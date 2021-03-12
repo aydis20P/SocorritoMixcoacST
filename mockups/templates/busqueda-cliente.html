@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Busqued de Cliente</title>
+{% endblock head %}
+
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Teléfono Alternativo</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Tipo</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for f in frutas %}
+        <tr>
+            <td>{{ f }}</td>
+            <td>1122334455</td>
+            <td>5544332211</td>
+            <td>Dirección</td>
+            <td>Tipo</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

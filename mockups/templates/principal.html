@@ -2,95 +2,38 @@
 {% load static %}
 
 {% block head %}
-    <title>Principal</title>
+    <title>Pedidos por teléfono</title>
 {% endblock head %}
 
 {% block content %}
-
     <div class="container">
         <div class="row">
             <div class="col-md">
-                <div class="card border border-info shadow-0 mb-3" style="max-width: 18rem">
-                    <div class="card-header">Principal</div>
-                    <div class="card-body text-dark">
-                    <h5 class="card-title">Tarjeta 1</h5>
-                    <p class="card-text">
-                        Texto de ejemplo
-                    </p>
+                <div class="card">
+                    <div class="card-body">
+                        <br>
+                        <div class="row">
+                            <div class="col-md">
+                                <h5>Busqueda del Cliente</h5>
+                            </div>
+                            <div class="col-md">
+                                <div class="input-group">
+                                    <div class="form-outline">
+                                      <input type="search" id="form1" class="form-control" />
+                                      <label class="form-label" for="form1">Teléfono</label>
+                                    </div>
+                                    <a href="busqueda-cliente" class="btn btn-warning">
+                                        <i class="fas fa-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="card border border-info text-white bg-info shadow-0 mb-3" style="max-width: 18rem">
-                    <div class="card-header">Principal</div>
-                    <div class="card-body text-dark">
-                    <h5 class="card-title">Tarjeta 2</h5>
-                    <p class="card-text">
-                        Texto de ejemplo
-                    </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="card border border-info shadow-0 mb-3" style="max-width: 18rem">
-                    <div class="card-header">Principal</div>
-                    <div class="card-body text-dark">
-                    <h5 class="card-title">Tarjeta 3</h5>
-                    <p class="card-text">
-                        Texto de ejemplo
-                    </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="card border border-info shadow-0 mb-3" style="max-width: 18rem">
-                    <div class="card-header">Principal</div>
-                    <div class="card-body text-dark">
-                    <h5 class="card-title">Tarjeta 3</h5>
-                    <p class="card-text">
-                        Texto de ejemplo
-                    </p>
-                    </div>
-                </div>
+                  </div>
             </div>
         </div>
         <div class="row">
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                              </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>  
+
         </div>
     </div>
-    
 {% endblock content %}
