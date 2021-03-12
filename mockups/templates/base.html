@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load static %}
+<xml:html>
+    <head>
+        <!-- Nav Bar -->
+        <nav class="navbar navbar-light bg-info">
+            <div class="container-fluid">
+            <a class="navbar-brand" href="">
+                <img
+                src="{% static 'images/logo.jpg' %}"
+                height="100"
+                alt=""
+                loading="lazy"
+                />
+            </a>
+            </div>
+        </nav>
+        <br></br>
+
+        {% block head %}
+        <title>Mockups Socorrito</title>
+        {% endblock head %}
+
+        <!-- Font Awesome -->
+        <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        rel="stylesheet"
+        />
+        <!-- Google Fonts -->
+        <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        rel="stylesheet"
+        />
+        <!-- MDB -->
+        <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css"
+        rel="stylesheet"
+        />
+    </head>
+    <body>
+        {% block content %}
+
+        {% endblock content %}
+
+        <!-- MDB -->
+        <script
+        type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"
+        ></script>
+    </body>
+    {% block script %}
+
+    {% endblock script %}
+</html>
