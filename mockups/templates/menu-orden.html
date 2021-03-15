@@ -39,6 +39,23 @@
             {% endfor %}
             </tbody>
         </table>
+        <div class="card">
+            <div class="card-body">
+                <div class="form-outline">
+                    <textarea class="form-control" id="textAreaExample" rows="4"></textarea>
+                    <label class="form-label" for="textAreaExample">Observaciones del pedido</label>
+                  </div>
+            </div>
+        </div>
+        
+        <a href="busqueda-cliente" class="btn btn-warning">
+            <i class="fas fa-arrow-left"></i>
+            Regresar
+        </a>
+        <a href="busqueda-cliente" class="btn btn-warning">
+            <i class="fas fa-cart-plus"></i>
+            Añadir al carrito
+        </a>
     {% else %}
     <div class="container">
         <div class="row">
@@ -80,7 +97,8 @@
             var val = document.getElementById(id).value;//obtenemos el valor del elemento
             val = parseInt(val) + 1;//lo parseamos a int e incrementamos en 1
             if(!isNaN(val)){//validación Is Not a Number
-                document.getElementById(id).value = val;//actualizamos el valor
+                if(val<100)
+                    document.getElementById(id).value = val;//actualizamos el valor
             }
         }
 
@@ -89,7 +107,8 @@
             var val = document.getElementById(id).value;
             val = parseInt(val) - 1;
             if(!isNaN(val)){
-                document.getElementById(id).value = val;
+                if(val>=0)
+                    document.getElementById(id).value = val;
             }
         }
     </script>
