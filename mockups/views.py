@@ -27,3 +27,6 @@ def busqueda_cliente(request):
      context['clientes'] = clientes
 
      return render(request, 'busqueda-cliente.html', context)
+def registrar_cliente(request):
+     context = {}
+     return render (request, 'registrar-cliente.html', context)
