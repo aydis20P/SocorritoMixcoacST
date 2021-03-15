@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Registrar cliente</title>
+{% endblock head %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="card">
+      <div class="card-body">
+        <form>
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <input type="text" id="form6Example1" class="form-control" />
+                  <label class="form-label" for="form6Example1">Nombre</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <input type="text" id="form6Example2" class="form-control" />
+                  <label class="form-label" for="form6Example2">Apellidos</label>
+                </div>
+              </div>
+            </div>
+          
+            <!-- Text input -->
+            <div class="form-outline mb-4">
+              <input type="text" id="form6Example4" class="form-control" />
+              <label class="form-label" for="form6Example4">Dirección</label>
+            </div>
+          
+            <!-- Text input -->
+            <div class="form-outline mb-4">
+              <input type="text" id="form6Example6" class="form-control" />
+              <label class="form-label" for="form6Example6">Teléfono o Celular</label>
+            </div>
+
+            <!-- Text input -->
+            <div class="form-outline mb-4">
+                <input type="text" id="form6Example6" class="form-control" />
+                <label class="form-label" for="form6Example6">Teléfono o Celulalr alternativo</label>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col">
+      <div class="row gy-5 gx-2">
+        <div class="col">
+          <div class="d-grid gap-2 ">
+            <a href="busqueda-cliente" class="btn btn-warning">
+              <i class="fas fa-arrow-left"></i>
+              Regresar
+            </a>
+          </div>
+        </div>
+        <div class="col">
+          <div class="d-grid gap-2 ">
+            <a href="registrar-cliente" class="btn btn-warning">
+              <i class="fas fa-user-plus"></i>
+              Registrar
+            </a>
+          </div>
+        </div>
+      </div>
+      
+     
+    </div>
+  </div>
+</div>
+{% endblock content %}

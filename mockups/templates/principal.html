@@ -17,15 +17,19 @@
                                 <h5>Busqueda del Cliente</h5>
                             </div>
                             <div class="col-md">
-                                <div class="input-group">
-                                    <div class="form-outline">
-                                      <input type="search" id="form1" class="form-control" />
-                                      <label class="form-label" for="form1">Teléfono</label>
+                                <form id="telForm" method="POST"><!-- metemos el input en un form y declaramos método POST -->
+                                {% csrf_token %}
+                                    <div class="input-group">
+                                        <div class="form-outline">
+                                            <input required type="tel" id="telefono" class="form-control" name="telefono" /><!-- agregamos name que regresará en método POST -->
+                                            <label class="form-label" for="form1">Teléfono</label>
+                                        </div>
+                                        <!-- Cambiamos href por button con type submit -->
+                                        <button type="submit" class="btn btn-warning">
+                                            <i class="fas fa-search"></i>
+                                        </button>  
                                     </div>
-                                    <a href="busqueda-cliente" class="btn btn-warning">
-                                        <i class="fas fa-search"></i>
-                                    </a>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
