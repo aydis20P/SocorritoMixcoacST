@@ -1,0 +1,40 @@
+{% block content %}
+
+    <div class="d-flex justify-content-start">
+        <div class="form-outline">
+            <input type="text" id="form1" class="form-control" />
+            <label class="form-label" for="form1">Cantidad</label>
+        </div>
+        <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
+            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner()">
+            <i class="fas fa-angle-up"></i>
+            </button>
+            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner()">
+            <i class="fas fa-angle-down"></i>
+            </button>
+        </div>
+    </div>
+    
+{% endblock content %}
+
+{% block script %}
+
+    <script>
+        function incrementaSpinner(){
+            var val = document.getElementById('form1').value;//obtenemos el valor del elemento
+            val = parseInt(val) + 1;//lo parseamos a int e incrementamos en 1
+            if(!isNaN(val)){//validación Is Not a Number
+                document.getElementById('form1').value = val;//actualizamos el valor
+            }
+        }
+
+        function decrementaSpinner(){
+            var val = document.getElementById('form1').value;
+            val = parseInt(val) - 1;
+            if(!isNaN(val)){
+                document.getElementById('form1').value = val;
+            }
+        }
+    </script>
+
+{% endblock script %}
