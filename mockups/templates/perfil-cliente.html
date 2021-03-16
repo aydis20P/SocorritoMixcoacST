@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Perfil del cliente</title>
+{% endblock head %}
+
+{% block content %}
+    {% if clientes %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-3 pt-3 shadow">
+                <h1>Perfil del cliente</h1> <br>
+                <p>
+                    <strong>Nombre</strong>: {{nombre}}<br>
+                    <strong>Telefono</strong>: {{telefono1}}<br>
+                    <strong>Telefono alternativo</strong>: {{telefono2}}<br>
+                    <strong>Domicilio</strong>: {{direccion}}<br>
+                    <strong>Tipo de cliente</strong>: {{tipo}}
+                </p>
+            </div>
+        </div>
+        <a href="busqueda-cliente" class="btn btn-warning">
+            <i class="fas fa-arrow-left"></i>
+            Regresar
+        </a>
+    </div>
+    {% endif %}
+{% endblock content %}
+

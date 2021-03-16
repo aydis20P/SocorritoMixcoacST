@@ -9,3 +9,4 @@ mysite/settings.py
 mockups/migrations/
 static/
 .directory
+settings.py.bak
