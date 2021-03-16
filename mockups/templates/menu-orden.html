@@ -7,6 +7,7 @@
 
 {% block content %}
     {% if platillos %}
+    <form id="formMenu" method="POST">
         <table class="table">
             <thead>
             <tr>
@@ -21,9 +22,10 @@
                     {% for atribb in platillo %}
                     <td>{{ atribb }}</td>
                     {% endfor %}
+                    {% csrf_token %}
                     <td><div class="d-flex justify-content-start">
                         <div class="form-outline">
-                            <input readonly value="0" type="text" id="{{ platillo }}" class="form-control" />
+                            <input readonly value="0" type="text" id="{{ platillo }}" class="form-control" name="{{ platillo }}"/>
                             <label class="form-label" for="form1">Cantidad</label>
                         </div>
                         <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
@@ -34,7 +36,7 @@
                             <i class="fas fa-angle-down"></i>
                             </button>
                         </div>
-                    </div></td> 
+                    </div></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -42,20 +44,30 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-outline">
-                    <textarea class="form-control" id="textAreaExample" rows="4"></textarea>
+                    <textarea class="form-control" id="textAreaExample" rows="4" name="observaciones"></textarea>
                     <label class="form-label" for="textAreaExample">Observaciones del pedido</label>
-                  </div>
+                </div>
+                <div class="row g-0 gy-0 mt-2">
+                    <div class="col">
+                        <div class="d-grid gap-2 p-1">
+                            <a href="busqueda-cliente" class="btn btn-warning">
+                                <i class="fas fa-arrow-left"></i>
+                                Regresar
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="d-grid gap-2 p-1">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-cart-plus"></i>
+                                Añadir al carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <a href="busqueda-cliente" class="btn btn-warning">
-            <i class="fas fa-arrow-left"></i>
-            Regresar
-        </a>
-        <a href="busqueda-cliente" class="btn btn-warning">
-            <i class="fas fa-cart-plus"></i>
-            Añadir al carrito
-        </a>
+    </form>
     {% else %}
     <div class="container">
         <div class="row">

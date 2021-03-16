@@ -33,21 +33,51 @@ def busqueda_cliente(request):
      return render(request, 'busqueda-cliente.html', context)
 
 def menu_orden(request):
+     if request.method == "POST":
+          orden = []
+          total = 0
+          for key, value in request.POST.items():
+               print('Key: %s' % (key) )
+               print('Value %s' % (value) )
+               if "Albondiga" in key:
+                    p = ["Albondiga", 60.5, value, int(value)*60.5]
+                    orden.append(p)
+                    total = total + int(value)*60.5
+               if "Taco azteca" in key:
+                    p = ["Taco azteca", 60.5, value, int(value)*60.5]
+                    orden.append(p)
+                    total = total + int(value)*60.5
+               if "Coca-cola" in key:
+                    p = ["Coca-cola", 20, value, int(value)*20]
+                    orden.append(p)
+                    total = total + int(value)*60.5
+               if "Sopa" in key:
+                    p = ["Sopa", 30, value, int(value)*30]
+                    orden.append(p)
+                    total = total + int(value)*60.5
+               if "observaciones" in key:
+                    request.session["observacion"] = value
 
+          print("lista orden: " + str(orden))
+          request.session['orden'] = orden
+          request.session['total'] = total
+          context = {}
+          return redirect('resumen-pedido')
 
-     p1 = ["Albondiga", 60.5]
-     p2 = ["Taco azteca", 60.5]
-     p3 = ["Coca-cola", 20]
-     p4 = ["Sopa", 30]
-     platillos = []
-     platillos.append(p1)
-     platillos.append(p2)
-     platillos.append(p3)
-     platillos.append(p4)
+     else:
+          p1 = ["Albondiga", 60.5]
+          p2 = ["Taco azteca", 60.5]
+          p3 = ["Coca-cola", 20]
+          p4 = ["Sopa", 30]
+          platillos = []
+          platillos.append(p1)
+          platillos.append(p2)
+          platillos.append(p3)
+          platillos.append(p4)
 
-     context = {}
-     context['platillos'] = platillos
-     return render(request, 'menu-orden.html', context)
+          context = {}
+          context['platillos'] = platillos
+          return render(request, 'menu-orden.html', context)
 
 def registrar_cliente(request):
      if request.method == "POST":
@@ -73,14 +103,12 @@ def resumen_pedido(request):
 		["Sopa", 30, 3, 90],
 	]
 
-	total = 331.5
-
 	observacion = "las albóndigas con poca salsa. dos cocas frías, una al tiempo"
 
 	context = {}
-	context["orden"] = orden
-	context["total"] = total
-	context["observacion"] = observacion
+	context["orden"] = request.session.get("orden")
+	context["total"] = request.session.get('total')
+	context["observacion"] = request.session.get('observacion')
 	return render(request, "resumen-pedido.html", context)
 
 def perfil_cliente(request):
