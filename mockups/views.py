@@ -9,13 +9,13 @@ def principal(request):
 
      if request.method=="POST":
           telefono = request.POST.get('telefono')#obtenemos el teléfono ingresado del método POST
-          
+
           if telefono in request.session.get('clientes_qs')[0]:#simulamos la busqueda del teléfono en nuestro clientes_qs
                request.session['telefono'] = telefono #lo agregamos a una variable de sesión
           else:
                request.session['telefono'] = "" #en caso contrario vaciamos la variable de sesión
           return redirect('busqueda-cliente')
-          
+
      else:
           context = {}
           return render(request, 'principal.html', context)
@@ -23,7 +23,7 @@ def principal(request):
 def busqueda_cliente(request):
 
      #Aquí se trabaja toda la lógica del negocio
-     
+
      clientes = []
      if not request.session.get('telefono') == "":
           clientes.append(request.session.get('clientes_qs')[0])
@@ -33,8 +33,8 @@ def busqueda_cliente(request):
      return render(request, 'busqueda-cliente.html', context)
 
 def menu_orden(request):
-     
-     
+
+
      p1 = ["Albondiga", 60.5]
      p2 = ["Taco azteca", 60.5]
      p3 = ["Coca-cola", 20]
@@ -63,3 +63,22 @@ def registrar_cliente(request):
      else:
           context = {}
           return render (request, 'registrar-cliente.html', context)
+
+def resumen_pedido(request):
+
+	orden = [
+		["Albóndiga", 60.5, 1, 60.5],
+		["Taco azteca", 60.5, 2, 121.0],
+		["Coca-cola", 20, 3, 60],
+		["Sopa", 30, 3, 90],
+	]
+
+	total = 331.5
+
+	observacion = "las albóndigas con poca salsa. dos cocas frías, una al tiempo"
+
+	context = {}
+	context["orden"] = orden
+	context["total"] = total
+	context["observacion"] = observacion
+	return render(request, "resumen-pedido.html", context)
