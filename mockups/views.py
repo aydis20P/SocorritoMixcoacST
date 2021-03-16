@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect
 
 def principal(request):
+     #precondición, una lista con un cliente que tambien es una lista
+     clientes_qs = []
+     cliente = ["Homero", "1122334455", "5544332211", "Avenida Siempre Viva, 109", "Frecuente"]
+     clientes_qs.append(cliente)
+     request.session['clientes_qs'] = clientes_qs#la agregamos a una variable de sesión
+
      if request.method=="POST":
-          telefono = request.POST.get('telefono')
-          #simulamos la busqueda (el QUERY)
-          if telefono == "1122334455" or telefono == "5544332211":
+          telefono = request.POST.get('telefono')#obtenemos el teléfono ingresado del método POST
+          
+          if telefono in request.session.get('clientes_qs')[0]:#simulamos la busqueda del teléfono en nuestro clientes_qs
                request.session['telefono'] = telefono #lo agregamos a una variable de sesión
           else:
                request.session['telefono'] = "" #en caso contrario vaciamos la variable de sesión
@@ -17,12 +23,10 @@ def principal(request):
 def busqueda_cliente(request):
 
      #Aquí se trabaja toda la lógica del negocio
-
-     #precondición, una lista con un cliente que tambien es una lista
+     
      clientes = []
-     cliente = ["Homero", "1122334455", "5544332211", "Avenida Siempre Viva, 109", "Frecuente"]
      if not request.session.get('telefono') == "":
-          clientes.append(cliente)
+          clientes.append(request.session.get('clientes_qs')[0])
      context = {}
      context['clientes'] = clientes
 
@@ -46,5 +50,16 @@ def menu_orden(request):
      return render(request, 'menu-orden.html', context)
 
 def registrar_cliente(request):
-     context = {}
-     return render (request, 'registrar-cliente.html', context)
+     if request.method == "POST":
+          print("nombre post: " + request.POST.get('nombre'))
+          clientes_qs = []
+          cliente = [request.POST.get('nombre'), request.POST.get('tel1'), request.POST.get('tel2'), request.POST.get('direccion'), "Nuevo"]
+          clientes_qs.append(cliente)
+          request.session['clientes_qs'] = clientes_qs #la agregamos a una variable de sesión
+
+          request.session['telefono'] = request.POST.get('tel1')
+
+          return redirect('busqueda-cliente')
+     else:
+          context = {}
+          return render (request, 'registrar-cliente.html', context)
