@@ -34,42 +34,36 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row g-0 gy-0">
                 <div class="col-md">
-                    <div class="card shadow-0 mb-3">
-                        <div class="card-body">
-                            <div class="d-grid gap-2">
+
+                            <div class="d-grid gap-2 p-1">
                                 <a href="/" class="btn btn-warning">
                                     <i class="fas fa-arrow-left"></i>
                                     Regresar
                                 </a>
                             </div>
-                        </div>
-                    </div>
+                      
                 </div>
                 <div class="col-md">
-                    <div class="card shadow-0 mb-3">
-                        <div class="card-body">
-                            <div class="d-grid gap-2">
+
+                            <div class="d-grid gap-2 p-1">
                                 <a href="#" class="btn btn-warning">
                                     <i class="fas fa-user-alt"></i>
                                     Ver perfil del cliente
                                 </a>
                             </div>
-                        </div>
-                    </div>
-                  </div>
+                    
+                </div>
                 <div class="col-md">
-                    <div class="card shadow-0 mb-3">
-                        <div class="card-body">
-                            <div class="d-grid gap-2">
+                    
+                            <div class="d-grid gap-2 p-1">
                                 <a href="menu-orden" class="btn btn-warning">
                                     <i class="fas fa-utensils"></i>
                                     Tomar pedido
                                 </a>
                             </div>
-                        </div>
-                    </div>
+                        
                 </div>
             </div>
         </div>
@@ -77,43 +71,30 @@
     {% else %}
 
     <div class="container">
-        <div class="row">
-          <div class="col-md">
+        
             <div class="card">
+                <div class="card-header">¡El cliente no está registrado!</div>
                 <div class="card-body">
-                  <p class="card-text">
-                    ¡El cliente no está registrado!
-                  </p>
-                  <div class="row">
-                      <div class="col-md">
-                        <div class="card shadow-0 mb-3">
-                            <div class="card-body">
-                                <div class="d-grid gap-2">
-                                    <a href="/" class="btn btn-warning">
-                                        <i class="fas fa-arrow-left"></i>
-                                        Regresar
-                                    </a>
-                                </div>
+                    <div class="row g-0 gy-0">
+                        <div class="col-md">
+                            <div class="d-grid gap-2 p-1">
+                                <a href="/" class="btn btn-warning">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Regresar
+                                </a>
+                            </div>      
+                        </div>
+                        <div class="col-md">
+                            <div class="d-grid gap-2 p-1">
+                                <a href="registrar-cliente" class="btn btn-warning">
+                                    <i class="fas fa-user-plus"></i>
+                                    Registrar al cliente
+                                </a>
                             </div>
                         </div>
-                      </div>
-                      <div class="col-md">
-                        <div class="card shadow-0 mb-3">
-                            <div class="card-body">
-                                <div class="d-grid gap-2">
-                                    <a href="registrar-cliente" class="btn btn-warning">
-                                        <i class="fas fa-user-plus"></i>
-                                        Registrar al cliente
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                  </div> 
+                    </div> 
                 </div>
-              </div>
-          </div>
-        </div>
+            </div>
     </div>
     
     {% endif %}
