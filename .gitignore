@@ -10,3 +10,4 @@ mockups/migrations/
 static/
 .directory
 settings.py.bak
+.vscode
