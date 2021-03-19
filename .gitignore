@@ -3,10 +3,10 @@
 __pycache__
 myvenv
 db.sqlite3
-mockups/static
+socorritomixcoacst/static
 .DS_Store
 mysite/settings.py
-mockups/migrations/
+socorritomixcoacst/migrations/
 static/
 .directory
 settings.py.bak
