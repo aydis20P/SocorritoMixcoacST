@@ -50,11 +50,11 @@ def menu_orden(request):
                if "Coca-cola" in key:
                     p = ["Coca-cola", 20, value, int(value)*20]
                     orden.append(p)
-                    total = total + int(value)*60.5
+                    total = total + int(value)*20
                if "Sopa" in key:
                     p = ["Sopa", 30, value, int(value)*30]
                     orden.append(p)
-                    total = total + int(value)*60.5
+                    total = total + int(value)*30
                if "observaciones" in key:
                     request.session["observacion"] = value
 
