@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Prueba del menú</title>
+{% endblock head %}
+
+{% block content %}
+<div class="d-flex flex-column px-3">
+	<ul class="list-group flex-fill" id="lista-ordenes">
+		<!--aqui van los ítem de la lista (<li>)-->
+		<li class="list-group-item" id="orden-0">
+			<div class="d-flex align-items-center justify-content-between flex-wrap" id="entrada-lista">
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle btn-lg" type="button" data-mdb-toggle="dropdown">Primer tiempo</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<li><button class="dropdown-item" href="#">Sopa</button></li>
+						<li><button class="dropdown-item" href="#">Consomé</button></li>
+					</ul>
+				</div>
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle btn-lg" type="button" data-mdb-toggle="dropdown">Segúndo tiempo</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<li><button class="dropdown-item" href="#">Arroz</button></li>
+						<li><button class="dropdown-item" href="#">Espagueti</button></li>
+					</ul>
+				</div>
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle btn-lg" type="button" data-mdb-toggle="dropdown">Tercer tiempo</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<li><button class="dropdown-item" href="#">Pollo con mole</button></li>
+						<li><button class="dropdown-item" href="#">Taco Azteca</button></li>
+					</ul>
+				</div>
+				<button type="button" class="btn btn-primary btn-lg btn-danger" onclick="removerOrden(this)">
+					<i class="far fa-trash-alt fa-lg"></i>
+				</button>
+			</div>	
+		</li>
+	</ul>
+	<div class="d-flex justify-content-end py-3">
+		<button type="button" class="btn btn-primary btn-lg" onclick="agregarOrden()">
+			<i class="fas fa-plus fa-lg">&Tab;agregar orden</i>
+		</button>
+	</div>
+</div>
+
+
+{% endblock content %}
+{% block script %}
+<script>
+
+	var menus = 1
+	var identificador = 1
+
+	function agregarOrden(){
+		var item = document.createElement("li")
+		item.classList.add("list-group-item")
+		item.id = "orden-" + identificador
+		item.innerHTML = document.getElementById("orden-0").innerHTML
+		document.getElementById("lista-ordenes").appendChild(item)
+		menus++
+		identificador++
+	}
+
+	function removerOrden(boton){
+		elemento = boton.parentElement.parentElement
+		if(menus > 1){
+			elemento.remove()
+			menus--
+		}
+		else{
+			alert("No se puede dejar la lista sin elementos")
+		}
+	}
+
+</script>
+{% endblock script %}
