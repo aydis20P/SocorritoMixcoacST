@@ -122,3 +122,7 @@ def perfil_cliente(request):
      context['tipo'] = clientes[0][4]
      return render(request, 'perfil-cliente.html', context)
 
+def prueba(request):
+	
+	context = {}
+	return render(request, "prueba.html", context)
