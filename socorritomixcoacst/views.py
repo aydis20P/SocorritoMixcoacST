@@ -1,36 +1,36 @@
 from django.shortcuts import render, redirect
+from .models import Usuario, Cliente
+from django.views.generic.detail import DetailView
 
 def principal(request):
-     #precondición, una lista con un cliente que tambien es una lista
-     clientes_qs = []
-     cliente = ["Homero", "1122334455", "5544332211", "Avenida Siempre Viva, 109", "Frecuente"]
-     clientes_qs.append(cliente)
-     request.session['clientes_qs'] = clientes_qs#la agregamos a una variable de sesión
-
      if request.method=="POST":
-          telefono = request.POST.get('telefono')#obtenemos el teléfono ingresado del método POST
-
-          if telefono in request.session.get('clientes_qs')[0]:#simulamos la busqueda del teléfono en nuestro clientes_qs
-               request.session['telefono'] = telefono #lo agregamos a una variable de sesión
+          qs_clientes = Cliente.objects.filter(telefono=request.POST.get("telefono"))
+          if qs_clientes:
+               cliente_encontrado = qs_clientes[0]
+               cliente_url = cliente_encontrado.get_absolute_url()
+               return redirect(cliente_url)
           else:
-               request.session['telefono'] = "" #en caso contrario vaciamos la variable de sesión
-          return redirect('busqueda-cliente')
+               print("No se encontró el cliente")#TODO desplegar mensaje advirtiendo
+               context = {}
+               return render(request, 'principal.html', context)
 
      else:
           context = {}
           return render(request, 'principal.html', context)
 
-def busqueda_cliente(request):
 
-     #Aquí se trabaja toda la lógica del negocio
+class BusquedaCliente(DetailView):
 
-     clientes = []
-     if not request.session.get('telefono') == "":
-          clientes.append(request.session.get('clientes_qs')[0])
-     context = {}
-     context['clientes'] = clientes
+     model = Cliente
+     template_name = "busqueda-cliente.html"
 
-     return render(request, 'busqueda-cliente.html', context)
+     def get_context_data(self, **kwargs):
+          #Orden.objects.filter(fecha=timezone.now.date(), cliente=self.object)
+          context = super().get_context_data(**kwargs)
+          context['tipo'] = self.object.tipo
+          print(self.object.tipo)
+          return context
+
 
 def menu_orden(request):
      if request.method == "POST":

@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.shortcuts import reverse
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
 TIPO_PLATILLO = (('GU', 'guisado'), ('EN', 'entrada'), ('ST', 'segundo tiempo'))
@@ -8,11 +9,17 @@ TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 
 class Cliente(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False)
-    telefono = models.CharField(max_length=10, null=False, blank=False)
+    telefono = models.CharField(max_length=10, null=False, blank=False, unique=True)
     direccion = models.CharField(max_length=128, null=False, blank=False)
     referencias = models.CharField(max_length=128, null=True, blank=True)
     tipo = models.CharField(choices=TIPO_CLIENTE, max_length=2, null=False, blank=False)
     telefono_alternativo = models.CharField(max_length=10, null=True, blank=True)
+
+    def __str__(self):
+        return "Nombre: " + self.nombre + ", Tel: " + self.telefono
+
+    def get_absolute_url(self):
+        return reverse("cliente", args=[str(self.id)])
 
 class Orden(models.Model):
     total = models.FloatField(max_length=5, null=False)
