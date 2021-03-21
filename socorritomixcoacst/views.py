@@ -27,8 +27,6 @@ class BusquedaCliente(DetailView):
      def get_context_data(self, **kwargs):
           #Orden.objects.filter(fecha=timezone.now.date(), cliente=self.object)
           context = super().get_context_data(**kwargs)
-          context['tipo'] = self.object.tipo
-          print(self.object.tipo)
           return context
 
 
@@ -73,8 +71,8 @@ def menu_orden(request):
      else:
 
           #obtener la url de la página anterior
-          referer = request.META.get('HTTP_REFERER')
-          print(referer)
+          pag_ant = request.META.get('HTTP_REFERER')
+          print(pag_ant)
 
           p1 = ["Albondiga", 60.5]
           p2 = ["Taco azteca", 60.5]
@@ -87,7 +85,7 @@ def menu_orden(request):
           platillos.append(p4)
 
           context = {}
-          context['referer'] = referer#mandarlo en el contexto
+          context['referer'] = pag_ant#mandarlo en el contexto
           context['platillos'] = platillos
           return render(request, 'menu-orden.html', context)
 
