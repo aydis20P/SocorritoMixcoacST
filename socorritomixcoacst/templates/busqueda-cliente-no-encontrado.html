@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Busqueda de Cliente</title>
+{% endblock head %}
+
+{% block content %}
+<div class="container">
+
+    <div class="card">
+        <div class="card-header">¡El cliente no está registrado!</div>
+        <div class="card-body">
+            <div class="row g-0 gy-0">
+                <div class="col-md">
+                    <div class="d-grid gap-2 p-1">
+                        <a href="/" class="btn btn-warning">
+                            <i class="fas fa-arrow-left"></i>
+                            Regresar
+                        </a>
+                    </div>  
+                </div>    
+                <div class="col-md">
+                    <div class="d-grid gap-2 p-1">
+                        <a href="registrar-cliente" class="btn btn-warning">
+                            <i class="fas fa-user-plus"></i>
+                            Registrar al cliente
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

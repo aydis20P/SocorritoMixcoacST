@@ -27,8 +27,9 @@
                                 <td>{{ object.telefono }}</td>
                                 {% if object.telefono_alternativo%}
                                     <td>{{ object.telefono_alternativo }}</td>
-                                {% endif %}
+                                {% else %}
                                 <td></td>
+                                {% endif %}
                                 <td>{{ object.direccion }}</td>
                                 <td>{{ object.get_tipo_display }}</td>
                             </tr>
@@ -51,7 +52,7 @@
             <div class="col-md">
 
                         <div class="d-grid gap-2 p-1">
-                            <a href="perfil-cliente" class="btn btn-warning">
+                            <a href="/perfil-cliente" class="btn btn-warning">
                                 <i class="fas fa-user-alt"></i>
                                 Ver perfil del cliente
                             </a>
@@ -61,7 +62,7 @@
             <div class="col-md">
                 
                         <div class="d-grid gap-2 p-1">
-                            <a href="menu-orden" class="btn btn-warning">
+                            <a href="/menu-orden" class="btn btn-warning">
                                 <i class="fas fa-utensils"></i>
                                 Tomar pedido
                             </a>

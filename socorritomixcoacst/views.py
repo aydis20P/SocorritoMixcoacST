@@ -12,7 +12,7 @@ def principal(request):
           else:
                print("No se encontró el cliente")#TODO desplegar mensaje advirtiendo
                context = {}
-               return render(request, 'principal.html', context)
+               return redirect('cliente-no-encontrado')
 
      else:
           context = {}
@@ -30,6 +30,12 @@ class BusquedaCliente(DetailView):
           context['tipo'] = self.object.tipo
           print(self.object.tipo)
           return context
+
+
+def cliente_no_encontrado(request):
+
+     context = {}
+     return render(request, 'busqueda-cliente-no-encontrado.html', context)
 
 
 def menu_orden(request):
@@ -65,6 +71,11 @@ def menu_orden(request):
           return redirect('resumen-pedido')
 
      else:
+
+          #obtener la url de la página anterior
+          referer = request.META.get('HTTP_REFERER')
+          print(referer)
+
           p1 = ["Albondiga", 60.5]
           p2 = ["Taco azteca", 60.5]
           p3 = ["Coca-cola", 20]
@@ -76,6 +87,7 @@ def menu_orden(request):
           platillos.append(p4)
 
           context = {}
+          context['referer'] = referer#mandarlo en el contexto
           context['platillos'] = platillos
           return render(request, 'menu-orden.html', context)
 
