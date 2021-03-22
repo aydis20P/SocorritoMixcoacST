@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Usuario, Cliente
 from django.views.generic.detail import DetailView
+from django.http import HttpResponseRedirect
 
 def principal(request):
      if request.method=="POST":
@@ -126,12 +127,29 @@ class PerfilCliente(DetailView):
      model = Cliente
      template_name = "perfil-cliente.html"
 
-
      def get_context_data(self, **kwargs):
           context = super().get_context_data(**kwargs)
           context['referer'] = self.request.META.get('HTTP_REFERER')
 
           return context
+
+     def post(self, request, *args, **kwargs):
+          self.object = self.get_object() # asignar object a la vista
+          nombre = request.POST.get("nombre")
+          telefono_alternativo = request.POST.get("telefono_alternativo")
+          direccion = request.POST.get("direccion")
+          tipo = request.POST.get("nombre")
+          
+          if nombre:
+               self.object.nombre=nombre
+          if telefono_alternativo:
+               self.object.telefono_alternativo=telefono_alternativo
+          if direccion:
+               self.object.direccion=direccion      
+          
+          self.object.save()
+          return HttpResponseRedirect(request.path_info)
+
 
 def prueba(request):
 	

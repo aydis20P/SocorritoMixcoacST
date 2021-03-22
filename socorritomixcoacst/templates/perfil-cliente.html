@@ -12,13 +12,13 @@
             <form id="ProfileForm" method="POST">
                 {% csrf_token %}
                 <div class="col-12 my-3 pt-3 shadow">
-                    <h1>Perfil del cliente</h1> <br>
+                    <h1 class="ms-3">Perfil del cliente</h1> <br>
                     <div class="table-responsive">
                         <table class="table">
                             <tr>
                                 <td><strong>Nombre</strong>:</td>
                                 <td><div class="input-group mb-3">
-                                    <input type="text" id="formNombre" class="form-control" placeholder={{object.nombre}} aria-label={{object.nombre}}
+                                    <input required type="text" id="formNombre" name="nombre" class="form-control" placeholder={{object.nombre}} aria-label={{object.nombre}}
                                       aria-describedby="basic-addon1" readonly />
                                   </div></td>
                                 <td><button type="button" id=buttonNombre class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarNombre()">
@@ -36,7 +36,7 @@
                             <tr>
                                 <td><strong>Teléfono Alternativo</strong>:</td>
                                 <td><div class="input-group mb-3">
-                                    <input type="text" id="formTelefonoAlternativo" class="form-control" placeholder={{object.telefono_alternativo}} aria-label={{object.telefono_alternativo}}
+                                    <input required minlength="10" maxlength="10" type="text" id="formTelefonoAlternativo" name="telefono_alternativo" class="form-control" placeholder={{object.telefono_alternativo}} aria-label={{object.telefono_alternativo}}
                                       aria-describedby="basic-addon1" readonly />
                                   </div></td>
                                 <td><button type="button" id=buttonTelefonoAlternativo class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarTelefonoAlternativo()">
@@ -46,7 +46,7 @@
                             <tr>
                                 <td><strong>Dirección</strong>:</td>
                                 <td><div class="input-group mb-3">
-                                    <input type="text" id="formDireccion" class="form-control" placeholder={{object.direccion}} aria-label={{object.direccion}}
+                                    <input required type="text" id="formDireccion" name="direccion" class="form-control" placeholder={{object.direccion}} aria-label={{object.direccion}}
                                       aria-describedby="basic-addon1" readonly />
                                   </div></td>
                                 <td><button type="button" id=buttonDireccion class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarDireccion()">
@@ -60,10 +60,14 @@
                             
                         </table>
                     </div>
-                    <a href= "{{referer}}" class="btn btn-warning mb-3">
+                    <a href= "{{referer}}" class="btn btn-warning mb-3 ms-3">
                         <i class="fas fa-arrow-left"></i>
                         Regresar
                     </a>
+                    <button class="btn btn-warning mb-3" id=buttonGuardarCambios type="submit">
+                        <i class="fas fa-user-plus"></i>
+                        Guardar Cambios
+                      </button>
                 </div>
             </form>
             
@@ -75,18 +79,24 @@
 {% block script %}
 
     <script>
+        window.onload = function() {
+            document.getElementById('buttonGuardarCambios').style.display = "none";
+        };
         function cambiarNombre(){
             print
             document.getElementById('formNombre').removeAttribute("readonly");
             document.getElementById('buttonNombre').style.display = "none";
+            document.getElementById('buttonGuardarCambios').style.display = "initial";
         }
         function cambiarTelefonoAlternativo(){
             document.getElementById('formTelefonoAlternativo').removeAttribute("readonly");
             document.getElementById('buttonTelefonoAlternativo').style.display = "none";
+            document.getElementById('buttonGuardarCambios').style.display = "initial";
         }
         function cambiarDireccion(){
             document.getElementById('formDireccion').removeAttribute("readonly");
             document.getElementById('buttonDireccion').style.display = "none";
+            document.getElementById('buttonGuardarCambios').style.display = "initial";
         }
     </script>
 
