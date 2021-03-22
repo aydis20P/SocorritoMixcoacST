@@ -17,22 +17,41 @@
                         <table class="table">
                             <tr>
                                 <td><strong>Nombre</strong>:</td>
-                                <td>{{object.nombre}}</td>
-                                <td><button type="button" class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarNombre()">
+                                <td><div class="input-group mb-3">
+                                    <input type="text" id="formNombre" class="form-control" placeholder={{object.nombre}} aria-label={{object.nombre}}
+                                      aria-describedby="basic-addon1" readonly />
+                                  </div></td>
+                                <td><button type="button" id=buttonNombre class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarNombre()">
                                     <i class="fas fa-edit"></i>
                                     </button></td>
                             </tr>
                             <tr>
                                 <td><strong>Teléfono</strong>:</td>
-                                <td>{{object.telefono}}</td>
+                                <td><div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder={{object.telefono}} aria-label={{object.telefono}}
+                                      aria-describedby="basic-addon1" readonly />
+                                  </div></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td><strong>Teléfono Alternativo</strong>:</td>
-                                <td>{{object.telefono_alternativo}}</td>
+                                <td><div class="input-group mb-3">
+                                    <input type="text" id="formTelefonoAlternativo" class="form-control" placeholder={{object.telefono_alternativo}} aria-label={{object.telefono_alternativo}}
+                                      aria-describedby="basic-addon1" readonly />
+                                  </div></td>
+                                <td><button type="button" id=buttonTelefonoAlternativo class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarTelefonoAlternativo()">
+                                    <i class="fas fa-edit"></i>
+                                    </button></td>
                             </tr>
                             <tr>
                                 <td><strong>Dirección</strong>:</td>
-                                <td>{{object.direccion}}</td>
+                                <td><div class="input-group mb-3">
+                                    <input type="text" id="formDireccion" class="form-control" placeholder={{object.direccion}} aria-label={{object.direccion}}
+                                      aria-describedby="basic-addon1" readonly />
+                                  </div></td>
+                                <td><button type="button" id=buttonDireccion class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarDireccion()">
+                                    <i class="fas fa-edit"></i>
+                                    </button></td>
                             </tr>
                             <tr>
                                 <td><strong>Tipo de Cliente</strong>:</td>
@@ -57,7 +76,17 @@
 
     <script>
         function cambiarNombre(){
-            
+            print
+            document.getElementById('formNombre').removeAttribute("readonly");
+            document.getElementById('buttonNombre').style.display = "none";
+        }
+        function cambiarTelefonoAlternativo(){
+            document.getElementById('formTelefonoAlternativo').removeAttribute("readonly");
+            document.getElementById('buttonTelefonoAlternativo').style.display = "none";
+        }
+        function cambiarDireccion(){
+            document.getElementById('formDireccion').removeAttribute("readonly");
+            document.getElementById('buttonDireccion').style.display = "none";
         }
     </script>
 

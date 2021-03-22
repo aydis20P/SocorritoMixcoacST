@@ -125,9 +125,7 @@ class PerfilCliente(DetailView):
 
      model = Cliente
      template_name = "perfil-cliente.html"
-     
-     if request.method=="POST":
-          
+
 
      def get_context_data(self, **kwargs):
           context = super().get_context_data(**kwargs)
