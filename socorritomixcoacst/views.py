@@ -136,3 +136,17 @@ def prueba(request):
 	
 	context = {}
 	return render(request, "prueba.html", context)
+
+def registrar_cliente(request):
+     if request.method == "POST":
+          cliente_registro = Cliente(nombre=request.POST.get('nombre'), 
+                                   direccion=request.POST.get('direccion'),
+                                   telefono=request.POST.get('telefono'),
+                                   telefono_alternativo=request.POST.get('telefonoalt'),
+                                   referencias=request.POST.get('obs')
+                                   )
+          cliente_registro.save()
+          return redirect('busqueda-cliente')
+     else:
+          context = {}
+          return render (request, 'registrar-cliente.html', context)
