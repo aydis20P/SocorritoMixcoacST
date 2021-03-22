@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Usuario, Cliente
 from django.views.generic.detail import DetailView
+from django import forms
 
 def principal(request):
      if request.method=="POST":
@@ -138,3 +139,11 @@ def prueba(request):
 	
 	context = {}
 	return render(request, "prueba.html", context)
+
+
+     
+def registrar_clientes(request):
+     if request.method == 'POST':
+          
+     context = {}
+     return render (request, "registrar-clientes.html", context)
