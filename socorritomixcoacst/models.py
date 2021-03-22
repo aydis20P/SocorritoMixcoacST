@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.shortcuts import reverse
+from django.utils import timezone
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
 TIPO_PLATILLO = (('GU', 'guisado'), ('EN', 'entrada'), ('ST', 'segundo tiempo'))
@@ -14,6 +15,7 @@ class Cliente(models.Model):
     referencias = models.CharField(max_length=128, null=True, blank=True)
     tipo = models.CharField(choices=TIPO_CLIENTE, max_length=2, null=False, blank=False)
     telefono_alternativo = models.CharField(max_length=10, null=True, blank=True)
+    fecha_registro = models.DateField(null=False, default=timezone.now)
 
     def __str__(self):
         return "Nombre: " + self.nombre + ", Tel: " + self.telefono
@@ -25,13 +27,13 @@ class Orden(models.Model):
     total = models.FloatField(max_length=5, null=False)
     promocion = models.BooleanField(null=False)
     total_descuento = models.FloatField(max_length=5, null=True)
-    fecha = models.DateTimeField(null=False)    
+    fecha = models.DateTimeField(null=False)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
 
 class Platillo(models.Model):
-    nombre = models.CharField(max_length=64, null=False, blank=False)
+    nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
     precio = models.FloatField(max_length=5, null=False)
-    descripcion = models.CharField(max_length=128, null=False, blank=False)
+    descripcion = models.CharField(max_length=256, null=False, blank=False)
     tipo = models.CharField(choices=TIPO_PLATILLO, max_length=2, null=False, blank=False)
     es_complemento = models.BooleanField(null=False)
 
@@ -44,11 +46,13 @@ class OrdenPlatillo(models.Model):
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
 
 class Promocion(models.Model):
-    nombre = models.CharField(max_length=64, null=False, blank=False)
+    nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
+    vigencia_dias = models.IntegerField(null=True)
+    es_por_periodo = models.BooleanField(null=False, default=False)
 
 class ClientePromocion(models.Model):
-    fecha_inicio = models.DateField(null=False)
-    fecha_fin = models.DateField(null=False)
+    fecha_inicio = models.DateField(null=True)
+    fecha_fin = models.DateField(null=True)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
     promocion = models.ForeignKey(Promocion, on_delete=models.PROTECT)
 
@@ -57,7 +61,7 @@ class Menu(models.Model):
     tipo = models.CharField(choices=TIPO_MENU, max_length=2, null=False, blank=False)
 
 class PlatilloMenu(models.Model):
-    disponible = models.BooleanField(null=False)    
+    disponible = models.BooleanField(null=False)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
     menu = models.ForeignKey(Menu, on_delete=models.PROTECT)
 
