@@ -9,41 +9,56 @@
     
     <div class="container">
         <div class="row">
-            <div class="col-12 my-3 pt-3 shadow">
-                <h1>Perfil del cliente</h1> <br>
-            <div class="table-responsive">
-                <table class="table">
-                    <tr>
-                        <td><strong>Nombre</strong>:</td>
-                        <td>{{object.nombre}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Teléfono</strong>:</td>
-                        <td>{{object.telefono}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Teléfono Alternativo</strong>:</td>
-                        <td>{{object.telefono_alternativo}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Dirección</strong>:</td>
-                        <td>{{object.direccion}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Tipo de Cliente</strong>:</td>
-                        <td>{{object.get_tipo_display}}</td>
-                    </tr>
-                    
-                </table>
-            </div>
-                <a href= "{{referer}}" class="btn btn-warning mb-3">
-                    <i class="fas fa-arrow-left"></i>
-                    Regresar
-                </a>
-            </div>
+            <form id="ProfileForm" method="POST">
+                {% csrf_token %}
+                <div class="col-12 my-3 pt-3 shadow">
+                    <h1>Perfil del cliente</h1> <br>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <td><strong>Nombre</strong>:</td>
+                                <td>{{object.nombre}}</td>
+                                <td><button type="button" class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarNombre()">
+                                    <i class="fas fa-edit"></i>
+                                    </button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Teléfono</strong>:</td>
+                                <td>{{object.telefono}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Teléfono Alternativo</strong>:</td>
+                                <td>{{object.telefono_alternativo}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dirección</strong>:</td>
+                                <td>{{object.direccion}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tipo de Cliente</strong>:</td>
+                                <td>{{object.get_tipo_display}}</td>
+                            </tr>
+                            
+                        </table>
+                    </div>
+                    <a href= "{{referer}}" class="btn btn-warning mb-3">
+                        <i class="fas fa-arrow-left"></i>
+                        Regresar
+                    </a>
+                </div>
+            </form>
             
         </div>
         
     </div>
 {% endblock content %}
 
+{% block script %}
+
+    <script>
+        function cambiarNombre(){
+            
+        }
+    </script>
+
+{% endblock script %}
