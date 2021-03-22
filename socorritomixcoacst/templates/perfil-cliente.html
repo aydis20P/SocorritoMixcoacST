@@ -6,25 +6,44 @@
 {% endblock head %}
 
 {% block content %}
-    {% if clientes %}
+    
     <div class="container">
         <div class="row">
             <div class="col-12 my-3 pt-3 shadow">
                 <h1>Perfil del cliente</h1> <br>
-                <p>
-                    <strong>Nombre</strong>: {{nombre}}<br>
-                    <strong>Telefono</strong>: {{telefono1}}<br>
-                    <strong>Telefono alternativo</strong>: {{telefono2}}<br>
-                    <strong>Domicilio</strong>: {{direccion}}<br>
-                    <strong>Tipo de cliente</strong>: {{tipo}}
-                </p>
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <td><strong>Nombre</strong>:</td>
+                        <td>{{object.nombre}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Teléfono</strong>:</td>
+                        <td>{{object.telefono}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Teléfono Alternativo</strong>:</td>
+                        <td>{{object.telefono_alternativo}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dirección</strong>:</td>
+                        <td>{{object.direccion}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tipo de Cliente</strong>:</td>
+                        <td>{{object.get_tipo_display}}</td>
+                    </tr>
+                    
+                </table>
             </div>
+                <a href= "{{referer}}" class="btn btn-warning mb-3">
+                    <i class="fas fa-arrow-left"></i>
+                    Regresar
+                </a>
+            </div>
+            
         </div>
-        <a href="busqueda-cliente" class="btn btn-warning">
-            <i class="fas fa-arrow-left"></i>
-            Regresar
-        </a>
+        
     </div>
-    {% endif %}
 {% endblock content %}
 
