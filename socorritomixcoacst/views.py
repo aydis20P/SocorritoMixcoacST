@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente
-from django.views.generic.detail import DetailView
+from .models import Usuario, Cliente, Orden, OrdenPlatillo
 from django.http import HttpResponseRedirect
+from django.views.generic.detail import DetailView
 
 def principal(request):
      if request.method=="POST":
@@ -131,6 +131,14 @@ class PerfilCliente(DetailView):
           context = super().get_context_data(**kwargs)
           context['referer'] = self.request.META.get('HTTP_REFERER')
 
+          lista_pedidos = Orden.objects.filter(cliente=self.object)
+          context['pedidos'] = lista_pedidos
+          lista_ordenesPlatillo = []
+          for pedido in lista_pedidos:
+               aux = OrdenPlatillo.objects.filter(orden=pedido)
+               for ordenPlatillo in aux:
+                    lista_ordenesPlatillo.append(ordenPlatillo)
+          context['ordenes_platillo'] = lista_ordenesPlatillo
           return context
 
      def post(self, request, *args, **kwargs):
@@ -139,15 +147,15 @@ class PerfilCliente(DetailView):
           telefono_alternativo = request.POST.get("telefono_alternativo")
           direccion = request.POST.get("direccion")
           tipo = request.POST.get("nombre")
-          
+
           if nombre:
                self.object.nombre=nombre
           if telefono_alternativo:
                self.object.telefono_alternativo=telefono_alternativo
           if direccion:
                self.object.direccion=direccion      
-          
           self.object.save()
+
           return HttpResponseRedirect(request.path_info)
 
 

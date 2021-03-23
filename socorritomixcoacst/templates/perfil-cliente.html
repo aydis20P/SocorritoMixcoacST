@@ -8,96 +8,299 @@
 {% block content %}
     
     <div class="container">
-        <div class="row">
-            <form id="ProfileForm" method="POST">
-                {% csrf_token %}
-                <div class="col-12 my-3 pt-3 shadow">
-                    <h1 class="ms-3">Perfil del cliente</h1> <br>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <td><strong>Nombre</strong>:</td>
-                                <td><div class="input-group mb-3">
-                                    <input required type="text" id="formNombre" name="nombre" class="form-control" placeholder={{object.nombre}} aria-label={{object.nombre}}
-                                      aria-describedby="basic-addon1" readonly />
-                                  </div></td>
-                                <td><button type="button" id=buttonNombre class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarNombre()">
-                                    <i class="fas fa-edit"></i>
-                                    </button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Teléfono</strong>:</td>
-                                <td><div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder={{object.telefono}} aria-label={{object.telefono}}
-                                      aria-describedby="basic-addon1" readonly />
-                                  </div></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Teléfono Alternativo</strong>:</td>
-                                <td><div class="input-group mb-3">
-                                    <input required minlength="10" maxlength="10" type="text" id="formTelefonoAlternativo" name="telefono_alternativo" class="form-control" placeholder={{object.telefono_alternativo}} aria-label={{object.telefono_alternativo}}
-                                      aria-describedby="basic-addon1" readonly />
-                                  </div></td>
-                                <td><button type="button" id=buttonTelefonoAlternativo class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarTelefonoAlternativo()">
-                                    <i class="fas fa-edit"></i>
-                                    </button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Dirección</strong>:</td>
-                                <td><div class="input-group mb-3">
-                                    <input required type="text" id="formDireccion" name="direccion" class="form-control" placeholder={{object.direccion}} aria-label={{object.direccion}}
-                                      aria-describedby="basic-addon1" readonly />
-                                  </div></td>
-                                <td><button type="button" id=buttonDireccion class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarDireccion()">
-                                    <i class="fas fa-edit"></i>
-                                    </button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Tipo de Cliente</strong>:</td>
-                                <td>{{object.get_tipo_display}}</td>
-                            </tr>
-                            
-                        </table>
-                    </div>
-                    <a href= "{{referer}}" class="btn btn-warning mb-3 ms-3">
-                        <i class="fas fa-arrow-left"></i>
-                        Regresar
-                    </a>
-                    <button class="btn btn-warning mb-3" id=buttonGuardarCambios type="submit">
-                        <i class="fas fa-user-plus"></i>
-                        Guardar Cambios
-                      </button>
-                </div>
-            </form>
-            
-        </div>
+        <!-- Tabs navs -->
+        <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+            <li class="nav-item" role="presentation">
+            <a
+                class="nav-link active"
+                id="ex1-tab-1"
+                data-mdb-toggle="tab"
+                href="#ex1-tabs-1"
+                role="tab"
+                aria-controls="ex1-tabs-1"
+                aria-selected="true"
+                >Perfil del Cliente</a
+            >
+            </li>
+            <li class="nav-item" role="presentation">
+            <a
+                class="nav-link"
+                id="ex1-tab-2"
+                data-mdb-toggle="tab"
+                href="#ex1-tabs-2"
+                role="tab"
+                aria-controls="ex1-tabs-2"
+                aria-selected="false"
+                >Ordenes del Cliente</a
+            >
+            </li>
+            <li class="nav-item" role="presentation">
+            <a
+                class="nav-link"
+                id="ex1-tab-3"
+                data-mdb-toggle="tab"
+                href="#ex1-tabs-3"
+                role="tab"
+                aria-controls="ex1-tabs-3"
+                aria-selected="false"
+                >Promociones</a
+            >
+            </li>
+        </ul>
+        <!-- Tabs navs -->
         
+        <!-- Tabs content -->
+        <!-- Contenido de Tab Perfil del Cliente -->
+        <div class="tab-content" id="ex1-content">
+            <div
+            class="tab-pane fade show active"
+            id="ex1-tabs-1"
+            role="tabpanel"
+            aria-labelledby="ex1-tab-1"
+            >
+            <div class="row">
+                <form id="ProfileForm" method="POST">
+                    {% csrf_token %}
+                    <div class="col-12 my-3 pt-3 shadow">
+                        <div class="table-responsive">
+                            <table class="table" id="tabla">
+                                <tr>
+                                    <td><strong>Nombre</strong>:</td>
+                                    <td><div class="input-group mb-3">
+                                        <input required type="text" id="formNombre" name="nombre" class="form-control" placeholder={{object.nombre}} aria-label={{object.nombre}}
+                                          aria-describedby="basic-addon1" readonly />
+                                      </div></td>
+                                    <td><button type="button" id=buttonNombre class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarNombre()">
+                                        <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" id=buttonReloadNombre class="btn btn-info btn-floating" data-mdb-ripple-color="dark" onclick="reestablecerNombre()">
+                                        <i class="fas fa-undo"></i>
+                                        </button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Teléfono</strong>:</td>
+                                    <td><div class="input-group mb-3">
+                                        <input type="tel" class="form-control" placeholder={{object.telefono}} aria-label={{object.telefono}}
+                                          aria-describedby="basic-addon1" readonly />
+                                      </div></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Teléfono Alternativo</strong>:</td>
+                                    <td><div class="input-group mb-3">
+                                        <input required minlength="10" maxlength="10" type="tel" id="formTelefonoAlternativo" name="telefono_alternativo" class="form-control" placeholder={{object.telefono_alternativo}} aria-label={{object.telefono_alternativo}}
+                                          aria-describedby="basic-addon1" readonly />
+                                      </div></td>
+                                    <td><button type="button" id=buttonTelefonoAlternativo class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarTelefonoAlternativo()">
+                                        <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" id=buttonReloadTelefonoAlternativo class="btn btn-info btn-floating" data-mdb-ripple-color="dark" onclick="reestablecerTelefonoAlternativo()">
+                                        <i class="fas fa-undo"></i>
+                                        </button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dirección</strong>:</td>
+                                    <td><div class="input-group mb-3">
+                                        <input required type="text" id="formDireccion" name="direccion" class="form-control" placeholder={{object.direccion}} aria-label={{object.direccion}}
+                                          aria-describedby="basic-addon1" readonly />
+                                      </div></td>
+                                    <td><button type="button" id=buttonDireccion class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarDireccion()">
+                                        <i class="fas fa-edit"></i>
+                                        </button><button type="button" id=buttonReloadDireccion class="btn btn-info btn-floating" data-mdb-ripple-color="dark" onclick="reestablecerDireccion()">
+                                            <i class="fas fa-undo"></i>
+                                            </button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tipo de Cliente</strong>:</td>
+                                    <td><div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder={{object.get_tipo_display}} aria-label={{object.get_tipo_display}}
+                                          aria-describedby="basic-addon1" readonly />
+                                      </div></td>
+                                    <td></td>
+                                </tr>
+                                
+                            </table>
+                        </div>
+                        <a href= "{{referer}}" class="btn btn-warning mb-3 ms-3">
+                            <i class="fas fa-arrow-left"></i>
+                            Regresar
+                        </a>
+                        <button class="btn btn-warning mb-3" id=buttonGuardarCambios type="submit">
+                            <i class="fas fa-user-plus"></i>
+                            Guardar Cambios
+                          </button>
+                    </div>
+                </form>
+                
+            </div>
+            </div>
+
+            <!-- Contenido de Tab Ordenes del Cliente -->
+            <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                <div class="row"> 
+                    {% if pedidos %}
+                    <div class="col-12 my-3 pt-3 shadow">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Total</th>
+                                        <th scope="col">Descuento</th>
+                                        <th scope="col">Total con descuento</th>
+                                        <th scope="col">Detalle del pedido</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pedido in pedidos %}
+                                    <tr>
+                                        <td>{{pedido.fecha}}</td>
+                                        <td id="a{{forloop.counter}}">${{pedido.total}}</td>
+                                        <td id="b{{forloop.counter}}">{{pedido.promocion}}</td>
+                                        <td id="c{{forloop.counter}}">${{pedido.total_descuento}}</td>
+                                        <td><!-- Button trigger modal -->
+                                            <button
+                                              type="button"
+                                              class="btn btn-primary"
+                                              data-mdb-toggle="modal"
+                                              data-mdb-target="#modal{{forloop.counter}}"
+                                            >
+                                              Ver detalle
+                                            </button>
+                                            
+                                            <!-- Modal -->
+                                            <div
+                                              class="modal fade"
+                                              id="modal{{forloop.counter}}"
+                                              tabindex="-1"
+                                              aria-labelledby="exampleModalLabel"
+                                              aria-hidden="true"
+                                            >
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Detalle del pedido</h5>
+                                                    <button
+                                                      type="button"
+                                                      class="btn-close"
+                                                      data-mdb-dismiss="modal"
+                                                      aria-label="Close"
+                                                    ></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                      <ul id="modal_ul{{pedido.id}}">
+
+                                                      </ul>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                                      Cerrar
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                        
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% else %}  
+                    <br>
+                    <h3>Este cliente no ha realizado pedidos</h3>
+                    {% endif %} 
+                </div>
+            </div>
+
+            <!-- Contenido de Tab Promociones -->
+            <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+            Tab 3 content
+            </div>
+        </div>
+        <!-- Tabs content -->  
     </div>
+    
 {% endblock content %}
 
 {% block script %}
 
     <script>
+
         window.onload = function() {
             document.getElementById('buttonGuardarCambios').style.display = "none";
-        };
+            document.getElementById('buttonReloadNombre').style.display = "none";
+            document.getElementById('buttonReloadTelefonoAlternativo').style.display = "none";
+            document.getElementById('buttonReloadDireccion').style.display = "none";
+            construyeModals();
+        }
+        function construyeModals(){
+            
+            {% for pedido in pedidos %}
+                //Obtener identificador del pedido
+                var idPedido = {{pedido.id}};
+                //Obtener el elemento que tiene el id del pedido, llamarlo x
+                var padre = document.getElementById("modal_ul"+idPedido);
+                {% for ordenPlatillo in ordenes_platillo %}
+                    //Obtener las ordenplatillo que corresponden al id del pedido
+                    if ({{ordenPlatillo.orden.id}} == idPedido){
+                        //Para cada ordenPlatillo, crear un elemento y añadir como hijo a la lista padre
+                        var hijo = document.createElement("li");
+                        var cadenaHTML = "";
+                        {% if ordenPlatillo.es_completa %}
+                        cadenaHTML = "{{ordenPlatillo.cantidad}} Menú-{{ordenPlatillo.platillo.nombre}}(s) .......... ${{ordenPlatillo.sub_total}}";
+                        {% elif ordenPlatillo.sub_total == 0 %}
+                        cadenaHTML = "{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s) .......... (complemento)";
+                        {% else %}
+                        cadenaHTML = "{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s) .......... ${{ordenPlatillo.sub_total}}";
+                        {% endif %}
+                        hijo.innerHTML = cadenaHTML;
+                        padre.appendChild(hijo);
+                    }
+                {% endfor %} 
+            {% endfor %} 
+        }
+        
+        
         function cambiarNombre(){
-            print
             document.getElementById('formNombre').removeAttribute("readonly");
             document.getElementById('buttonNombre').style.display = "none";
+            document.getElementById('buttonReloadNombre').style.display = "initial";
             document.getElementById('buttonGuardarCambios').style.display = "initial";
         }
         function cambiarTelefonoAlternativo(){
             document.getElementById('formTelefonoAlternativo').removeAttribute("readonly");
             document.getElementById('buttonTelefonoAlternativo').style.display = "none";
+            document.getElementById('buttonReloadTelefonoAlternativo').style.display = "initial";
             document.getElementById('buttonGuardarCambios').style.display = "initial";
         }
         function cambiarDireccion(){
             document.getElementById('formDireccion').removeAttribute("readonly");
             document.getElementById('buttonDireccion').style.display = "none";
+            document.getElementById('buttonReloadDireccion').style.display = "initial";
             document.getElementById('buttonGuardarCambios').style.display = "initial";
         }
+        function reestablecerNombre(){
+            document.getElementById('buttonReloadNombre').style.display = "none";
+            document.getElementById('buttonNombre').style.display = "initial";
+            document.getElementById('formNombre').value = "";
+            document.getElementById('formNombre').readOnly = true;
+        }
+        function reestablecerTelefonoAlternativo(){
+            document.getElementById('buttonReloadTelefonoAlternativo').style.display = "none";
+            document.getElementById('buttonTelefonoAlternativo').style.display = "initial";
+            document.getElementById('formTelefonoAlternativo').value = "";
+            document.getElementById('formTelefonoAlternativo').readOnly = true;
+        }
+        function reestablecerDireccion(){
+            document.getElementById('buttonReloadDireccion').style.display = "none";
+            document.getElementById('buttonDireccion').style.display = "initial";
+            document.getElementById('formDireccion').value = "";
+            document.getElementById('formDireccion').readOnly = true;
+        }
+
     </script>
 
 {% endblock script %}

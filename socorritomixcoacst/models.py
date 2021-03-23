@@ -30,13 +30,18 @@ class Orden(models.Model):
     fecha = models.DateTimeField(null=False)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return "ID: " + str(self.id) + ", Fecha: " + str(self.fecha) + ", Monto: $"+ str(self.total_descuento) + ", Cliente: " + self.cliente.nombre
+
 class Platillo(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
     precio = models.FloatField(max_length=5, null=False)
     descripcion = models.CharField(max_length=256, null=False, blank=False)
     tipo = models.CharField(choices=TIPO_PLATILLO, max_length=2, null=False, blank=False)
     es_complemento = models.BooleanField(null=False)
-
+    
+    def __str__(self):
+        return "Nombre: " + self.nombre + ", Precio: " + str(self.precio) + ", Tipo: "+ self.tipo
 
 class OrdenPlatillo(models.Model):
     sub_total = models.FloatField(max_length=5, null=False)
@@ -44,6 +49,9 @@ class OrdenPlatillo(models.Model):
     cantidad = models.IntegerField(null=False)
     orden = models.ForeignKey(Orden, on_delete=models.PROTECT)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
+    
+    def __str__(self):
+        return "ID: " + str(self.id) + ", Es completa: " + str(self.es_completa) + ", Platillo: " + self.platillo.nombre + ", Cantidad: " + str(self.cantidad) + ", Subtotal: $" + str(self.sub_total)
 
 class Promocion(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
