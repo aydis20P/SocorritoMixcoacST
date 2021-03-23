@@ -31,7 +31,7 @@
                 role="tab"
                 aria-controls="ex1-tabs-2"
                 aria-selected="false"
-                >Ordenes del Cliente</a
+                >Pedidos del Cliente</a
             >
             </li>
             <li class="nav-item" role="presentation">
@@ -66,10 +66,11 @@
                             <table class="table" id="tabla">
                                 <tr>
                                     <td><strong>Nombre</strong>:</td>
-                                    <td><div class="input-group mb-3">
-                                        <input required type="text" id="formNombre" name="nombre" class="form-control" placeholder={{object.nombre}} aria-label={{object.nombre}}
-                                          aria-describedby="basic-addon1" readonly />
-                                      </div></td>
+                                    <td><div class="form-outline">
+                                        <input type="text" required maxlength="64" id="formNombre" name="nombre" class="form-control" readonly />
+                                        <label class="form-label" for="formNombre">{{object.nombre}}</label>
+                                      </div>
+                                    </td>
                                     <td><button type="button" id=buttonNombre class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarNombre()">
                                         <i class="fas fa-edit"></i>
                                         </button>
@@ -79,18 +80,20 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Teléfono</strong>:</td>
-                                    <td><div class="input-group mb-3">
-                                        <input type="tel" class="form-control" placeholder={{object.telefono}} aria-label={{object.telefono}}
-                                          aria-describedby="basic-addon1" readonly />
-                                      </div></td>
+                                    <td><div class="form-outline">
+                                        <input type="tel" class="form-control" readonly />
+                                        <label class="form-label" for="formTelefono">{{object.telefono}}</label>
+                                      </div>
+                                    </td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Teléfono Alternativo</strong>:</td>
-                                    <td><div class="input-group mb-3">
-                                        <input required minlength="10" maxlength="10" type="tel" id="formTelefonoAlternativo" name="telefono_alternativo" class="form-control" placeholder={{object.telefono_alternativo}} aria-label={{object.telefono_alternativo}}
-                                          aria-describedby="basic-addon1" readonly />
-                                      </div></td>
+                                    <td><div class="form-outline">
+                                        <input type="text" required minlength="10" maxlength="10" id="formTelefonoAlternativo" name="telefono_alternativo" class="form-control" readonly />
+                                        <label class="form-label" for="formTelefonoAlternativo">{{object.telefono_alternativo}}</label>
+                                      </div>
+                                    </td>
                                     <td><button type="button" id=buttonTelefonoAlternativo class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarTelefonoAlternativo()">
                                         <i class="fas fa-edit"></i>
                                         </button>
@@ -100,10 +103,11 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Dirección</strong>:</td>
-                                    <td><div class="input-group mb-3">
-                                        <input required type="text" id="formDireccion" name="direccion" class="form-control" placeholder={{object.direccion}} aria-label={{object.direccion}}
-                                          aria-describedby="basic-addon1" readonly />
-                                      </div></td>
+                                    <td><div class="form-outline">
+                                        <input type="text" required maxlength="128" id="formDireccion" name="direccion" class="form-control" readonly />
+                                        <label class="form-label" for="formDireccion">{{object.direccion}}</label>
+                                      </div>
+                                    </td>
                                     <td><button type="button" id=buttonDireccion class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarDireccion()">
                                         <i class="fas fa-edit"></i>
                                         </button><button type="button" id=buttonReloadDireccion class="btn btn-info btn-floating" data-mdb-ripple-color="dark" onclick="reestablecerDireccion()">
@@ -111,11 +115,26 @@
                                             </button></td>
                                 </tr>
                                 <tr>
+                                    <td><strong>Referencias</strong>:</td>
+                                    <td><div class="form-outline">
+                                        <input type="text" required maxlength="128" id="formReferencias" name="referencias" class="form-control" readonly />
+                                        <label class="form-label" for="formReferencias">{{object.referencias}}</label>
+                                      </div>
+                                    </td>
+                                    <td><button type="button" id=buttonReferencias class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarReferencias()">
+                                        <i class="fas fa-edit"></i>
+                                        </button><button type="button" id=buttonReloadReferencias class="btn btn-info btn-floating" data-mdb-ripple-color="dark" onclick="reestablecerReferencias()">
+                                            <i class="fas fa-undo"></i>
+                                            </button>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td><strong>Tipo de Cliente</strong>:</td>
-                                    <td><div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder={{object.get_tipo_display}} aria-label={{object.get_tipo_display}}
-                                          aria-describedby="basic-addon1" readonly />
-                                      </div></td>
+                                    <td><div class="form-outline">
+                                        <input type="text" class="form-control" readonly />
+                                        <label class="form-label" for="formReferencias">{{object.get_tipo_display}}</label>
+                                      </div>
+                                    </td>
                                     <td></td>
                                 </tr>
                                 
@@ -208,16 +227,26 @@
                             </table>
                         </div>
                     </div>
-                    {% else %}  
-                    <br>
-                    <h3>Este cliente no ha realizado pedidos</h3>
+                    {% else %}
+                    <div class="col-12 my-3 pt-3 shadow">
+                        <br><h5>Este cliente no ha realizado pedidos</h5>
+                    </div>  
+                    
+                    
                     {% endif %} 
                 </div>
             </div>
 
             <!-- Contenido de Tab Promociones -->
             <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-            Tab 3 content
+                <div class="col-12 my-3 pt-3 shadow">
+                    <div class="text-center">
+                    <br><h5>     ¡Seccion en construccion!</h5>
+                    <i class="fas fa-hard-hat fa-6x"></i>
+                    <i class="fas fa-cogs fa-6x"></i>
+                    <div class="pt-3"></div>
+                </div>  
+                </div>
             </div>
         </div>
         <!-- Tabs content -->  
@@ -234,7 +263,10 @@
             document.getElementById('buttonReloadNombre').style.display = "none";
             document.getElementById('buttonReloadTelefonoAlternativo').style.display = "none";
             document.getElementById('buttonReloadDireccion').style.display = "none";
+            document.getElementById('buttonReloadReferencias').style.display = "none";
             construyeModals();
+            verificaTelAlternativoNulo();
+            verificaReferenciasNulo();
         }
         function construyeModals(){
             
@@ -249,12 +281,12 @@
                         //Para cada ordenPlatillo, crear un elemento y añadir como hijo a la lista padre
                         var hijo = document.createElement("li");
                         var cadenaHTML = "";
-                        {% if ordenPlatillo.es_completa %}
-                        cadenaHTML = "{{ordenPlatillo.cantidad}} Menú-{{ordenPlatillo.platillo.nombre}}(s) .......... ${{ordenPlatillo.sub_total}}";
+                        {% if ordenPlatillo.es_completa and not ordenPlatillo.platillo.es_complemento %}
+                        cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} Menú-{{ordenPlatillo.platillo.nombre}}(s)</div><div>${{ordenPlatillo.sub_total}}</div></div>";
                         {% elif ordenPlatillo.sub_total == 0 %}
-                        cadenaHTML = "{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s) .......... (complemento)";
+                        cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s)</div><div>(Complemento)</div></div>";
                         {% else %}
-                        cadenaHTML = "{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s) .......... ${{ordenPlatillo.sub_total}}";
+                        cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s)</div><div>${{ordenPlatillo.sub_total}}</div></div>";
                         {% endif %}
                         hijo.innerHTML = cadenaHTML;
                         padre.appendChild(hijo);
@@ -263,7 +295,16 @@
             {% endfor %} 
         }
         
-        
+        function verificaTelAlternativoNulo(){
+            {% if object.telefono_alternativo == none %}
+                document.getElementById('formTelefonoAlternativo').placeholder = "";
+            {% endif %}
+        }
+        function verificaReferenciasNulo(){
+            {% if object.referencias == none %}
+                document.getElementById('formReferencias').placeholder = "";
+            {% endif %}
+        }
         function cambiarNombre(){
             document.getElementById('formNombre').removeAttribute("readonly");
             document.getElementById('buttonNombre').style.display = "none";
@@ -282,23 +323,48 @@
             document.getElementById('buttonReloadDireccion').style.display = "initial";
             document.getElementById('buttonGuardarCambios').style.display = "initial";
         }
+        function cambiarReferencias(){
+            document.getElementById('formReferencias').removeAttribute("readonly");
+            document.getElementById('buttonReferencias').style.display = "none";
+            document.getElementById('buttonReloadReferencias').style.display = "initial";
+            document.getElementById('buttonGuardarCambios').style.display = "initial";
+        }
         function reestablecerNombre(){
             document.getElementById('buttonReloadNombre').style.display = "none";
             document.getElementById('buttonNombre').style.display = "initial";
             document.getElementById('formNombre').value = "";
+            //Le quitamos el focus al elemento para que el valor por defecto se muestre dentro del input field y no sobre él 
+            document.getElementById('formNombre').focus();
+            document.getElementById('formNombre').blur();
             document.getElementById('formNombre').readOnly = true;
         }
         function reestablecerTelefonoAlternativo(){
             document.getElementById('buttonReloadTelefonoAlternativo').style.display = "none";
             document.getElementById('buttonTelefonoAlternativo').style.display = "initial";
             document.getElementById('formTelefonoAlternativo').value = "";
+            //Le quitamos el focus al elemento para que el valor por defecto se muestre dentro del input field y no sobre él 
+            document.getElementById('formTelefonoAlternativo').focus();
+            document.getElementById('formTelefonoAlternativo').blur();
             document.getElementById('formTelefonoAlternativo').readOnly = true;
         }
         function reestablecerDireccion(){
             document.getElementById('buttonReloadDireccion').style.display = "none";
             document.getElementById('buttonDireccion').style.display = "initial";
             document.getElementById('formDireccion').value = "";
+            //Le quitamos el focus al elemento para que el valor por defecto se muestre dentro del input field y no sobre él 
+            document.getElementById('formDireccion').focus();
+            document.getElementById('formDireccion').blur();
             document.getElementById('formDireccion').readOnly = true;
+            
+        }
+        function reestablecerReferencias(){
+            document.getElementById('buttonReloadReferencias').style.display = "none";
+            document.getElementById('buttonReferencias').style.display = "initial";
+            document.getElementById('formReferencias').value = "";
+            //Le quitamos el focus al elemento para que el valor por defecto se muestre dentro del input field y no sobre él 
+            document.getElementById('formReferencias').focus();
+            document.getElementById('formReferencias').blur();
+            document.getElementById('formReferencias').readOnly = true;
         }
 
     </script>

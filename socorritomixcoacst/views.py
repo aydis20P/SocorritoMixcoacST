@@ -143,9 +143,10 @@ class PerfilCliente(DetailView):
 
      def post(self, request, *args, **kwargs):
           self.object = self.get_object() # asignar object a la vista
-          nombre = request.POST.get("nombre")
+          nombre = str(request.POST.get("nombre"))
           telefono_alternativo = request.POST.get("telefono_alternativo")
-          direccion = request.POST.get("direccion")
+          direccion = str(request.POST.get("direccion"))
+          referencias = request.POST.get("referencias")
           tipo = request.POST.get("nombre")
 
           if nombre:
@@ -153,7 +154,9 @@ class PerfilCliente(DetailView):
           if telefono_alternativo:
                self.object.telefono_alternativo=telefono_alternativo
           if direccion:
-               self.object.direccion=direccion      
+               self.object.direccion=direccion  
+          if referencias:
+               self.object.referencias=referencias     
           self.object.save()
 
           return HttpResponseRedirect(request.path_info)
