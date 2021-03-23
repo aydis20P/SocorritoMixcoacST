@@ -129,10 +129,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Tipo de Cliente</strong>:</td>
+                                    <td><strong>Tipo de Cliente </strong>:</td>
                                     <td><div class="form-outline">
                                         <input type="text" class="form-control" readonly />
-                                        <label class="form-label" for="formReferencias">{{object.get_tipo_display}}</label>
+                                        <label class="form-label" for="formTipo">{{object.get_tipo_display}} ({{num_pedidos_realizados}} pedidos realizados)</label>
+                                      </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha de registro</strong>:</td>
+                                    <td><div class="form-outline">
+                                        <input type="text" class="form-control" readonly />
+                                        <label class="form-label" for="formFechaRegistro">{{object.fecha_registro}}</label>
+                                      </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha del último pedido realizado</strong>:</td>
+                                    <td><div class="form-outline">
+                                        <input type="text" class="form-control" readonly />
+                                        <label class="form-label" for="formFechaRegistro">{{fecha_ultimo_pedido}}</label>
+                                      </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total de ingresos generados</strong>:</td>
+                                    <td><div class="form-outline">
+                                        <input type="text" class="form-control" readonly />
+                                        <label class="form-label" for="formDineroGastado">${{dinero_gastado_por_cliente}}</label>
                                       </div>
                                     </td>
                                     <td></td>
