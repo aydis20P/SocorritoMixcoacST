@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente, Orden, OrdenPlatillo
+from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.contrib import messages
@@ -42,6 +42,24 @@ def cliente_no_encontrado(request):
 
 
 def menu_orden(request):
+     #Primero jalamos de la base de datos los platillos,
+     #desglosados en forma de diferentes listas para cada vista
+
+     entradas = []
+     segundos_tiempos = []
+     guisados = []
+     platillos = []
+
+     lista_platillos = Platillo.objects.all()
+     for platillo in lista_platillos:
+          if(platillo.tipo == "EN"):
+               entradas.append(platillo.nombre)
+          if(platillo.tipo == "ST"):
+               segundos_tiempos.append(platillo.nombre)
+          if(platillo.tipo == "GU"):
+               guisados.append(platillo.nombre)
+          platillos.append(list((platillo.nombre, platillo.precio)))
+
      if request.method == "POST":
           orden = []
           total = 0
@@ -79,19 +97,12 @@ def menu_orden(request):
           pag_ant = request.META.get('HTTP_REFERER')
           print(pag_ant)
 
-          p1 = ["Albondiga", 60.5]
-          p2 = ["Taco azteca", 60.5]
-          p3 = ["Coca-cola", 20]
-          p4 = ["Sopa", 30]
-          platillos = []
-          platillos.append(p1)
-          platillos.append(p2)
-          platillos.append(p3)
-          platillos.append(p4)
-
           context = {}
-          context['referer'] = pag_ant#mandarlo en el contexto
-          context['platillos'] = platillos
+          context['referer'] = pag_ant #mandarlo en el contexto
+          context['platillos'] = zip(platillos) #hay que hacer esto, no se por que
+          context['entradas'] = entradas
+          context['segundos_tiempos'] = segundos_tiempos
+          context['guisados'] = guisados
           return render(request, 'menu-orden.html', context)
 
 def resumen_pedido(request):
