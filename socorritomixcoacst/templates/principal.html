@@ -21,7 +21,7 @@
                                 {% csrf_token %}
                                     <div class="input-group">
                                         <div class="form-outline">
-                                            <input required type="tel" id="telefono" class="form-control" name="telefono" /><!-- agregamos name que regresará en método POST -->
+                                            <input required type="tel" autocomplete="off" id="telefono" class="form-control" name="telefono" /><!-- agregamos name que regresará en método POST -->
                                             <label class="form-label" for="form1">Teléfono</label>
                                         </div>
                                         <!-- Cambiamos href por button con type submit -->
