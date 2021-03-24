@@ -31,6 +31,9 @@
 						<!--este elemento estará oculto, pero se usará de referencia para generar las entradas de la lista de menús completos-->
 						<li class="list-group-item" id="plantilla-menu" hidden>
 							<div class="d-flex align-items-center justify-content-between flex-wrap" id="contenedor-entrada-lista">
+								<div class="numero-menu">
+									menú $(número)
+								</div>
 								<div class="dropdown">
 									<button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Primer tiempo</button>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -184,9 +187,11 @@
 
 			//buscamos en el documento el elemento con id "plantilla-menu", extraemos su código HTML,
 			//y se lo insertamos al menú que acabamos de crear,
-			//para luego buscar el elemento "lista-menus" y agregrle el menú que acabamos de crear
+			//para luego buscar el elemento "lista-menus" y agregrle el menú que acabamos de crear.
+			//luego buscamos dentro del elemento buscamos el texto y le ponemos su número de menú
 			//por último incrementamos el contador de cuantos menús hay en la vista
 			nuevoMenu.innerHTML = document.getElementById("plantilla-menu").innerHTML
+			nuevoMenu.getElementsByClassName("numero-menu")[0].innerText = "Menú " + (numero_menus + 1)
 			document.getElementById("lista-menus").appendChild(nuevoMenu)
 			numero_menus++
 		}
@@ -204,10 +209,11 @@
 			numero_menus--
 
 			//ahora obtenemos todos los menús en el documento,
-			//y a cada uno le reasignamos su ID para mantener la secuencia de estos
+			//y a cada uno le reasignamos su ID y texto para mantener la secuencia de estos
 			menus = document.getElementsByClassName("menu-completo")
 			for (var i=0; i<menus.length; i++){
 				menus[i].id = "menu-" + i
+				menus[i].getElementsByClassName("numero-menu")[0].innerText = "Menú " + (i + 1)
 			}
 		}
 
