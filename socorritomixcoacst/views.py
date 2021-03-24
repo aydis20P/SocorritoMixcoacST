@@ -130,7 +130,16 @@ class PerfilCliente(DetailView):
 
      def get_context_data(self, **kwargs):
           context = super().get_context_data(**kwargs)
-          context['referer'] = self.request.META.get('HTTP_REFERER')
+
+          #TODO revisar flujo hacia esta template cuando se llega desde la vista administrativa
+          # en base a ello modificar referer
+          
+          #obtener la url actual
+          url_actual = self.request.get_full_path()
+          #quitar la subcadena 'perfil-cliente/' de la url actual
+          nueva_url = url_actual.replace('perfil-cliente/','')
+          #mandar la nueva url en el contxto con el nombre referer
+          context['referer'] = nueva_url
 
           #Se obtienen todos los pedidos realizados por el cliente y se guardan en una lista
           lista_pedidos = Orden.objects.filter(cliente=self.object)

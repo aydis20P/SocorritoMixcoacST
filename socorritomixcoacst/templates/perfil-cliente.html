@@ -91,7 +91,7 @@
                                     <td><strong>Teléfono Alternativo</strong>:</td>
                                     <td><div class="form-outline">
                                         <input type="text" required minlength="10" maxlength="10" id="formTelefonoAlternativo" name="telefono_alternativo" class="form-control" readonly />
-                                        <label class="form-label" for="formTelefonoAlternativo">{{object.telefono_alternativo}}</label>
+                                        <label id="lbl-tel-alt" class="form-label" for="formTelefonoAlternativo">{{object.telefono_alternativo}}</label>
                                       </div>
                                     </td>
                                     <td><button type="button" id=buttonTelefonoAlternativo class="btn btn-warning btn-floating" data-mdb-ripple-color="dark" onclick="cambiarTelefonoAlternativo()">
@@ -323,8 +323,8 @@
         }
         
         function verificaTelAlternativoNulo(){
-            {% if object.telefono_alternativo == none %}
-                document.getElementById('formTelefonoAlternativo').placeholder = "";
+            {% if not object.telefono_alternativo %}
+                document.getElementById('lbl-tel-alt').textContent = "Agregar Teléfono Alternativo";
             {% endif %}
         }
         function verificaReferenciasNulo(){
