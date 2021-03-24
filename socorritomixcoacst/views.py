@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente
+from .models import Usuario, Cliente, Orden, OrdenPlatillo
+from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.db import IntegrityError
 
@@ -107,16 +108,45 @@ def resumen_pedido(request):
 	context["observacion"] = request.session.get('observacion')
 	return render(request, "resumen-pedido.html", context)
 
-def perfil_cliente(request):
-     clientes = request.session['clientes_qs']
-     context = {}
-     context['clientes'] = clientes
-     context['nombre'] = clientes[0][0]
-     context['telefono1'] = clientes[0][1]
-     context['telefono2'] = clientes[0][2]
-     context['direccion'] = clientes[0][3]
-     context['tipo'] = clientes[0][4]
-     return render(request, 'perfil-cliente.html', context)
+class PerfilCliente(DetailView):
+
+     model = Cliente
+     template_name = "perfil-cliente.html"
+
+     def get_context_data(self, **kwargs):
+          context = super().get_context_data(**kwargs)
+          context['referer'] = self.request.META.get('HTTP_REFERER')
+
+          lista_pedidos = Orden.objects.filter(cliente=self.object)
+          context['pedidos'] = lista_pedidos
+          lista_ordenesPlatillo = []
+          for pedido in lista_pedidos:
+               aux = OrdenPlatillo.objects.filter(orden=pedido)
+               for ordenPlatillo in aux:
+                    lista_ordenesPlatillo.append(ordenPlatillo)
+          context['ordenes_platillo'] = lista_ordenesPlatillo
+          return context
+
+     def post(self, request, *args, **kwargs):
+          self.object = self.get_object() # asignar object a la vista
+          nombre = str(request.POST.get("nombre"))
+          telefono_alternativo = request.POST.get("telefono_alternativo")
+          direccion = str(request.POST.get("direccion"))
+          referencias = request.POST.get("referencias")
+          tipo = request.POST.get("nombre")
+
+          if nombre:
+               self.object.nombre=nombre
+          if telefono_alternativo:
+               self.object.telefono_alternativo=telefono_alternativo
+          if direccion:
+               self.object.direccion=direccion  
+          if referencias:
+               self.object.referencias=referencias     
+          self.object.save()
+
+          return HttpResponseRedirect(request.path_info)
+
 
 def prueba(request):
 	
