@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Usuario, Cliente
 from django.views.generic.detail import DetailView
+from django.db import IntegrityError
 
 def principal(request):
      if request.method=="POST":
@@ -89,21 +90,6 @@ def menu_orden(request):
           context['platillos'] = platillos
           return render(request, 'menu-orden.html', context)
 
-def registrar_cliente(request):
-     if request.method == "POST":
-          print("nombre post: " + request.POST.get('nombre'))
-          clientes_qs = []
-          cliente = [request.POST.get('nombre'), request.POST.get('tel1'), request.POST.get('tel2'), request.POST.get('direccion'), "Nuevo"]
-          clientes_qs.append(cliente)
-          request.session['clientes_qs'] = clientes_qs #la agregamos a una variable de sesión
-
-          request.session['telefono'] = request.POST.get('tel1')
-
-          return redirect('busqueda-cliente')
-     else:
-          context = {}
-          return render (request, 'registrar-cliente.html', context)
-
 def resumen_pedido(request):
 
 	orden = [
@@ -136,3 +122,32 @@ def prueba(request):
 	
 	context = {}
 	return render(request, "prueba.html", context)
+
+def registrar_clientes(request):
+     """ Pregunta si hay datos ocultos(POST)"""
+     if request.method == "POST":
+          cliente_registro = Cliente(nombre=request.POST.get("nombre")+" "+request.POST.get("apellidos"), 
+                                   direccion=request.POST.get("direccion"),
+                                   telefono=request.POST.get("telefono"),
+                                   telefono_alternativo=request.POST.get("telefonoalt"),
+                                   referencias=request.POST.get("obs"),
+                                   tipo="NU"
+                                   )
+          """ Manejo de excepciones """                         
+          try:
+               """Guarda los datos en BD (mysql)"""
+               cliente_registro.save()
+               """Redirecciona la página a una url absoluta que contiene los datos del cliente"""
+               return redirect(cliente_registro.get_absolute_url())
+          #"""Si existe una excepción de IntegrityError"""
+          except IntegrityError:
+               print("Este cliente ya está registrado ") # TODO mandar mensaje advirtiendo ckiente registrado
+               context = {}
+               """Vuelve a la ventana registrar-clientes"""
+               return render (request, 'registrar-clientes.html', context)
+
+          
+          
+     else:
+          context = {}
+          return render (request, 'registrar-clientes.html', context)
