@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Usuario, Cliente
 from django.views.generic.detail import DetailView
+from django.contrib import messages
+
 
 def principal(request):
      if request.method=="POST":
@@ -11,6 +13,7 @@ def principal(request):
                return redirect(cliente_url)
           else:
                print("No se encontró el cliente")#TODO desplegar mensaje advirtiendo
+               messages.warning(request, "¡¡¡No se encontró al cliente!!!")
                context = {}
                return redirect('cliente-no-encontrado')
 
