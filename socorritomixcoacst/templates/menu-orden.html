@@ -32,27 +32,36 @@
                         <li class="list-group-item" id="plantilla-menu" hidden>
                             <div class="d-flex align-items-center justify-content-between flex-wrap" id="contenedor-entrada-lista">
                                 <div class="numero-menu">
-                                    menú $(número)
+                                    menú número
                                 </div>
                                 <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Primer tiempo</button>
+                                    <button class="btn dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Entrada</button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><button class="dropdown-item" href="#">Sopa</button></li>
-                                        <li><button class="dropdown-item" href="#">Consomé</button></li>
+                                        {% for entrada in entradas %}
+                                        <li><button type="button" class="dropdown-item" onclick="seleccionar(this)">{{ entrada }}</button></li>
+                                        {% endfor %}
+                                        <!-- acá se va a guardar la selección de platillo -->
+                                        <div id="seleccion-entrada" class="seleccion" hidden></div>
                                     </ul>
                                 </div>
                                 <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Segúndo tiempo</button>
+                                    <button class="btn dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Segúndo tiempo</button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><button class="dropdown-item" href="#">Arroz</button></li>
-                                        <li><button class="dropdown-item" href="#">Espagueti</button></li>
+                                        {% for segundo_tiempo in segundos_tiempos %}
+                                        <li><button type="button" class="dropdown-item" onclick="seleccionar(this)">{{ segundo_tiempo }}</button></li>
+                                        {% endfor %}
+                                        <!-- acá se va a guardar la selección de platillo -->
+                                        <div id="seleccion-segundo-tiempo" class="seleccion" hidden></div>
                                     </ul>
                                 </div>
                                 <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Tercer tiempo</button>
+                                    <button class="btn dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Güisado</button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><button class="dropdown-item" href="#">Pollo con mole</button></li>
-                                        <li><button class="dropdown-item" href="#">Taco Azteca</button></li>
+                                        {% for guisado in guisados %}
+                                        <li><button type="button" class="dropdown-item" onclick="seleccionar(this)">{{ guisado }}</button></li>
+                                        {% endfor %}
+                                        <!-- acá se va a guardar la selección de platillo -->
+                                        <div id="seleccion-guisado" class="seleccion" hidden></div>
                                     </ul>
                                 </div>
                                 <button type="button" class="btn btn-primary btn-danger" onclick="removerMenu(this)">
@@ -81,10 +90,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for platillo in platillos %}
+                    {% for platillo in platillos%}
                         <tr>
-                            {% for atribb in platillo %}
-                            <td>{{ atribb }}</td>
+                            {% for nombre, precio in platillo %}
+                                <td>{{ nombre }}</td>
+                                <td class="precio">{{ precio }}</td>
                             {% endfor %}
                             {% csrf_token %}
                             <td><div class="d-flex justify-content-start">
@@ -217,6 +227,15 @@
             }
         }
 
+        //función para marcar que selección se hizo en los menús completos
+        function seleccionar(boton){
+            seleccion = boton.parentElement.parentElement.getElementsByClassName("seleccion")[0]
+            boton_dropdown = boton.parentElement.parentElement.parentElement.getElementsByClassName("btn")[0]
+
+            seleccion.innerText = boton.innerText
+            boton_dropdown.innerText = boton.innerText
+        }
+
         function incrementaSpinner(platillo){
             console.log(String(platillo));
             var id = "['"+String(platillo[0])+"', "+String(platillo[1]+"]");//dar formato al arreglo que recibe como parámetro para concordar con el id del elemento
@@ -236,6 +255,19 @@
                 if(val>=0)
                     document.getElementById(id).value = val;
             }
+        }
+
+        //objeto de tipo internacionalización para formatear cifras a precios
+        const formato = new Intl.NumberFormat('es-MX',{
+            style: 'currency',
+            currency: 'MXN',
+            minimumFractionDigits: 2
+        })
+
+        //formateamos los objetos de la clase "precio" en formato monetario
+        precios =  document.getElementsByClassName("precio")
+        for(var i=0; i<precios.length; i++){
+            precios[i].innerHTML = formato.format(precios[i].innerHTML)
         }
     </script>
 {% endblock script %}
