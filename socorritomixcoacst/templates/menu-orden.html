@@ -8,111 +8,111 @@
 {% block content %}
     {% if platillos %}
     <form id="formMenu" method="POST">
-		<!-- definimos las pestañas (vía una lista no ordenada) -->
-		<ul class="nav nav-tabs nav-fill p-3" id="paneles" role="tablist">
-			<li class="nav-item" role="presentation">
-				<a class="nav-link active" id="menu-tab" data-mdb-toggle="tab" href="#panel-menu" role="tab" aria-controls="panel-menu" aria-selected="true">Menús completos</a>
-			</li>
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" id="ordenes-tab" data-mdb-toggle="tab" href="#panel-ordenes" role="tab" aria-controls="panel-ordenes" aria-selected="false">Órdenes</a>
-			</li>
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" id="extras-tab" data-mdb-toggle="tab" href="#panel-extras" role="tab" aria-controls="panel-extras" aria-selected="false">Extras</a>
-			</li>
-		</ul>
+        <!-- definimos las pestañas (vía una lista no ordenada) -->
+        <ul class="nav nav-tabs nav-fill p-3" id="paneles" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="menu-tab" data-mdb-toggle="tab" href="#panel-menu" role="tab" aria-controls="panel-menu" aria-selected="true">Menús completos</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="ordenes-tab" data-mdb-toggle="tab" href="#panel-ordenes" role="tab" aria-controls="panel-ordenes" aria-selected="false">Órdenes</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="extras-tab" data-mdb-toggle="tab" href="#panel-extras" role="tab" aria-controls="panel-extras" aria-selected="false">Extras</a>
+            </li>
+        </ul>
 
-		<!-- Definimos los elementos de la tabla como divisiónes de la clase "tab-pane" -->
-		<div class="tab-content p-3" id="contenido-paneles">
+        <!-- Definimos los elementos de la tabla como divisiónes de la clase "tab-pane" -->
+        <div class="tab-content p-3" id="contenido-paneles">
 
-			<!-- panel 1: menús -->
-			<div class="tab-pane fade show active" id="panel-menu" role="tabpanel" aria-labelledby="menu-tab">
-				<div class="d-flex flex-column px-3" id="contenedor-lista">
-					<ul class="list-group flex-fill" id="lista-menus">
-						<!--este elemento estará oculto, pero se usará de referencia para generar las entradas de la lista de menús completos-->
-						<li class="list-group-item" id="plantilla-menu" hidden>
-							<div class="d-flex align-items-center justify-content-between flex-wrap" id="contenedor-entrada-lista">
-								<div class="numero-menu">
-									menú $(número)
-								</div>
-								<div class="dropdown">
-									<button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Primer tiempo</button>
-									<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-										<li><button class="dropdown-item" href="#">Sopa</button></li>
-										<li><button class="dropdown-item" href="#">Consomé</button></li>
-									</ul>
-								</div>
-								<div class="dropdown">
-									<button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Segúndo tiempo</button>
-									<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-										<li><button class="dropdown-item" href="#">Arroz</button></li>
-										<li><button class="dropdown-item" href="#">Espagueti</button></li>
-									</ul>
-								</div>
-								<div class="dropdown">
-									<button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Tercer tiempo</button>
-									<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-										<li><button class="dropdown-item" href="#">Pollo con mole</button></li>
-										<li><button class="dropdown-item" href="#">Taco Azteca</button></li>
-									</ul>
-								</div>
-								<button type="button" class="btn btn-primary btn-danger" onclick="removerMenu(this)">
-									<i class="far fa-trash-alt fa-lg"></i>
-								</button>
-							</div>
-						</li>
-					</ul>
-					<!-- Botón para agregar un nuevo menú completo -->
-					<div class="d-flex justify-content-end py-3">
-						<button type="button" class="btn btn-primary btn-md btn-warning" onclick="agregarMenu()">
-							<i class="fas fa-plus fa-lg">&Tab;agregar otro menú</i>
-						</button>
-					</div>
-				</div>
-			</div>
+            <!-- panel 1: menús -->
+            <div class="tab-pane fade show active" id="panel-menu" role="tabpanel" aria-labelledby="menu-tab">
+                <div class="d-flex flex-column px-3" id="contenedor-lista">
+                    <ul class="list-group flex-fill" id="lista-menus">
+                        <!--este elemento estará oculto, pero se usará de referencia para generar las entradas de la lista de menús completos-->
+                        <li class="list-group-item" id="plantilla-menu" hidden>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap" id="contenedor-entrada-lista">
+                                <div class="numero-menu">
+                                    menú $(número)
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Primer tiempo</button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><button class="dropdown-item" href="#">Sopa</button></li>
+                                        <li><button class="dropdown-item" href="#">Consomé</button></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Segúndo tiempo</button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><button class="dropdown-item" href="#">Arroz</button></li>
+                                        <li><button class="dropdown-item" href="#">Espagueti</button></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Tercer tiempo</button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><button class="dropdown-item" href="#">Pollo con mole</button></li>
+                                        <li><button class="dropdown-item" href="#">Taco Azteca</button></li>
+                                    </ul>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-danger" onclick="removerMenu(this)">
+                                    <i class="far fa-trash-alt fa-lg"></i>
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- Botón para agregar un nuevo menú completo -->
+                    <div class="d-flex justify-content-end py-3">
+                        <button type="button" class="btn btn-primary btn-md btn-warning" onclick="agregarMenu()">
+                            <i class="fas fa-plus fa-lg">&Tab;agregar otro menú</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-			<!-- panel 2: órdenes  -->
-			<div class="tab-pane fade" id="panel-ordenes" role="tabpanel" aria-labelledby="ordenes-tab">
-				<table class="table">
-					<thead>
-					<tr>
-						<th scope="col">Platillo</th>
-						<th scope="col">Costo</th>
-						<th scope="col"></th>
-					</tr>
-					</thead>
-					<tbody>
-					{% for platillo in platillos %}
-						<tr>
-							{% for atribb in platillo %}
-							<td>{{ atribb }}</td>
-							{% endfor %}
-							{% csrf_token %}
-							<td><div class="d-flex justify-content-start">
-								<div class="form-outline">
-									<input readonly value="0" type="text" id="{{ platillo }}" class="form-control" name="{{ platillo }}"/>
-									<label class="form-label" for="form1">Cantidad</label>
-								</div>
-								<div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
-									<button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner({{ platillo }})">
-									<i class="fas fa-angle-up"></i>
-									</button>
-									<button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner({{ platillo }})">
-									<i class="fas fa-angle-down"></i>
-									</button>
-								</div>
-							</div></td>
-						</tr>
-					{% endfor %}
-					</tbody>
-				</table>
-			</div>
+            <!-- panel 2: órdenes  -->
+            <div class="tab-pane fade" id="panel-ordenes" role="tabpanel" aria-labelledby="ordenes-tab">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Platillo</th>
+                        <th scope="col">Costo</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for platillo in platillos %}
+                        <tr>
+                            {% for atribb in platillo %}
+                            <td>{{ atribb }}</td>
+                            {% endfor %}
+                            {% csrf_token %}
+                            <td><div class="d-flex justify-content-start">
+                                <div class="form-outline">
+                                    <input readonly value="0" type="text" id="{{ platillo }}" class="form-control" name="{{ platillo }}"/>
+                                    <label class="form-label" for="form1">Cantidad</label>
+                                </div>
+                                <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
+                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner({{ platillo }})">
+                                    <i class="fas fa-angle-up"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner({{ platillo }})">
+                                    <i class="fas fa-angle-down"></i>
+                                    </button>
+                                </div>
+                            </div></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-			<!-- panel 3: extras -->
-			<div class="tab-pane fade" id="panel-extras" role="tabpanel" aria-labelledby="extras-tab">
-				aca van los extras. pero aun no tan :)
-			</div>
+            <!-- panel 3: extras -->
+            <div class="tab-pane fade" id="panel-extras" role="tabpanel" aria-labelledby="extras-tab">
+                aca van los extras. pero aun no tan :)
+            </div>
 
-		</div>
+        </div>
 
         <div class="card">
             <div class="card-body">
@@ -174,48 +174,48 @@
 {% endblock content %}
 
 {% block script %}
-		<script>
-		var numero_menus = 0
+        <script>
+        var numero_menus = 0
 
-		function agregarMenu(){
-			//creamos un elemeno de tipo ítem de lista (<li>),
-			//le asignamos las clases list-group-item y menu-completo,
-			//y le damos un identificador del siguente lugar en la lista
-			var nuevoMenu = document.createElement("li")
-			nuevoMenu.className = "list-group-item menu-completo"
-			nuevoMenu.id = "menu-" + numero_menus
+        function agregarMenu(){
+            //creamos un elemeno de tipo ítem de lista (<li>),
+            //le asignamos las clases list-group-item y menu-completo,
+            //y le damos un identificador del siguente lugar en la lista
+            var nuevoMenu = document.createElement("li")
+            nuevoMenu.className = "list-group-item menu-completo"
+            nuevoMenu.id = "menu-" + numero_menus
 
-			//buscamos en el documento el elemento con id "plantilla-menu", extraemos su código HTML,
-			//y se lo insertamos al menú que acabamos de crear,
-			//para luego buscar el elemento "lista-menus" y agregrle el menú que acabamos de crear.
-			//luego buscamos dentro del elemento buscamos el texto y le ponemos su número de menú
-			//por último incrementamos el contador de cuantos menús hay en la vista
-			nuevoMenu.innerHTML = document.getElementById("plantilla-menu").innerHTML
-			nuevoMenu.getElementsByClassName("numero-menu")[0].innerText = "Menú " + (numero_menus + 1)
-			document.getElementById("lista-menus").appendChild(nuevoMenu)
-			numero_menus++
-		}
+            //buscamos en el documento el elemento con id "plantilla-menu", extraemos su código HTML,
+            //y se lo insertamos al menú que acabamos de crear,
+            //para luego buscar el elemento "lista-menus" y agregrle el menú que acabamos de crear.
+            //luego buscamos dentro del elemento buscamos el texto y le ponemos su número de menú
+            //por último incrementamos el contador de cuantos menús hay en la vista
+            nuevoMenu.innerHTML = document.getElementById("plantilla-menu").innerHTML
+            nuevoMenu.getElementsByClassName("numero-menu")[0].innerText = "Menú " + (numero_menus + 1)
+            document.getElementById("lista-menus").appendChild(nuevoMenu)
+            numero_menus++
+        }
 
-		//agregamos la primera órden
-		agregarMenu()
+        //agregamos la primera órden
+        agregarMenu()
 
-		function removerMenu(boton){
-			//ya que el botón se pasa a si mismo como parámetro, lo usamos de referencia para obtener su contenedor,
-			//en este caso su "abuelo" (padre del padre).
-			//ya que tenemos ese elemento, lo borramos,
-			//y decrementamos el contador de menús en la vista
-			menu = boton.parentElement.parentElement
-			menu.remove()
-			numero_menus--
+        function removerMenu(boton){
+            //ya que el botón se pasa a si mismo como parámetro, lo usamos de referencia para obtener su contenedor,
+            //en este caso su "abuelo" (padre del padre).
+            //ya que tenemos ese elemento, lo borramos,
+            //y decrementamos el contador de menús en la vista
+            menu = boton.parentElement.parentElement
+            menu.remove()
+            numero_menus--
 
-			//ahora obtenemos todos los menús en el documento,
-			//y a cada uno le reasignamos su ID y texto para mantener la secuencia de estos
-			menus = document.getElementsByClassName("menu-completo")
-			for (var i=0; i<menus.length; i++){
-				menus[i].id = "menu-" + i
-				menus[i].getElementsByClassName("numero-menu")[0].innerText = "Menú " + (i + 1)
-			}
-		}
+            //ahora obtenemos todos los menús en el documento,
+            //y a cada uno le reasignamos su ID y texto para mantener la secuencia de estos
+            menus = document.getElementsByClassName("menu-completo")
+            for (var i=0; i<menus.length; i++){
+                menus[i].id = "menu-" + i
+                menus[i].getElementsByClassName("numero-menu")[0].innerText = "Menú " + (i + 1)
+            }
+        }
 
         function incrementaSpinner(platillo){
             console.log(String(platillo));
