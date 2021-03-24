@@ -143,30 +143,24 @@ class PerfilCliente(DetailView):
           if telefono_alternativo:
                self.object.telefono_alternativo=telefono_alternativo
           if direccion:
-               self.object.direccion=direccion  
+               self.object.direccion=direccion
           if referencias:
-               self.object.referencias=referencias     
+               self.object.referencias=referencias
           self.object.save()
 
           return HttpResponseRedirect(request.path_info)
 
-
-def prueba(request):
-	
-	context = {}
-	return render(request, "prueba.html", context)
-
 def registrar_clientes(request):
      """ Pregunta si hay datos ocultos(POST)"""
      if request.method == "POST":
-          cliente_registro = Cliente(nombre=request.POST.get("nombre")+" "+request.POST.get("apellidos"), 
+          cliente_registro = Cliente(nombre=request.POST.get("nombre")+" "+request.POST.get("apellidos"),
                                    direccion=request.POST.get("direccion"),
                                    telefono=request.POST.get("telefono"),
                                    telefono_alternativo=request.POST.get("telefonoalt"),
                                    referencias=request.POST.get("obs"),
                                    tipo="NU"
                                    )
-          """ Manejo de excepciones """                         
+          """ Manejo de excepciones """
           try:
                """Guarda los datos en BD (mysql)"""
                cliente_registro.save()
@@ -179,8 +173,8 @@ def registrar_clientes(request):
                """Vuelve a la ventana registrar-clientes"""
                return render (request, 'registrar-clientes.html', context)
 
-          
-          
+
+
      else:
           context = {}
           return render (request, 'registrar-clientes.html', context)
