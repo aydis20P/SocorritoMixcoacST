@@ -49,18 +49,18 @@ def menu_orden(request):
      entradas = []
      segundos_tiempos = []
      guisados = []
-     platillos = []
 
      lista_platillos = Platillo.objects.all()
-     for platillo in lista_platillos:
+
+     """for platillo in lista_platillos:
           if(platillo.tipo == "EN"):
                entradas.append(platillo.nombre)
           if(platillo.tipo == "ST"):
                segundos_tiempos.append(platillo.nombre)
           if(platillo.tipo == "GU"):
                guisados.append(platillo.nombre)
-          platillos.append(list((platillo.nombre, platillo.precio)))
-
+          #platillos.append(list((platillo.nombre, platillo.precio)))
+"""
      if request.method == "POST":
           orden = []
           total = 0
@@ -92,7 +92,7 @@ def menu_orden(request):
           context = {}
           return redirect('resumen-pedido')
 
-     else:
+     else: #Método GET
 
           #obtener la url de la página anterior
           pag_ant = request.META.get('HTTP_REFERER')
@@ -100,7 +100,7 @@ def menu_orden(request):
 
           context = {}
           context['referer'] = pag_ant #mandarlo en el contexto
-          context['platillos'] = zip(platillos) #hay que hacer esto, no se por que
+          context['platillos'] = lista_platillos
           context['entradas'] = entradas
           context['segundos_tiempos'] = segundos_tiempos
           context['guisados'] = guisados

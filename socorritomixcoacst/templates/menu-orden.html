@@ -29,44 +29,43 @@
                 <div class="d-flex flex-column px-3" id="contenedor-lista">
                     <ul class="list-group flex-fill" id="lista-menus">
                         <!--este elemento estará oculto, pero se usará de referencia para generar las entradas de la lista de menús completos-->
-                        <li class="list-group-item" id="plantilla-menu" hidden>
-                            <div class="d-flex align-items-center justify-content-between flex-wrap" id="contenedor-entrada-lista">
-                                <div class="numero-menu">
-                                    menú número
+                        <li class="list-group-item" id="plantilla-menu">
+                            <div class="container">
+                                <div class="row justify-content-between">
+                                    <div class="col">
+                                        <div class="row mb-1">
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected>Entrada</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected>Segundo Tiempo</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="row">
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected>Guisado</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="row mt-1">
+                                            <button type="button" class="btn btn-primary btn-danger" onclick="removerMenu(this)">
+                                                <i class="far fa-trash-alt fa-lg">&Tab;Eliminar</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                               
+                                    
                                 </div>
-                                <div class="dropdown">
-                                    <button class="btn dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Entrada</button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {% for entrada in entradas %}
-                                        <li><button type="button" class="dropdown-item" onclick="seleccionar(this)">{{ entrada }}</button></li>
-                                        {% endfor %}
-                                        <!-- acá se va a guardar la selección de platillo -->
-                                        <div id="seleccion-entrada" class="seleccion" hidden></div>
-                                    </ul>
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Segúndo tiempo</button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {% for segundo_tiempo in segundos_tiempos %}
-                                        <li><button type="button" class="dropdown-item" onclick="seleccionar(this)">{{ segundo_tiempo }}</button></li>
-                                        {% endfor %}
-                                        <!-- acá se va a guardar la selección de platillo -->
-                                        <div id="seleccion-segundo-tiempo" class="seleccion" hidden></div>
-                                    </ul>
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn dropdown-toggle btn-warning" type="button" data-mdb-toggle="dropdown">Güisado</button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {% for guisado in guisados %}
-                                        <li><button type="button" class="dropdown-item" onclick="seleccionar(this)">{{ guisado }}</button></li>
-                                        {% endfor %}
-                                        <!-- acá se va a guardar la selección de platillo -->
-                                        <div id="seleccion-guisado" class="seleccion" hidden></div>
-                                    </ul>
-                                </div>
-                                <button type="button" class="btn btn-primary btn-danger" onclick="removerMenu(this)">
-                                    <i class="far fa-trash-alt fa-lg"></i>
-                                </button>
                             </div>
                         </li>
                     </ul>
@@ -79,7 +78,7 @@
                 </div>
             </div>
 
-            <!-- panel 2: órdenes  -->
+            <!-- tab 2: órdenes  -->
             <div class="tab-pane fade" id="panel-ordenes" role="tabpanel" aria-labelledby="ordenes-tab">
                 <table class="table">
                     <thead>
@@ -92,21 +91,19 @@
                     <tbody>
                     {% for platillo in platillos%}
                         <tr>
-                            {% for nombre, precio in platillo %}
-                                <td>{{ nombre }}</td>
-                                <td class="precio">{{ precio }}</td>
-                            {% endfor %}
+                            <td>{{ platillo.nombre }}</td>
+                            <td class="precio">{{ platillo.precio }}</td>
                             {% csrf_token %}
                             <td><div class="d-flex justify-content-start">
                                 <div class="form-outline">
-                                    <input readonly value="0" type="text" id="{{ platillo }}" class="form-control" name="{{ platillo }}"/>
+                                    <input readonly value="0" type="text" id="orden_de_{{ platillo.nombre }}" class="form-control" name="orden_de_{{ platillo.nombre }}"/>
                                     <label class="form-label" for="form1">Cantidad</label>
                                 </div>
                                 <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
-                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner({{ platillo }})">
+                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_de_{{ platillo.nombre }}')">
                                     <i class="fas fa-angle-up"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner({{ platillo }})">
+                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_de_{{ platillo.nombre }}')">
                                     <i class="fas fa-angle-down"></i>
                                     </button>
                                 </div>
@@ -184,8 +181,30 @@
 {% endblock content %}
 
 {% block script %}
-        <script>
-        var numero_menus = 0
+    <script>
+        window.onload = function() {
+
+        }
+        function incrementaSpinner(platilloNombre){
+            var val = document.getElementById(platilloNombre).value;//obtenemos el valor del elemento
+            val = parseInt(val) + 1;//lo parseamos a int e incrementamos en 1
+            
+            if(!isNaN(val)){//validación Is Not a Number
+                if(val<100)
+                    document.getElementById(platilloNombre).value = val;//actualizamos el valor
+            }
+        }
+
+        function decrementaSpinner(platilloNombre){
+            var val = document.getElementById(platilloNombre).value;
+            val = parseInt(val) - 1;
+            if(!isNaN(val)){
+                if(val>=0)
+                    document.getElementById(platilloNombre).value = val;
+            }
+        }
+
+       /* var numero_menus = 0
 
         function agregarMenu(){
             //creamos un elemeno de tipo ítem de lista (<li>),
@@ -268,6 +287,6 @@
         precios =  document.getElementsByClassName("precio")
         for(var i=0; i<precios.length; i++){
             precios[i].innerHTML = formato.format(precios[i].innerHTML)
-        }
+        }*/
     </script>
 {% endblock script %}
