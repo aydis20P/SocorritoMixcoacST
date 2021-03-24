@@ -2,12 +2,9 @@ from django.shortcuts import render, redirect
 from .models import Usuario, Cliente, Orden, OrdenPlatillo
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
-<<<<<<< HEAD
 from django.contrib import messages
 
-=======
 from django.db import IntegrityError
->>>>>>> 4c3157e1e7a02270d33c621cd2224c21de9eadd3
 
 def principal(request):
      if request.method=="POST":
