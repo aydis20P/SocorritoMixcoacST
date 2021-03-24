@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente
+from .models import Usuario, Cliente, Orden, OrdenPlatillo
+from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
+from django.contrib import messages
+
+from django.db import IntegrityError
 
 def principal(request):
      if request.method=="POST":
@@ -11,6 +15,7 @@ def principal(request):
                return redirect(cliente_url)
           else:
                print("No se encontró el cliente")#TODO desplegar mensaje advirtiendo
+               messages.warning(request, "¡¡¡No se encontró al cliente!!!")
                context = {}
                return redirect('cliente-no-encontrado')
 
@@ -89,21 +94,6 @@ def menu_orden(request):
           context['platillos'] = platillos
           return render(request, 'menu-orden.html', context)
 
-def registrar_cliente(request):
-     if request.method == "POST":
-          print("nombre post: " + request.POST.get('nombre'))
-          clientes_qs = []
-          cliente = [request.POST.get('nombre'), request.POST.get('tel1'), request.POST.get('tel2'), request.POST.get('direccion'), "Nuevo"]
-          clientes_qs.append(cliente)
-          request.session['clientes_qs'] = clientes_qs #la agregamos a una variable de sesión
-
-          request.session['telefono'] = request.POST.get('tel1')
-
-          return redirect('busqueda-cliente')
-     else:
-          context = {}
-          return render (request, 'registrar-cliente.html', context)
-
 def resumen_pedido(request):
 
 	orden = [
@@ -121,13 +111,70 @@ def resumen_pedido(request):
 	context["observacion"] = request.session.get('observacion')
 	return render(request, "resumen-pedido.html", context)
 
-def perfil_cliente(request):
-     clientes = request.session['clientes_qs']
-     context = {}
-     context['clientes'] = clientes
-     context['nombre'] = clientes[0][0]
-     context['telefono1'] = clientes[0][1]
-     context['telefono2'] = clientes[0][2]
-     context['direccion'] = clientes[0][3]
-     context['tipo'] = clientes[0][4]
-     return render(request, 'perfil-cliente.html', context)
+class PerfilCliente(DetailView):
+
+     model = Cliente
+     template_name = "perfil-cliente.html"
+
+     def get_context_data(self, **kwargs):
+          context = super().get_context_data(**kwargs)
+          context['referer'] = self.request.META.get('HTTP_REFERER')
+
+          lista_pedidos = Orden.objects.filter(cliente=self.object)
+          context['pedidos'] = lista_pedidos
+          lista_ordenesPlatillo = []
+          for pedido in lista_pedidos:
+               aux = OrdenPlatillo.objects.filter(orden=pedido)
+               for ordenPlatillo in aux:
+                    lista_ordenesPlatillo.append(ordenPlatillo)
+          context['ordenes_platillo'] = lista_ordenesPlatillo
+          return context
+
+     def post(self, request, *args, **kwargs):
+          self.object = self.get_object() # asignar object a la vista
+          nombre = str(request.POST.get("nombre"))
+          telefono_alternativo = request.POST.get("telefono_alternativo")
+          direccion = str(request.POST.get("direccion"))
+          referencias = request.POST.get("referencias")
+          tipo = request.POST.get("nombre")
+
+          if nombre:
+               self.object.nombre=nombre
+          if telefono_alternativo:
+               self.object.telefono_alternativo=telefono_alternativo
+          if direccion:
+               self.object.direccion=direccion
+          if referencias:
+               self.object.referencias=referencias
+          self.object.save()
+
+          return HttpResponseRedirect(request.path_info)
+
+def registrar_clientes(request):
+     """ Pregunta si hay datos ocultos(POST)"""
+     if request.method == "POST":
+          cliente_registro = Cliente(nombre=request.POST.get("nombre")+" "+request.POST.get("apellidos"),
+                                   direccion=request.POST.get("direccion"),
+                                   telefono=request.POST.get("telefono"),
+                                   telefono_alternativo=request.POST.get("telefonoalt"),
+                                   referencias=request.POST.get("obs"),
+                                   tipo="NU"
+                                   )
+          """ Manejo de excepciones """
+          try:
+               """Guarda los datos en BD (mysql)"""
+               cliente_registro.save()
+               """Redirecciona la página a una url absoluta que contiene los datos del cliente"""
+               return redirect(cliente_registro.get_absolute_url())
+          #"""Si existe una excepción de IntegrityError"""
+          except IntegrityError:
+               print("Este cliente ya está registrado ") # TODO mandar mensaje advirtiendo ckiente registrado
+               context = {}
+               """Vuelve a la ventana registrar-clientes"""
+               return render (request, 'registrar-clientes.html', context)
+
+
+
+     else:
+          context = {}
+          return render (request, 'registrar-clientes.html', context)
