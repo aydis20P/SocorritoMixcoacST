@@ -3,8 +3,9 @@ from .models import Usuario, Cliente, Orden, OrdenPlatillo
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.contrib import messages
-
 from django.db import IntegrityError
+import datetime
+import pytz
 
 def principal(request):
      if request.method=="POST":
@@ -120,14 +121,39 @@ class PerfilCliente(DetailView):
           context = super().get_context_data(**kwargs)
           context['referer'] = self.request.META.get('HTTP_REFERER')
 
+          #Se obtienen todos los pedidos realizados por el cliente y se guardan en una lista
           lista_pedidos = Orden.objects.filter(cliente=self.object)
           context['pedidos'] = lista_pedidos
+          #Se obtienen todas las ordenesPlatillo asociadas a los pedidos del cliente
           lista_ordenesPlatillo = []
+          #Aprovechando el cliclo for que era inicialmente para las ordenesPlatillo, de una vez sacamos la fecha del último pedido realizado por el cliente 
+          #También aprovechamos el mismo ciclo for para sacar el total de dinero gastado por el cliente en la fonda
+          fecha_ultimo_pedido = datetime.datetime(1900, 1, 1, 17, 55) #Inicialmente le asignamos una fecha lejana en el tiempo
+          fecha_mexico = pytz.timezone("America/Mexico_City") #Esta variable nos permite formatear la fecha inicial a una compatible con models.DateField, esto para poder hacer comparaciones
+          fecha_ultimo_pedido = fecha_mexico.localize(fecha_ultimo_pedido) #En este punto las fechas ya se puede comparar
+          fecha_aux = pytz.timezone("America/Mexico_City").localize(datetime.datetime(1900, 1, 1, 17, 55)) #Variable auxiliar que sirve para hacer verificaciones posteriormente
+          dinero_gastado_por_cliente = 0
           for pedido in lista_pedidos:
+               if pedido.fecha > fecha_ultimo_pedido:
+                    fecha_ultimo_pedido = pedido.fecha
                aux = OrdenPlatillo.objects.filter(orden=pedido)
+               dinero_gastado_por_cliente = dinero_gastado_por_cliente + pedido.total_descuento
                for ordenPlatillo in aux:
                     lista_ordenesPlatillo.append(ordenPlatillo)
           context['ordenes_platillo'] = lista_ordenesPlatillo
+          #El siguiente condicional se utiliza para que el form-outline "Fecha del último pedido realizado:" se muestre vacío cuando el cliente no ha realizado ninguna compra
+          if fecha_ultimo_pedido > fecha_aux:
+               context['fecha_ultimo_pedido'] = fecha_ultimo_pedido
+          else:
+               context['fecha_ultimo_pedido'] = ""
+          context['dinero_gastado_por_cliente'] = dinero_gastado_por_cliente
+          #Se obtiene el número de pedidos realizados y se envía como contexto
+          context['num_pedidos_realizados'] = len(lista_pedidos)
+          
+          
+          
+
+
           return context
 
      def post(self, request, *args, **kwargs):
