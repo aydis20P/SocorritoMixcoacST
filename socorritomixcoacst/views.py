@@ -62,34 +62,12 @@ def menu_orden(request):
           #platillos.append(list((platillo.nombre, platillo.precio)))
 """
      if request.method == "POST":
-          orden = []
-          total = 0
           for key, value in request.POST.items():
-               print('Key: %s' % (key) )
+               print('Key: %s' % (key) ) 
                print('Value %s' % (value) )
-               if "Albondiga" in key:
-                    p = ["Albondiga", 60.5, value, int(value)*60.5]
-                    orden.append(p)
-                    total = total + int(value)*60.5
-               if "Taco azteca" in key:
-                    p = ["Taco azteca", 60.5, value, int(value)*60.5]
-                    orden.append(p)
-                    total = total + int(value)*60.5
-               if "Coca-cola" in key:
-                    p = ["Coca-cola", 20, value, int(value)*20]
-                    orden.append(p)
-                    total = total + int(value)*20
-               if "Sopa" in key:
-                    p = ["Sopa", 30, value, int(value)*30]
-                    orden.append(p)
-                    total = total + int(value)*30
-               if "observaciones" in key:
-                    request.session["observacion"] = value
-
-          print("lista orden: " + str(orden))
-          request.session['orden'] = orden
-          request.session['total'] = total
-          context = {}
+    
+          
+          
           return redirect('resumen-pedido')
 
      else: #Método GET
