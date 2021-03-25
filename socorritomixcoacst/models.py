@@ -1,7 +1,10 @@
 from django.db import models
 from django.conf import settings
-from django.shortcuts import reverse
+from django.shortcuts import reverse    
 from django.utils import timezone
+
+from dataclasses import dataclass
+from dataclasses import asdict
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
 TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'))
@@ -42,6 +45,7 @@ class Platillo(models.Model):
 
     def __str__(self):
         return "Nombre: " + self.nombre + ", Precio: " + str(self.precio) + ", Tipo: "+ self.tipo
+
 
 class OrdenPlatillo(models.Model):
     sub_total = models.FloatField(max_length=5, null=False)

@@ -15,26 +15,35 @@
 			<table id="tabla" class="table">
 				<thead>
 					<tr>
+						<th scope="col">Menú completo</th>
 						<th scope="col">Platillo</th>
-						<th scope="col">Precio</th>
 						<th scope="col">Cantidad</th>
 						<th scope="col">Subtotal</th>
 					</tr>
 				</thead>
-				<!-- Jalamos la lista de órdenes y metemos sus elementos uno por uno en la tabla -->
+				<!-- Jalamos la lista de órdenesPlatillo y metemos sus elementos uno por uno en la tabla -->
 				<tbody>
-					{% for pedido in orden %}
+					{% for pedido in pedidos_del_cliente %}
 					<tr>
-						{% for valor in pedido %}
-						<td>{{ valor }}</td>
-						{% endfor %}
+						{% if pedido.es_completa %}
+							<td>Menu completo {{ pedido.numero_completa }}</td>
+						{% else %}
+							<td>No aplica</td>
+						{% endif %}
+						<td>{{ pedido.platillo.nombre }}</td>
+						<td>{{ pedido.cantidad }}</td>
+						<td>{{ pedido.sub_total }}</td>
 					<tr>
 					{% endfor %}
 					<!-- ponemos una última fila con el total (calculado desde views.py) -->
 					<tr>
 						<td colspan="2"></td>
 						<td><h6>Total</h6></td>
-						<td id="total">total del pedido</td>
+						{% if orden_del_cliente.promocion %}
+							<td >{{ orden_del_cliente.total_descuento }}</td>
+						{% else %}
+							<td>{{orden_del_cliente.total}}</td>
+						{% endif %}
 					</tr>
 				</tbody>
 			</table>
@@ -45,7 +54,7 @@
 		<!-- Las observaciónes del pedido ocupan todo el espácio posible, dejando el justo para los botónes -->
 		<div class="flex-grow-1 pb-3">
 			<h5>Observaciónes del pedido:<br></h5>
-			{{ observacion }}
+			{{ observaciones }}
 		</div>
 		<!-- caja flexible para que los botones se agrupen juntos al redimensionar -->
 		<div class="d-flex">
@@ -62,33 +71,5 @@
 {% endblock content %}
 
 {% block script %}
-<script>
-	//objeto de tipo internacionalización para formatear cifras a precios
-	const formato = new Intl.NumberFormat('es-MX',{
-		style: 'currency',
-		currency: 'MXN',
-		minimumFractionDigits: 2
-	})
 
-	//arreglo con las filas de la tabla
-	tabla = document.getElementById("tabla").rows
-
-	//formatearemos cada elemento impar de la tabla como precio (el precio el subtotal)
-	//esquivamos la primera fila porque es la del encabezado, y la última porque es la del total
-	//también esquivamos cada fila par porque bootstrap MDB pone filas vacias a modo de espaciador
-	for(var i=1; i<tabla.length-1; i++){
-		if(i%2 == 1){
-			fila = tabla[i].children
-			console.log(fila)
-			for(var j=0; j<fila.length; j++){
-				if(j%2 == 1){
-						fila[j].innerHTML = formato.format(fila[j].innerHTML)
-				}
-			}
-		}
-	}
-
-	//formateamos el total por separado
-	document.getElementById("total").innerHTML = "<h6>" + formato.format({{ total }}) + "</h6>"
-</script>
 {% endblock script %}
