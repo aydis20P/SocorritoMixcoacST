@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from django.contrib import messages
 from django.db import IntegrityError
 import datetime
+from datetime import datetime as dt
 import pytz
 
 def principal(request):
@@ -33,8 +34,8 @@ class BusquedaCliente(DetailView):
      def get_context_data(self, **kwargs):
           #Orden.objects.filter(fecha=timezone.now.date(), cliente=self.object)
           context = super().get_context_data(**kwargs)
+          self.request.session["cliente_actual"] = self.object.id
           return context
-
 
 def cliente_no_encontrado(request):
 
@@ -51,23 +52,93 @@ def menu_orden(request):
      guisados = []
 
      lista_platillos = Platillo.objects.all()
-
-     """for platillo in lista_platillos:
-          if(platillo.tipo == "EN"):
-               entradas.append(platillo.nombre)
-          if(platillo.tipo == "ST"):
-               segundos_tiempos.append(platillo.nombre)
-          if(platillo.tipo == "GU"):
-               guisados.append(platillo.nombre)
-          #platillos.append(list((platillo.nombre, platillo.precio)))
-"""
+          
      if request.method == "POST":
-          for key, value in request.POST.items():
-               print('Key: %s' % (key) ) 
-               print('Value %s' % (value) )
-    
-          
-          
+
+          todos_menus = []
+          todos_ordenes = []
+          todos_extras = []
+          numero_menu = 1
+          pedido = []
+          cliente = Cliente.objects.filter(id=request.session.get("cliente_actual"))[0]
+          orden = Orden(total=0,
+                        promocion=False,
+                        total_descuento=0,
+                        fecha=dt.now(),
+                        cliente=cliente)
+
+          for clave, valor in request.POST.items():
+               print("Clave: %s" % (clave))
+               print("Valor: %s" % (valor))
+               
+               if "menu-" in clave:
+                    todos_menus.append(tuple((clave, valor)))
+               if "orden_de_" in clave:
+                    if int(valor) > 0:
+                         todos_ordenes.append(tuple((clave.replace("orden_de_", ""), valor)))
+               if "orden_extra_de_" in clave:
+                    if int(valor) > 0:
+                         todos_extras.append(tuple((clave.replace("orden_extra_de_", ""), valor)))
+
+          print(todos_menus)
+          print(todos_ordenes)
+          print(todos_extras)
+
+          #guardamos los menús completos
+          for i in range(len(todos_menus)):
+               platillo_actual = Platillo.objects.filter(nombre=todos_menus[i][1])[0]
+               if i % 3 == 0: #Entradas
+                    platillo_menu_1 = OrdenPlatillo(sub_total=0,
+                                                    es_completa=True,
+                                                    numero_completa=numero_menu,
+                                                    cantidad=1,
+                                                    orden=orden,
+                                                    platillo=platillo_actual)
+                    pedido.append(platillo_menu_1)
+               if i % 3 == 1: #Segúndos tiempos
+                    platillo_menu_2 = OrdenPlatillo(sub_total=0,
+                                                    es_completa=True,
+                                                    numero_completa=numero_menu,
+                                                    cantidad=1,
+                                                    orden=orden,
+                                                    platillo=platillo_actual)
+                    pedido.append(platillo_menu_2)
+               if i % 3 == 2: #Guisado
+                    platillo_menu_3 = OrdenPlatillo(sub_total=(platillo_actual.precio + 20),
+                                                    es_completa=True,
+                                                    numero_completa=numero_menu,
+                                                    cantidad=1,
+                                                    orden=orden,
+                                                    platillo=platillo_actual)
+                    pedido.append(platillo_menu_3)
+                    numero_menu += 1
+
+          #guardamos las órdenes
+          for i in range(len(todos_ordenes)):
+               platillo_actual = Platillo.objects.filter(nombre=todos_ordenes[i][0])[0]
+               cantidad_platillo_actual = int(todos_ordenes[i][1])
+               platillo_orden = OrdenPlatillo(sub_total=(platillo_actual.precio * cantidad_platillo_actual),
+                                              es_completa=False,
+                                              cantidad=cantidad_platillo_actual,
+                                              orden=orden,
+                                              platillo=platillo_actual)
+               pedido.append(platillo_orden)
+
+          #guardamos los extras
+          for i in range(len(todos_extras)):
+               platillo_actual = Platillo.objects.filter(nombre=todos_extras[i][0])[0]
+               cantidad_platillo_actual = int(todos_extras[i][1])
+               platillo_orden = OrdenPlatillo(sub_total=(platillo_actual.precio * cantidad_platillo_actual),
+                                              es_completa=False,
+                                              cantidad=cantidad_platillo_actual,
+                                              orden=orden,
+                                              platillo=platillo_actual)
+               pedido.append(platillo_orden)
+
+          print(orden)
+          for i in pedido:
+               print(i)
+
           return redirect('resumen-pedido')
 
      else: #Método GET
