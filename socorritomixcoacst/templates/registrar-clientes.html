@@ -28,19 +28,10 @@
                   </div>
                 </div>
               </div>
-            
-              <!-- Text input -->
-              <div class="form-outline mb-1">
-                <input required type="text" autocomplete="off" id="direccion" class="form-control" name="direccion"/>
-                <label class="form-label" for="direccion">Dirección</label>
-              </div>
-            
               <!-- Text input -->
               <div class="form-outline mb-1">
                 <input required type="text" autocomplete="off" id="telefono" class="form-control" name="telefono" maxlength="10" minlength="10" value="" onkeyup="this.value=Numeros(this.value)"/>
                 <label class="form-label" for="telefono">Telefono/Celular</label>
-                
-
               </div>
 
               <!-- Text input -->
@@ -61,11 +52,15 @@
                  return out;
                 }
                </script>
-
+              <!-- Text input -->
+              <div class="form-outline mb-1">
+                <input required type="text" autocomplete="off" id="direccion" class="form-control" name="direccion"/>
+                <label class="form-label" for="direccion">Dirección</label>
+              </div>
               <!-- Text input observaciones-->
               <div class="form-outline mb-4">
                 <textarea  class="form-control" id="obs" name="obs" rows="4"></textarea>
-                <label class="form-label" for="obs">Observaciones Dirección</label>
+                <label class="form-label" for="obs">Referencia Dirección</label>
               </div>
 
               <div class="row">
