@@ -3,8 +3,7 @@ from django.conf import settings
 from django.shortcuts import reverse    
 from django.utils import timezone
 
-from dataclasses import dataclass
-from dataclasses import asdict
+
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
 TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'))
