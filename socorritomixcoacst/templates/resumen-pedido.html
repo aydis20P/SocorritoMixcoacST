@@ -49,27 +49,83 @@
 			</table>
 		</div>
 	</div>
-	<!-- contenedor de caja flexible para alojar la observación y el botón de cancelar y aceptar -->
-	<div class="d-flex align-items-center justify-content-end flex-wrap pb-3">
-		<!-- Las observaciónes del pedido ocupan todo el espácio posible, dejando el justo para los botónes -->
-		<div class="flex-grow-1 pb-3">
-			<h5>Observaciónes del pedido:<br></h5>
-			{{ observaciones }}
-		</div>
-		<!-- caja flexible para que los botones se agrupen juntos al redimensionar -->
-		<div class="d-flex">
-			<div class="px-3">
-				<a href="menu-orden" class="btn btn-lg btn-danger">Cancelar</a>
+	<form id="form-confirmarpedido" method="POST">
+		{% csrf_token %}
+		<!-- contenedor de caja flexible para alojar la observación y el botón de cancelar y aceptar -->
+		<div class="container">
+			<div class="row mb-1 g-1">
+				<div class="col">
+					<div class="d-flex justify-content-end mt-2 me-2">
+						<h5>Pago con:</h5>
+					</div>
+				</div>
+				<div class="col">
+					
+					<div class="form-outline">
+						<input type="number" id="pagC" class="form-control" name="pagC" onkeyup="calculaCambio()" onchange="calculaCambio()" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
+						<label class="form-label" for="pagC">Pago con</label>
+					</div>	
+					
+				</div>
 			</div>
-			<div class="px-3">
-				<!-- TODO aquí haría falta meterle que onclick guardara la orden en la BD. -->
-				<a href="/" class="btn btn-lg btn-warning">Aceptar</a>
+			<div class="row mb-1 g-1">
+				<div class="col">
+					<div class="d-flex justify-content-end mt-2 me-2">
+						<h5>Cambio :</h5>
+					</div>
+				</div>
+				<div class="col">
+					
+					<div class="form-outline">
+						<input type="text" id="cambio" class="form-control" name="cambio" disabled/>
+						<label id="lbcambio"class="form-label" for="cambio">cambio</label>
+					</div>	
+					
+				</div>
 			</div>
 		</div>
-	</div>
+		<div class="d-flex align-items-center justify-content-end flex-wrap pb-3">
+			<!-- Las observaciónes del pedido ocupan todo el espácio posible, dejando el justo para los botónes -->
+			<div class="flex-grow-1 pb-3">
+				<h5>Observaciónes del pedido:<br></h5>
+				{{ observaciones }}
+			</div>
+			<!-- caja flexible para que los botones se agrupen juntos al redimensionar -->
+			<div class="d-flex">
+				<div class="px-3">
+					<a href="menu-orden" class="btn btn-lg btn-danger">Cancelar</a>
+				</div>
+				<div class="px-3">
+					<!-- TODO aquí haría falta meterle que onclick guardara la orden en la BD. -->
+					<button class="btn btn-warning" type="submit">
+						<i class="fas fa-user-plus"></i>
+						Confirmar pedido
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	
 </div>
 {% endblock content %}
 
 {% block script %}
-
+	<script>
+	function calculaCambio(){
+		var total = parseFloat({{ orden_del_cliente.total }});
+		var pagoCon = parseFloat(document.getElementById("pagC").value);
+		var cambio = pagoCon - total;
+		console.log(total+" "+pagoCon+" "+cambio);
+		document.getElementById("lbcambio").textContent="";
+		if(pagoCon>0 ){
+			document.getElementById("cambio").value = cambio;
+		}
+		else{
+			document.getElementById("cambio").value = "";
+		}
+	}
+	function log(){
+		console.log("Entré");
+	}
+	</script>
 {% endblock script %}

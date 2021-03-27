@@ -7,8 +7,9 @@ from django.db import IntegrityError
 import datetime
 from datetime import datetime as dt
 import pytz
-from dataclasses import asdict
-from dataclasses import dataclass
+from django.conf import settings
+
+
 
 def principal(request):
      if request.method=="POST":
@@ -113,10 +114,12 @@ def resumen_pedido(request):
      todos_ordenes = request.session['todos_ordenes'] 
      todos_extras = request.session['todos_extras']
      observaciones = request.session.get('observaciones')
+     cambio = request.session.get('cambio')
+     pago_con = request.session.get('pagC')
      pedidos_del_cliente = []
      #cambio del pago de a $500
      cliente = Cliente.objects.filter(id=request.session.get("cliente_actual"))[0]
-     
+     print (cambio)
      #
      orden = Orden(total=0,
                     promocion=False,
@@ -175,15 +178,34 @@ def resumen_pedido(request):
                                              platillo=platillo_actual)
           pedidos_del_cliente.append(platillo_orden)
           orden.total += platillo_orden.sub_total
-     if request.method=="POST":
 
-          print()
-          #return 0;
+     if request.method=="POST":
+          for key, value in request.POST.items():
+               print ('Entré al for')
+               print('Key: %s' % (key) ) 
+               # print(f'Key: {key}') in Python >= 3.7
+               print('Value %s' % (value) )
+               # print(f'Value: {value}') in Python >= 3.7
+
+          orden.fecha=dt.now().astimezone(pytz.timezone(settings.TIME_ZONE))
+          pago_con=float(request.POST.get('pagC'))
+          cambio=float(pago_con-orden.total)
+         
+          orden.save()
+          for pedido in pedidos_del_cliente:
+               pedido.orden=orden
+               pedido.save()
+
+          return redirect(principal)
      else: #Método GET
+          
           context = {}
+          
+         
           context['orden_del_cliente'] = orden
           context['pedidos_del_cliente'] = pedidos_del_cliente
           context["observaciones"] = observaciones
+          context['cambio'] = cambio
           return render(request, "resumen-pedido.html", context)
 
 
