@@ -245,7 +245,7 @@ class PerfilCliente(DetailView):
                if pedido.fecha > fecha_ultimo_pedido:
                     fecha_ultimo_pedido = pedido.fecha
                aux = OrdenPlatillo.objects.filter(orden=pedido)
-               dinero_gastado_por_cliente = dinero_gastado_por_cliente + pedido.total_descuento
+               dinero_gastado_por_cliente = dinero_gastado_por_cliente + pedido.total
                for ordenPlatillo in aux:
                     lista_ordenesPlatillo.append(ordenPlatillo)
           context['ordenes_platillo'] = lista_ordenesPlatillo
