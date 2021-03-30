@@ -358,3 +358,7 @@ def registrar_clientes(request):
      else:
           context = {}
           return render (request, 'registrar-clientes.html', context)
+
+def editar_platillos(request):
+     context = {}
+     return render( request, 'editar-platillos.html', context)
