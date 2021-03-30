@@ -1,10 +1,12 @@
 from django.db import models
 from django.conf import settings
-from django.shortcuts import reverse
+from django.shortcuts import reverse    
 from django.utils import timezone
 
+
+
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
-TIPO_PLATILLO = (('GU', 'guisado'), ('EN', 'entrada'), ('ST', 'segundo tiempo'))
+TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'))
 TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CENAS','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 
@@ -39,19 +41,21 @@ class Platillo(models.Model):
     descripcion = models.CharField(max_length=256, null=False, blank=False)
     tipo = models.CharField(choices=TIPO_PLATILLO, max_length=2, null=False, blank=False)
     es_complemento = models.BooleanField(null=False)
-    
+
     def __str__(self):
         return "Nombre: " + self.nombre + ", Precio: " + str(self.precio) + ", Tipo: "+ self.tipo
+
 
 class OrdenPlatillo(models.Model):
     sub_total = models.FloatField(max_length=5, null=False)
     es_completa = models.BooleanField(null=False)
+    numero_completa = models.IntegerField(null=True)
     cantidad = models.IntegerField(null=False)
     orden = models.ForeignKey(Orden, on_delete=models.PROTECT)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
-    
+
     def __str__(self):
-        return "ID: " + str(self.id) + ", Es completa: " + str(self.es_completa) + ", Platillo: " + self.platillo.nombre + ", Cantidad: " + str(self.cantidad) + ", Subtotal: $" + str(self.sub_total)
+        return "ID: " + str(self.id) + ", Es completa: " + str(self.es_completa) + ", Numero completa: " + str(self.numero_completa) + ", Platillo: " + self.platillo.nombre + ", Cantidad: " + str(self.cantidad) + ", Subtotal: $" + str(self.sub_total)
 
 class Promocion(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
