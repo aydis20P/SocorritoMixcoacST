@@ -35,72 +35,122 @@
 						<td>{{ pedido.sub_total }}</td>
 					<tr>
 					{% endfor %}
-					<!-- ponemos una última fila con el total (calculado desde views.py) -->
 					<tr>
 						<td colspan="2"></td>
-						<td><h6>Total</h6></td>
+						<td><h6>Sub Total</h6></td>
 						{% if orden_del_cliente.promocion %}
-							<td >{{ orden_del_cliente.total_descuento }}</td>
+							<td id="sub-total">{{ orden_del_cliente.total_descuento }}</td>
 						{% else %}
-							<td>{{orden_del_cliente.total}}</td>
+							<td id="sub-total">{{orden_del_cliente.total}}</td>
 						{% endif %}
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+	{% if observaciones %}
+		<div class="flex-grow-1 pb-3">
+			<h5>Observaciónes del pedido:<br></h5>
+			{{ observaciones }}
+		</div>
+	{% endif %}
 	<form id="form-confirmarpedido" method="POST">
 		{% csrf_token %}
-		<!-- contenedor de caja flexible para alojar la observación y el botón de cancelar y aceptar -->
-		<div class="container">
-			<div class="row mb-1 g-1">
-				<div class="col">
-					<div class="d-flex justify-content-end mt-2 me-2">
-						<h5>Pago con:</h5>
-					</div>
-				</div>
-				<div class="col">
-					
-					<div class="form-outline">
-						<input type="number" id="pagC" class="form-control" name="pagC" onkeyup="calculaCambio()" onchange="calculaCambio()" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
-						<label class="form-label" for="pagC">Pago con</label>
-					</div>	
-					
-				</div>
+
+		<div class="row justify-content-end p-2">
+			<div class="col d-flex justify-content-end mt-2 me-2">
+				<h5>Método de pago:</h5>
 			</div>
-			<div class="row mb-1 g-1">
-				<div class="col">
-					<div class="d-flex justify-content-end mt-2 me-2">
-						<h5>Cambio :</h5>
-					</div>
-				</div>
-				<div class="col">
-					
-					<div class="form-outline">
-						<input type="text" id="cambio" class="form-control" name="cambio" disabled/>
-						<label id="lbcambio"class="form-label" for="cambio">cambio</label>
-					</div>	
-					
-				</div>
+			<div class="col d-flex">
+				<select id="select-pago" class="form-select" aria-label="Default select example" onchange="muestraPagoEfectivo()">
+					<option selected value="efectivo">Efectivo</option>
+					<option value="terminal">Terminal</option>
+					<option value="pagado">Pagado</option>
+				</select>
 			</div>
 		</div>
-		<div class="d-flex align-items-center justify-content-end flex-wrap pb-3">
-			<!-- Las observaciónes del pedido ocupan todo el espácio posible, dejando el justo para los botónes -->
-			<div class="flex-grow-1 pb-3">
-				<h5>Observaciónes del pedido:<br></h5>
-				{{ observaciones }}
-			</div>
-			<!-- caja flexible para que los botones se agrupen juntos al redimensionar -->
-			<div class="d-flex">
-				<div class="px-3">
-					<a href="menu-orden" class="btn btn-lg btn-danger">Cancelar</a>
+
+		<!-- sección pago -->
+		<div class="container">
+			<!-- chkbox comisión -->
+			<div class="d-flex justify-content-end mt-2 mb-2">
+				<div class="form-check">
+					<input
+					class="form-check-input"
+					type="checkbox"
+					value="0"
+					id="chbx-comision-extra"
+					onchange="muestraInputComision(); calculaCambio()"
+					/>
+					<label for="flexCheckDefault">
+					Aplica comisión extra de envío
+					</label>
 				</div>
-				<div class="px-3">
-					<!-- TODO aquí haría falta meterle que onclick guardara la orden en la BD. -->
-					<button class="btn btn-warning" type="submit">
-						<i class="fas fa-user-plus"></i>
-						Confirmar pedido
-					</button>
+			</div>
+			<!-- input comisión -->
+			<div id="input-comision" style="display: none;">
+				<div class="row justify-content-end g-1">
+					<div class="col d-flex justify-content-end mt-2 me-2">
+						<h5>Comisión extra:</h5>
+					</div>
+					<div class="col d-flex form-outline">
+						<input id="input-comision-number" type="number" id="comExt" class="form-control" name="comExt" autocomplete="off" min="0" onkeyup="calculaCambio()" onchange="calculaCambio()"/>
+						<label class="form-label" for="comExt">Comisión extra</label>
+					</div>
+				</div>
+			</div>
+			<div id="seccion-total" class="row g-1">
+				<div class="col d-flex justify-content-end mt-2 me-2">
+					<h5 id="total">Total: ${{orden_del_cliente.total}}</h5>
+				</div>
+			</div>
+			<!-- sección pago efectivo -->
+			<div id="pago-efectivo">
+				<div class="row mt-1 mb-1 g-1">
+					<div class="col">
+						<div class="d-flex justify-content-end mt-2 me-2">
+							<h5>Pago con:</h5>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-outline">
+							<input type="number" id="pagC" class="form-control" name="pagC" onkeyup="calculaCambio()" onchange="calculaCambio()" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
+							<label class="form-label" for="pagC">Pago con</label>
+						</div>	
+					</div>
+				</div>
+				<div class="row mb-1 g-1">
+					<div class="col">
+						<div class="d-flex justify-content-end mt-2 me-2">
+							<h5>Cambio :</h5>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-outline">
+							<input type="text" id="cambio" class="form-control" name="cambio" disabled/>
+							<label id="lbcambio"class="form-label" for="cambio">cambio</label>
+						</div>	
+					</div>
+				</div>	
+			</div>
+		</div>
+		<!-- sección botones -->
+		<div class="d-flex align-items-center justify-content-end flex-wrap pb-3">
+			<div class="container">
+				<div class="row">
+					<div class="d-flex justify-content-end">
+						<div class="p-2">
+							<button class="btn btn-lg btn-warning p-1" onclick="imprimir()">Imprimir</button>
+						</div>
+						<div class="p-2">
+							<a href="menu-orden" class="btn btn-lg btn-danger  p-1">Cancelar</a>
+						</div>
+						<div class="p-2">
+							<button class="btn btn-lg btn-warning p-1" type="submit">
+								Confirmar pedido
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -113,6 +163,33 @@
 	<script>
 	function calculaCambio(){
 		var total = parseFloat({{ orden_del_cliente.total }});
+
+		/**
+		 * flujo de comision
+		 * */
+		//buscamos el checkbox de aplica comisión  extra
+		var chbxComExt = document.getElementById("chbx-comision-extra");
+		if (chbxComExt.value == 0){
+			//pass...
+		}
+		else{//si está marcado actualizamos la variable total con el total actual más la comisión de envío
+			total = total + parseFloat(document.getElementById("input-comision-number").value);
+			
+		}
+		var pagC = document.getElementById("pagC");
+		pagC.min = total;//actualizamos el mínimo de paga con
+
+		/**
+		 * flujo de total
+		 * */
+		var totalDescuento = document.getElementById("total");
+		if (isNaN(total)){
+			totalDescuento.innerHTML = "Total: $" + document.getElementById("sub-total").innerHTML
+		}
+		else{
+			totalDescuento.innerHTML = "Total: $" + total;//actualizamos el elemento total con el total actual más la comisión de envío
+		}
+
 		var pagoCon = parseFloat(document.getElementById("pagC").value);
 		var cambio = pagoCon - total;
 		console.log(total+" "+pagoCon+" "+cambio);
@@ -124,8 +201,34 @@
 			document.getElementById("cambio").value = "";
 		}
 	}
-	function log(){
-		console.log("Entré");
+
+	function muestraInputComision(){
+		var chbxComExt = document.getElementById("chbx-comision-extra")
+		var inCom = document.getElementById("input-comision");
+		if (inCom.style.display == "block"){
+			inCom.style.display = "none";
+			chbxComExt.value = 0;
+		}
+		else{
+			inCom.style.display = "block";
+			chbxComExt.value = 1;
+		}
+	}
+
+	function muestraPagoEfectivo(){
+		var pagoEfectivo = document.getElementById("pago-efectivo")
+		var selectPago = document.getElementById("select-pago")
+
+		if (selectPago.value != "efectivo"){
+			pagoEfectivo.style.display = "none"
+		}
+		else{
+			pagoEfectivo.style.display = "block"
+		}
+	}
+
+	function imprimir(){
+		window.print();
 	}
 	</script>
 {% endblock script %}
