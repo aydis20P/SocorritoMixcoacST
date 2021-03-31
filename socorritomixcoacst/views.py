@@ -60,7 +60,9 @@ def menu_orden(request):
 
           todos_menus = []
           todos_ordenes = []
+          todos_bebidas = []
           todos_extras = []
+
           
           pedido = []
           request.session['observaciones'] = request.POST.get('observaciones')
@@ -76,12 +78,16 @@ def menu_orden(request):
                if "orden_de_" in clave:
                     if int(valor) > 0:
                          todos_ordenes.append(tuple((clave.replace("orden_de_", ""), valor)))
+               if "orden_bebida_de_" in clave:
+                    if int(valor) > 0:
+                         todos_bebidas.append(tuple((clave.replace("orden_bebida_de_", ""), valor)))
                if "orden_extra_de_" in clave:
                     if int(valor) > 0:
                          todos_extras.append(tuple((clave.replace("orden_extra_de_", ""), valor)))
 
           request.session['todos_menus'] = todos_menus
           request.session['todos_ordenes'] = todos_ordenes
+          request.session['todos_bebidas'] = todos_bebidas
           request.session['todos_extras'] = todos_extras
           #TODO request.session['todos_desayunos'] = todos_desayunos
           
