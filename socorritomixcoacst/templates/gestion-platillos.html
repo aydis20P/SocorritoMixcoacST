@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Tabs navs -->
+
+<div class="container">
+    
+    <!-- Tabs navs -->
+    
+    <!-- Tabs content -->
+    <!--Formulario para agregar nuevo platillo-->
+    <form method="POST">
+        {% csrf_token %}
+        <!-- Name input -->
+        <!--Nombre del Platilllo-->
+        <div class="row mb-1 g-1">
+            <div class="col">
+                <div class="d-flex justify-content-end mt-2 me-2">
+                    <h5>Nombre del platillo:</h5>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-outline mb-4">
+                    <input type="text" id="nom-plat" class="form-control" name="nom-plat"/>
+                    <label class="form-label" for="nom-plat">Nombre del platillo</label>
+                </div>
+            </div>
+        </div>
+        <!--Precio-->
+        <div class="row mb-1 g-1">
+            <div class="col">
+                <div class="d-flex justify-content-end mt-2 me-2">
+                    <h5>Precio:</h5>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-outline mb-4">
+                    <input type="number" id="precio" class="form-control" name="precio"/>
+                    <label class="form-label" for="form4Example1">Precio</label>
+                </div>
+            </div>
+        </div>
+        
+        <!--Tipo-->
+        <div class="row mb-1 g-1">
+            
+            <div class="col">
+                <div class="d-flex justify-content-end mt-2 me-2">
+                    <h5>Tipo:</h5>
+                </div>
+            </div>
+           
+            <div class="col">
+                <div style="border: 2px solid rgb(234, 234, 241); border-radius: 25px;">
+                    <select class="form-select" aria-label="Default select example" name = "select-tipo">
+                        <option selected disabled>Tipo de platillo</option>
+                        {% for clave, valor in tip_platillo %}
+                            <option value="{{clave}}">{{valor}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+       
+
+        <!--es_complemento-->
+        <div class="row mb-1 g-1">
+            <div class="col">
+                <div class="d-flex justify-content-end mt-1 me-2">
+                    <h5>Es complemento:</h5>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex align-items-center justify-content-start flex-wrap pb-3">
+                    <div class="form-check">
+                        <input class="form-check-input mt-2" type="checkbox" value="comple" id="complemento" name="complemento"/>
+                        <label class="form-check-label" for="complemento"> </label>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!--Descripción-->
+        <div class="row mb-1 g-1">
+            <div class="col">
+                <div class="d-flex justify-content-end mt-2 me-2">
+                    <h5>Descripcion:</h5>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-outline ">
+                    <textarea class="form-control" id="descripcion" rows="4" name="descripcion"></textarea>
+                    <label class="form-label" for="descripcion">Descripción</label>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 g-1">
+            <button type="submit" class="btn btn-primary btn-block mb-4">Registrar</button>
+        </div>
+        
+    </form>
+</div>
+
+
+  <!-- Tabs content -->
+{% endblock content %}

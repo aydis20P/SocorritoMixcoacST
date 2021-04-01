@@ -8,7 +8,7 @@ import datetime
 from datetime import datetime as dt
 import pytz
 from django.conf import settings
-
+from .models import TIPO_PLATILLO
 
 
 def principal(request):
@@ -296,6 +296,7 @@ def registrar_clientes(request):
                                    )
           """ Manejo de excepciones """
           try:
+               
                """Guarda los datos en BD (mysql)"""
                cliente_registro.save()
                """Redirecciona la página a una url absoluta que contiene los datos del cliente"""
@@ -313,16 +314,31 @@ def registrar_clientes(request):
           context = {}
           return render (request, 'registrar-clientes.html', context)
 
-def editar_platillos(request):
-     platillo_tipo=Platillo.objects.all()
+def gestion_platillos(request):
+     platillo_tipo=TIPO_PLATILLO
      if request.method == "POST":
+          prueba=request.POST.get("complemento")
+          
+          if not prueba:
+               complemento = False
+          else:
+               complemento = True
+          print ("chjeckbox: "+ str(prueba))
           platillos_nuevos=Platillo(nombre=request.POST.get("nom-plat"),
                                    precio=request.POST.get("precio"),
                                    tipo=request.POST.get("select-tipo"),
-                                   es_complemento=request.POST.get("complemento"),
+                                   es_complemento=complemento,
                                    descripcion=request.POST.get("descripcion"))
-     else:                              
+         
+          try:
+               context = {}
+               """Guarda los datos en BD (mysql)"""
+               platillos_nuevos.save()
+               return render( request, 'gestion-platillos.html', context)
+          #"""Si existe una excepción de IntegrityError"""
+          except IntegrityError:
+               return render( request, 'gestion-platillos.html', context)
+     else:
           context = {}
-          context['tipo_platillo'] = platillo_tipo
-          
-          return render( request, 'editar-platillos.html', context)
+          context['tip_platillo'] = platillo_tipo
+          return render( request, 'gestion-platillos.html', context)
