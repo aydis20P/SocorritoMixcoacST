@@ -13,5 +13,5 @@ urlpatterns = [
     path('cliente/<pk>/perfil-cliente/', PerfilCliente.as_view(), name='perfil-cliente'),
     path('admin-cliente', AdminCliente.as_view(), name='admin-cliente'),
     path('registrar-clientes', views.registrar_clientes, name="registrar-clientes"),
-    path('editar-platillos',views.editar_platillos, name="editar-platillos")
+    path('gestion-platillos',views.gestion_platillos, name="gestion-platillos")
 ]
