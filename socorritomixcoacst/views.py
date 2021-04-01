@@ -360,5 +360,15 @@ def registrar_clientes(request):
           return render (request, 'registrar-clientes.html', context)
 
 def editar_platillos(request):
-     context = {}
-     return render( request, 'editar-platillos.html', context)
+     platillo_tipo=Platillo.objects.all()
+     if request.method == "POST":
+          platillos_nuevos=Platillo(nombre=request.POST.get("nom-plat"),
+                                   precio=request.POST.get("precio"),
+                                   tipo=request.POST.get("select-tipo"),
+                                   es_complemento=request.POST.get("complemento"),
+                                   descripcion=request.POST.get("descripcion"))
+     else:                              
+          context = {}
+          context['tipo_platillo'] = platillo_tipo
+          
+          return render( request, 'editar-platillos.html', context)

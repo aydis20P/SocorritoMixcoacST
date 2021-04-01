@@ -43,6 +43,7 @@ class Platillo(models.Model):
     descripcion = models.CharField(max_length=256, null=False, blank=False)
     tipo = models.CharField(choices=TIPO_PLATILLO, max_length=2, null=False, blank=False)
     es_complemento = models.BooleanField(null=False)
+    oculto = models.BooleanField(default=False)
 
     def __str__(self):
         return "Nombre: " + self.nombre + ", Precio: " + str(self.precio) + ", Tipo: "+ self.tipo
