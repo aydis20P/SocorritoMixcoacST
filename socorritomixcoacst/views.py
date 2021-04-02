@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo
+from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo, PlatilloMenu
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.contrib import messages
@@ -318,3 +318,11 @@ def registrar_clientes(request):
      else:
           context = {}
           return render (request, 'registrar-clientes.html', context)
+
+def menus_del_dia(request):
+     #Jalamos de la BD todos los platíllosMenu para mostrarlos en la vista
+     platillos_menu = PlatilloMenu.objects.all()
+
+     context = {}
+     context["platillos-menu"] = platillos_menu
+     return render(request, "menus-del-dia.html", context)
