@@ -1,108 +1,165 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<!-- Tabs navs -->
 
+{% block head %}
+<title>Gestion de platillos</title>
+{% endblock head %}
 <div class="container">
     
-    <!-- Tabs navs -->
     
-    <!-- Tabs content -->
-    <!--Formulario para agregar nuevo platillo-->
-    <form method="POST">
-        {% csrf_token %}
-        <!-- Name input -->
-        <!--Nombre del Platilllo-->
-        <div class="row mb-1 g-1">
-            <div class="col">
-                <div class="d-flex justify-content-end mt-2 me-2">
-                    <h5>Nombre del platillo:</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-outline mb-4">
-                    <input type="text" id="nom-plat" class="form-control" name="nom-plat"/>
-                    <label class="form-label" for="nom-plat">Nombre del platillo</label>
-                </div>
-            </div>
-        </div>
-        <!--Precio-->
-        <div class="row mb-1 g-1">
-            <div class="col">
-                <div class="d-flex justify-content-end mt-2 me-2">
-                    <h5>Precio:</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-outline mb-4">
-                    <input type="number" id="precio" class="form-control" name="precio"/>
-                    <label class="form-label" for="form4Example1">Precio</label>
-                </div>
-            </div>
-        </div>
-        
-        <!--Tipo-->
-        <div class="row mb-1 g-1">
-            
-            <div class="col">
-                <div class="d-flex justify-content-end mt-2 me-2">
-                    <h5>Tipo:</h5>
-                </div>
-            </div>
-           
-            <div class="col">
-                <div style="border: 2px solid rgb(234, 234, 241); border-radius: 25px;">
-                    <select class="form-select" aria-label="Default select example" name = "select-tipo">
-                        <option selected disabled>Tipo de platillo</option>
-                        {% for clave, valor in tip_platillo %}
-                            <option value="{{clave}}">{{valor}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </div>
-       
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab" aria-controls="ex1-tabs-1" aria-selected="true">Agregar Platillos</a>
+        </li>
 
-        <!--es_complemento-->
-        <div class="row mb-1 g-1">
-            <div class="col">
-                <div class="d-flex justify-content-end mt-1 me-2">
-                    <h5>Es complemento:</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="d-flex align-items-center justify-content-start flex-wrap pb-3">
-                    <div class="form-check">
-                        <input class="form-check-input mt-2" type="checkbox" value="comple" id="complemento" name="complemento"/>
-                        <label class="form-check-label" for="complemento"> </label>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        <!--Descripción-->
-        <div class="row mb-1 g-1">
-            <div class="col">
-                <div class="d-flex justify-content-end mt-2 me-2">
-                    <h5>Descripcion:</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-outline ">
-                    <textarea class="form-control" id="descripcion" rows="4" name="descripcion"></textarea>
-                    <label class="form-label" for="descripcion">Descripción</label>
-                    
-                </div>
-            </div>
-        </div>
-        <div class="row mb-1 g-1">
-            <button type="submit" class="btn btn-primary btn-block mb-4">Registrar</button>
-        </div>
-        
-    </form>
+        <li class="nav-item" role="presentation">
+        <a class="nav-link" id="ex1-tab-2" data-mdb-toggle="tab" href="#ex1-tabs-2" role="tab" aria-controls="ex1-tabs-2" aria-selected="false">Modificar/Quitar PLatillos</a>
+        </li>
+    </ul>
+
+
+
+    
+
+    
 </div>
 
 
-  <!-- Tabs content -->
+<!-- Tabs content 1 -->
+<div class="tab-content" id="ex1-content">
+    <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+        <div class="container">
+                <!--Formulario para agregar nuevo platillo-->
+            <form method="POST">
+                {% csrf_token %}
+                <!-- Name input -->
+                <!--Nombre del Platilllo-->
+                <div class="row mb-1 g-1">
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-start mt-2 me-2">
+                            <h5>Nombre del platillo:</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-outline mb-4">
+                            <input type="text" id="nom-plat" class="form-control" name="nom-plat"/>
+                            <label class="form-label" for="nom-plat">Nombre del platillo</label>
+                        </div>
+                    </div>
+                </div>
+                <!--Precio-->
+                <div class="row mb-1 g-1">
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-start mt-2 me-2">
+                            <h5>Precio:</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-outline mb-4">
+                            <input type="number" id="precio" class="form-control" name="precio"/>
+                            <label class="form-label" for="form4Example1">Precio</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!--Tipo-->
+                <div class="row mb-1 g-1">
+                    
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-start mt-2 me-2">
+                            <h5>Tipo:</h5>
+                        </div>
+                    </div>
+                
+                    <div class="col-md-8">
+                        <div class="form-check-label">
+                            <select class="form-select" aria-label="Default select example" name = "select-tipo">
+                                <option selected disabled>Tipo de platillo</option>
+                                {% for clave, valor in tip_platillo %}
+                                    <option value="{{clave}}">{{valor}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            
+
+                <!--es_complemento-->
+                <div class="row mb-1 g-1">
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-start mt-1 me-2">
+                            <h5>Es complemento:</h5>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                    
+                        <div class="form-check-label">
+                            <input class="form-check-input mt-2" type="checkbox" value="comple" id="complemento" name="complemento"/>
+                            <label class="form-check-label" for="complemento"> </label>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+                
+                <!--Descripción-->
+                <div class="row mb-1 g-1">
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-start mt-2 me-2">
+                            <h5>Descripcion:</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-outline ">
+                            <textarea class="form-control"  id="descripcion" rows="4" name="descripcion"></textarea>
+                            <label class="form-label" for="descripcion">Descripción</label>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1 g-1">
+                    <button type="submit" class="btn bg-warning btn-block mb-4">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--Tab content 2-->
+    <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+        <div class="container">
+            <h2>Hover Rows</h2>
+            <p>The .table-hover class enables a hover state (grey background on mouse over) on table rows:</p>            
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Platillo</th>
+                        <th>Precio</th>
+                        <th>Tipo</th>
+                        <th>Complemento</th>
+                        <th>Descripcion</th>
+                        <th>Modificaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for platillo in platillos %}
+                    <tr>
+                        <td>{{platillo.nombre}}</td>
+                        <td>{{platillo.precio}}</td>
+                        <td>{{platillo.tipo}}</td>
+                        <td>{{platillo.es_complemento}}</td>
+                        <td>{{platillo.descripcion}}</td>
+                        <td></td>
+                    </tr> 
+                    {% endfor %}   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+  
+
+
+  
 {% endblock content %}

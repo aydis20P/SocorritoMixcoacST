@@ -361,7 +361,8 @@ def registrar_clientes(request):
           return render (request, 'registrar-clientes.html', context)
 
 def gestion_platillos(request):
-     platillo_tipo=TIPO_PLATILLO
+     platillo_tipo = TIPO_PLATILLO
+     platillo_mod = Platillo.objects.all()
      if request.method == "POST":
           prueba=request.POST.get("complemento")
           
@@ -378,6 +379,8 @@ def gestion_platillos(request):
          
           try:
                context = {}
+               context['tip_platillo'] = platillo_tipo
+               context['platillo'] = platillo_mod
                """Guarda los datos en BD (mysql)"""
                platillos_nuevos.save()
                return render( request, 'gestion-platillos.html', context)
@@ -387,4 +390,5 @@ def gestion_platillos(request):
      else:
           context = {}
           context['tip_platillo'] = platillo_tipo
+          context['platillos'] = platillo_mod
           return render( request, 'gestion-platillos.html', context)
