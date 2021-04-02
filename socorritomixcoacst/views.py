@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo
+from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo, HistorialPrecio
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.contrib import messages
@@ -317,6 +317,7 @@ def registrar_clientes(request):
 def gestion_platillos(request):
      platillo_tipo = TIPO_PLATILLO
      platillo_mod = Platillo.objects.all()
+
      if request.method == "POST":
           prueba=request.POST.get("complemento")
           
@@ -326,7 +327,7 @@ def gestion_platillos(request):
                complemento = True
           print ("chjeckbox: "+ str(prueba))
           platillos_nuevos=Platillo(nombre=request.POST.get("nom-plat"),
-                                   precio=request.POST.get("precio"),
+                                   
                                    tipo=request.POST.get("select-tipo"),
                                    es_complemento=complemento,
                                    descripcion=request.POST.get("descripcion"))
@@ -337,6 +338,9 @@ def gestion_platillos(request):
                context['platillo'] = platillo_mod
                """Guarda los datos en BD (mysql)"""
                platillos_nuevos.save()
+               #Creamos un registro que guardará el precio usando la llave foranea que es el objeto "platillos_nuevos"
+               precio = HistorialPrecio(precio=request.POST.get("precio"), platillo=platillos_nuevos)
+               precio.save()
                return render( request, 'gestion-platillos.html', context)
           #"""Si existe una excepción de IntegrityError"""
           except IntegrityError:

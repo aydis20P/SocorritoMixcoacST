@@ -146,7 +146,7 @@
                     {% for platillo in platillos %}
                     <tr>
                         <td>{{platillo.nombre}}</td>
-                        <td>{{platillo.precio}}</td>
+                        <td name ="{{ platillo.id}}_nuevo_precio">{{platillo.precio}}</td>
                         <td>{{platillo.tipo}}</td>
                         <td>{{platillo.es_complemento}}</td>
                         <td>{{platillo.descripcion}}</td>
