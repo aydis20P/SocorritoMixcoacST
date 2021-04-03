@@ -12,4 +12,5 @@ urlpatterns = [
     path('cliente/<pk>/perfil-cliente/', PerfilCliente.as_view(), name='perfil-cliente'),
     path('registrar-clientes', views.registrar_clientes, name="registrar-clientes"),
     path("menus-del-dia", views.menus_del_dia, name="menus-del-dia"),
+    path("crear-nuevo-menu", views.crear_nuevo_menu, name="crear-nuevo-menu"),
 ]

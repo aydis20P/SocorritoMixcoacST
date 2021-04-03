@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo, PlatilloMenu
+from .models import *
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.contrib import messages
@@ -8,8 +8,6 @@ import datetime
 from datetime import datetime as dt
 import pytz
 from django.conf import settings
-
-
 
 def principal(request):
      if request.method=="POST":
@@ -28,7 +26,6 @@ def principal(request):
           context = {}
           return render(request, 'principal.html', context)
 
-
 class BusquedaCliente(DetailView):
 
      model = Cliente
@@ -44,7 +41,6 @@ def cliente_no_encontrado(request):
 
      context = {}
      return render(request, 'busqueda-cliente-no-encontrado.html', context)
-
 
 def menu_orden(request):
      #Primero jalamos de la base de datos los platillos,
@@ -214,9 +210,6 @@ def resumen_pedido(request):
           context['cambio'] = cambio
           return render(request, "resumen-pedido.html", context)
 
-
-	
-
 class PerfilCliente(DetailView):
 
      model = Cliente
@@ -320,9 +313,13 @@ def registrar_clientes(request):
           return render (request, 'registrar-clientes.html', context)
 
 def menus_del_dia(request):
-     #Jalamos de la BD todos los platíllosMenu para mostrarlos en la vista
-     platillos_menu = PlatilloMenu.objects.all()
+     #Jalamos de la BD todos los Menu para mostrarlos en la vista
+     menus = Menu.objects.all()
 
      context = {}
-     context["platillos-menu"] = platillos_menu
+     context["menus"] = menus
      return render(request, "menus-del-dia.html", context)
+
+def crear_nuevo_menu(request):
+     context = {}
+     return render(request, "crear-nuevo-menu.html", context)

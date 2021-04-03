@@ -2,31 +2,28 @@
 {% load static %}
 
 {% block head %}
-<title>Platillos del día</title>
+<title>Menús del día</title>
 {% endblock head %}
 
 {% block content %}
 <div id="contenedor-general" class="p-3">
 
     <h3>Menús del día</h3>
-    <!-- primero checamos si hay platillos registrados, para asi generar su tabla -->
-    {% if platillos_menu %}
+    <!-- primero checamos si hay menús registrados, para asi generar su tabla -->
+    {% if menus %}
 
     <!-- si no hay platillos, no haremos ninguna tabla, en su lugar pondremos un aviso de que no hay platillos -->
     {% else %}
         <div id="tarjeta-aviso" class="card p-2">
-            <h4>No hay platillos registrados</h4>
+            <h4>No hay menús para el día de hoy<div id="fecha-del-dia"></div></h4>
         </div>
     {% endif %}
 
-    <!-- ponemos una caja flexible con botónes para agregar un nuevo menú del día y un nuevo platillo de menu -->
+    <!-- ponemos una caja flexible con un botón para agregar un nuevo menú del día -->
     <div id="contenedor-botones" class="d-flex justify-content-end flex-wrap py-3">
-        <button id="boton-nuevo-menu" type="button" class="btn btn-primary btn-md btn-warning m-3" onclick="agregarPlatilloMenu()">
+        <a id="boton-nuevo-menu" class="btn btn-primary btn-lg btn-warning m-3" href="/crear-nuevo-menu">
             <i class="fas fa-file-alt fa-lg">&Tab;Nuevo Menú del día</i>
-        </button>
-        <button id="boton-nuevo-platillo" type="button" class="btn btn-primary btn-md btn-warning m-3" onclick="agregarPlatilloMenu()">
-            <i class="fas fa-utensils fa-lg">&Tab;Nuevo platillo del día</i>
-        </button>
+        </a>
     </div>
 
 </div>
@@ -34,8 +31,12 @@
 
 {% block script %}
 <script>
-    function agregarPlatilloMenu(){
-        console.log("Por hacer");
-    }
+    //generaremos la fecha del día de hoy para mostrarla cuando no hay menús
+    const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+    var fecha = new Date();
+    var dia = fecha.getDay();
+    var mes = meses[fecha.getMonth()];
+    var año = fecha.getFullYear();
+    document.getElementById("fecha-del-dia").innerText = "(" + dia + " de " + mes + " del " + año + ")";
 </script>
 {% endblock script %}

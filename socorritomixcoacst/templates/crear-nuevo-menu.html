@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Crear nuevo menú del día</title>
+{% endblock head %}
+
+{% block content %}
+<div id="contenedor-general" class="p-3">
+
+    <h3>Crear nuevo menú del día</h3>
+
+
+    <!-- ponemos una caja flexible para alojafr los botónes necesarios -->
+    <div id="contenedor-botones" class="d-flex justify-content-end flex-wrap py-3">
+        <a id="boton-nuevo-menu" class="btn btn-primary btn-lg btn-warning m-3" href="/crear-nuevo-menu">
+            <i class="fas fa-file-alt fa-lg">&Tab;Nuevo Menú del día</i>
+        </a>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+
+</script>
+{% endblock script %}
