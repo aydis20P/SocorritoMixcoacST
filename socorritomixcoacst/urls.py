@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from .views import BusquedaCliente
 from .views import PerfilCliente
+from .views import AdminCliente
 
 urlpatterns = [
     path('', views.principal, name="principal"),
@@ -10,5 +11,6 @@ urlpatterns = [
     path('menu-orden', views.menu_orden, name = "menu-orden"),
     path('resumen-pedido', views.resumen_pedido, name="resumen-pedido"),
     path('cliente/<pk>/perfil-cliente/', PerfilCliente.as_view(), name='perfil-cliente'),
+    path('admin-cliente', AdminCliente.as_view(), name='admin-cliente'),
     path('registrar-clientes', views.registrar_clientes, name="registrar-clientes"),
 ]

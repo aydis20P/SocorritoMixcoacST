@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo
 from django.http import HttpResponseRedirect
-from django.views.generic.detail import DetailView
+from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.db import IntegrityError
 import datetime
-from datetime import datetime as dt
+from datetime import datetime as dt, timedelta
 import pytz
 from django.conf import settings
 
@@ -257,11 +257,6 @@ class PerfilCliente(DetailView):
           context['dinero_gastado_por_cliente'] = dinero_gastado_por_cliente
           #Se obtiene el número de pedidos realizados y se envía como contexto
           context['num_pedidos_realizados'] = len(lista_pedidos)
-          
-          
-          
-
-
           return context
 
      def post(self, request, *args, **kwargs):
@@ -283,6 +278,57 @@ class PerfilCliente(DetailView):
           self.object.save()
 
           return HttpResponseRedirect(request.path_info)
+
+class AdminCliente(ListView):
+
+     model = Cliente
+     template_name = "admin-cliente.html"
+     context_object_name = 'clientes'
+
+     ordenes_por_cliente = []
+     for cliente in Cliente.objects.all():
+          ordenes_por_cliente.append(Orden.objects.filter(cliente=cliente, fecha__range=[pytz.timezone("America/Mexico_City").localize(datetime.datetime.today()) - timedelta(days=30), pytz.timezone("America/Mexico_City").localize(datetime.datetime.today())]))
+     
+     clientes_orderby_ingresos_mes = []
+     for qs in ordenes_por_cliente:
+          if qs:
+               ingresos_generados_mes = 0
+               aux = qs[0]
+               cliente = aux.cliente
+               for i in range(0,len(qs)):
+                    if qs[i].promocion:
+                         ingresos_generados_mes += qs[i].total_descuento
+                    else:
+                         ingresos_generados_mes += qs[i].total
+               tuplita = tuple((cliente, ingresos_generados_mes))
+               clientes_orderby_ingresos_mes.append(tuplita)
+
+     clientes_orderby_ingresos_mes.sort(key=lambda x:x[1])
+     clientes_orderby_ingresos_mes.reverse()
+     
+     ordenes_por_cliente.sort(key = len)
+     ordenes_por_cliente.reverse()
+     
+     clientes_orderby_frecuencia = []
+     for qs in ordenes_por_cliente:
+          if qs:
+               frecuencia = len(qs)
+               aux = qs[0]
+               cliente = aux.cliente
+               tuplita = tuple((cliente, frecuencia))
+               clientes_orderby_frecuencia.append(tuplita)
+
+     def get_context_data(self, **kwargs):
+          context = super().get_context_data(**kwargs)
+          context['order_by_fecha_registro_antiguos'] = Cliente.objects.order_by('fecha_registro')
+          context['order_by_fecha_registro_recientes'] = Cliente.objects.order_by('-fecha_registro')
+          context['order_by_nombre'] = Cliente.objects.order_by('nombre')
+          context['order_by_orden_fecha'] = Orden.objects.filter(fecha__range=[datetime.date.today() - timedelta(days=40), datetime.date.today()]).order_by('-fecha')
+          context['order_by_ingresos_generados'] = Cliente.objects.order_by('-ingresos_generados')
+          context['order_by_compras_realizadas'] = Cliente.objects.order_by('-compras_realizadas')
+          context['order_by_compras_realizadas_mes'] = self.clientes_orderby_frecuencia 
+          context['order_by_ingresos_mes'] = self.clientes_orderby_ingresos_mes
+          return context
 
 def registrar_clientes(request):
      """ Pregunta si hay datos ocultos(POST)"""
