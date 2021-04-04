@@ -43,7 +43,7 @@ class Platillo(models.Model):
     esta_eliminado = models.BooleanField(null= False, default=False)
 
     def __str__(self):
-        return "Nombre: " + self.nombre + ", Precio: " + str(self.precio) + ", Tipo: "+ self.tipo
+        return "Nombre: " + self.nombre  + ", Tipo: "+ self.tipo
 
 
 class OrdenPlatillo(models.Model):
