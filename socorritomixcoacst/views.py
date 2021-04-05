@@ -112,25 +112,23 @@ def menu_orden(request):
           return render(request, 'menu-orden.html', context)
 
 def resumen_pedido(request):
-     numero_menu = 1
      todos_menus = request.session['todos_menus'] 
      todos_ordenes = request.session['todos_ordenes'] 
      todos_extras = request.session['todos_extras']
      observaciones = request.session.get('observaciones')
-     cambio = request.session.get('cambio')
-     pago_con = request.session.get('pagC')
-     pedidos_del_cliente = []
-     #cambio del pago de a $500
      cliente = Cliente.objects.filter(id=request.session.get("cliente_actual"))[0]
-     print (cambio)
-     #
+     pedidos_del_cliente = []#lista para pasar los pedidos del cliente al frontend
+
+
+     #creamos la potencial orden del clinte
      orden = Orden(total=0,
                     promocion=False,
                     total_descuento=0,
                     fecha=dt.now(),
                     cliente=cliente)
      
-     #guardamos los menús completos
+     #agregamos los menús completos a la lista pedidos_del_cliente
+     numero_menu = 1
      for i in range(len(todos_menus)):
           platillo_actual = Platillo.objects.filter(nombre=todos_menus[i][1])[0]
           if i % 3 == 0: #Entradas
@@ -159,7 +157,8 @@ def resumen_pedido(request):
                pedidos_del_cliente.append(platillo_menu_3)
                numero_menu += 1
                orden.total += platillo_menu_3.sub_total
-     #guardamos las órdenes
+
+     #agregamos las "órdenes" sueltas a la lista pedidos_del_cliente
      for i in range(len(todos_ordenes)):
           platillo_actual = Platillo.objects.filter(nombre=todos_ordenes[i][0])[0]
           cantidad_platillo_actual = int(todos_ordenes[i][1])
@@ -170,7 +169,8 @@ def resumen_pedido(request):
                                              platillo=platillo_actual)
           pedidos_del_cliente.append(platillo_orden)
           orden.total += platillo_orden.sub_total
-     #guardamos los extras
+
+     #agregamos los extras a la lista pedidos_del_cliente
      for i in range(len(todos_extras)):
           platillo_actual = Platillo.objects.filter(nombre=todos_extras[i][0])[0]
           cantidad_platillo_actual = int(todos_extras[i][1])
@@ -182,17 +182,15 @@ def resumen_pedido(request):
           pedidos_del_cliente.append(platillo_orden)
           orden.total += platillo_orden.sub_total
 
+
      if request.method=="POST":
           for key, value in request.POST.items():
-               print ('Entré al for')
                print('Key: %s' % (key) ) 
-               # print(f'Key: {key}') in Python >= 3.7
                print('Value %s' % (value) )
-               # print(f'Value: {value}') in Python >= 3.7
 
           orden.fecha=dt.now().astimezone(pytz.timezone(settings.TIME_ZONE))
           pago_con=float(request.POST.get('pagC'))
-          cambio=float(pago_con-orden.total)
+          cambio=float(pago_con - orden.total)#TODO: try...
          
           orden.save()
           for pedido in pedidos_del_cliente:
@@ -200,15 +198,15 @@ def resumen_pedido(request):
                pedido.save()
 
           return redirect(principal)
+
+
      else: #Método GET
-          
           context = {}
           
-         
           context['orden_del_cliente'] = orden
           context['pedidos_del_cliente'] = pedidos_del_cliente
           context["observaciones"] = observaciones
-          context['cambio'] = cambio
+          context["cliente"] = cliente
           return render(request, "resumen-pedido.html", context)
 
 
