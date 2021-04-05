@@ -1,15 +1,19 @@
 from django.shortcuts import render, redirect
 from .models import *
 from django.http import HttpResponseRedirect
-from django.views.generic.detail import DetailView
+from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.db import IntegrityError
 import datetime
-from datetime import datetime as dt
+from datetime import datetime as dt, timedelta
 import pytz
 from django.conf import settings
 
 def principal(request):
+     context = {}
+     return render(request, 'principal.html', context)
+
+def busqueda_cliente(request):
      if request.method=="POST":
           qs_clientes = Cliente.objects.filter(telefono=request.POST.get("telefono"))
           if qs_clientes:
@@ -24,7 +28,7 @@ def principal(request):
 
      else:
           context = {}
-          return render(request, 'principal.html', context)
+          return render(request, 'busqueda-cliente-principal.html', context)
 
 class BusquedaCliente(DetailView):
 
@@ -111,25 +115,26 @@ def menu_orden(request):
           return render(request, 'menu-orden.html', context)
 
 def resumen_pedido(request):
+	
+     #TODO actualizar los atributos compras_realizadas e ingresos_generados del cliente, cada vez que se realiza una orden
      numero_menu = 1
      todos_menus = request.session['todos_menus'] 
      todos_ordenes = request.session['todos_ordenes'] 
      todos_extras = request.session['todos_extras']
      observaciones = request.session.get('observaciones')
-     cambio = request.session.get('cambio')
-     pago_con = request.session.get('pagC')
-     pedidos_del_cliente = []
-     #cambio del pago de a $500
      cliente = Cliente.objects.filter(id=request.session.get("cliente_actual"))[0]
-     print (cambio)
-     #
+     pedidos_del_cliente = []#lista para pasar los pedidos del cliente al frontend
+
+
+     #creamos la potencial orden del clinte
      orden = Orden(total=0,
                     promocion=False,
                     total_descuento=0,
                     fecha=dt.now(),
                     cliente=cliente)
      
-     #guardamos los menús completos
+     #agregamos los menús completos a la lista pedidos_del_cliente
+     numero_menu = 1
      for i in range(len(todos_menus)):
           platillo_actual = Platillo.objects.filter(nombre=todos_menus[i][1])[0]
           if i % 3 == 0: #Entradas
@@ -158,7 +163,8 @@ def resumen_pedido(request):
                pedidos_del_cliente.append(platillo_menu_3)
                numero_menu += 1
                orden.total += platillo_menu_3.sub_total
-     #guardamos las órdenes
+
+     #agregamos las "órdenes" sueltas a la lista pedidos_del_cliente
      for i in range(len(todos_ordenes)):
           platillo_actual = Platillo.objects.filter(nombre=todos_ordenes[i][0])[0]
           cantidad_platillo_actual = int(todos_ordenes[i][1])
@@ -169,7 +175,8 @@ def resumen_pedido(request):
                                              platillo=platillo_actual)
           pedidos_del_cliente.append(platillo_orden)
           orden.total += platillo_orden.sub_total
-     #guardamos los extras
+
+     #agregamos los extras a la lista pedidos_del_cliente
      for i in range(len(todos_extras)):
           platillo_actual = Platillo.objects.filter(nombre=todos_extras[i][0])[0]
           cantidad_platillo_actual = int(todos_extras[i][1])
@@ -181,17 +188,15 @@ def resumen_pedido(request):
           pedidos_del_cliente.append(platillo_orden)
           orden.total += platillo_orden.sub_total
 
+
      if request.method=="POST":
           for key, value in request.POST.items():
-               print ('Entré al for')
                print('Key: %s' % (key) ) 
-               # print(f'Key: {key}') in Python >= 3.7
                print('Value %s' % (value) )
-               # print(f'Value: {value}') in Python >= 3.7
 
           orden.fecha=dt.now().astimezone(pytz.timezone(settings.TIME_ZONE))
           pago_con=float(request.POST.get('pagC'))
-          cambio=float(pago_con-orden.total)
+          cambio=float(pago_con - orden.total)#TODO: try...
          
           orden.save()
           for pedido in pedidos_del_cliente:
@@ -199,15 +204,15 @@ def resumen_pedido(request):
                pedido.save()
 
           return redirect(principal)
+
+
      else: #Método GET
-          
           context = {}
           
-         
           context['orden_del_cliente'] = orden
           context['pedidos_del_cliente'] = pedidos_del_cliente
           context["observaciones"] = observaciones
-          context['cambio'] = cambio
+          context["cliente"] = cliente
           return render(request, "resumen-pedido.html", context)
 
 class PerfilCliente(DetailView):
@@ -256,11 +261,6 @@ class PerfilCliente(DetailView):
           context['dinero_gastado_por_cliente'] = dinero_gastado_por_cliente
           #Se obtiene el número de pedidos realizados y se envía como contexto
           context['num_pedidos_realizados'] = len(lista_pedidos)
-          
-          
-          
-
-
           return context
 
      def post(self, request, *args, **kwargs):
@@ -282,6 +282,57 @@ class PerfilCliente(DetailView):
           self.object.save()
 
           return HttpResponseRedirect(request.path_info)
+
+class AdminCliente(ListView):
+
+     model = Cliente
+     template_name = "admin-cliente.html"
+     context_object_name = 'clientes'
+
+     ordenes_por_cliente = []
+     for cliente in Cliente.objects.all():
+          ordenes_por_cliente.append(Orden.objects.filter(cliente=cliente, fecha__range=[pytz.timezone("America/Mexico_City").localize(datetime.datetime.today()) - timedelta(days=30), pytz.timezone("America/Mexico_City").localize(datetime.datetime.today())]))
+     
+     clientes_orderby_ingresos_mes = []
+     for qs in ordenes_por_cliente:
+          if qs:
+               ingresos_generados_mes = 0
+               aux = qs[0]
+               cliente = aux.cliente
+               for i in range(0,len(qs)):
+                    if qs[i].promocion:
+                         ingresos_generados_mes += qs[i].total_descuento
+                    else:
+                         ingresos_generados_mes += qs[i].total
+               tuplita = tuple((cliente, ingresos_generados_mes))
+               clientes_orderby_ingresos_mes.append(tuplita)
+
+     clientes_orderby_ingresos_mes.sort(key=lambda x:x[1])
+     clientes_orderby_ingresos_mes.reverse()
+     
+     ordenes_por_cliente.sort(key = len)
+     ordenes_por_cliente.reverse()
+     
+     clientes_orderby_frecuencia = []
+     for qs in ordenes_por_cliente:
+          if qs:
+               frecuencia = len(qs)
+               aux = qs[0]
+               cliente = aux.cliente
+               tuplita = tuple((cliente, frecuencia))
+               clientes_orderby_frecuencia.append(tuplita)
+
+     def get_context_data(self, **kwargs):
+          context = super().get_context_data(**kwargs)
+          context['order_by_fecha_registro_antiguos'] = Cliente.objects.order_by('fecha_registro')
+          context['order_by_fecha_registro_recientes'] = Cliente.objects.order_by('-fecha_registro')
+          context['order_by_nombre'] = Cliente.objects.order_by('nombre')
+          context['order_by_orden_fecha'] = Orden.objects.filter(fecha__range=[datetime.date.today() - timedelta(days=40), datetime.date.today()]).order_by('-fecha')
+          context['order_by_ingresos_generados'] = Cliente.objects.order_by('-ingresos_generados')
+          context['order_by_compras_realizadas'] = Cliente.objects.order_by('-compras_realizadas')
+          context['order_by_compras_realizadas_mes'] = self.clientes_orderby_frecuencia 
+          context['order_by_ingresos_mes'] = self.clientes_orderby_ingresos_mes
+          return context
 
 def registrar_clientes(request):
      """ Pregunta si hay datos ocultos(POST)"""

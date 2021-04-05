@@ -18,6 +18,8 @@ class Cliente(models.Model):
     tipo = models.CharField(choices=TIPO_CLIENTE, max_length=2, null=False, blank=False)
     telefono_alternativo = models.CharField(max_length=10, null=True, blank=True)
     fecha_registro = models.DateField(null=False, default=timezone.now)
+    compras_realizadas = models.IntegerField(null=False, default=0)
+    ingresos_generados = models.FloatField(null=False, default=0)
 
     def __str__(self):
         return "Nombre: " + self.nombre + ", Tel: " + self.telefono
