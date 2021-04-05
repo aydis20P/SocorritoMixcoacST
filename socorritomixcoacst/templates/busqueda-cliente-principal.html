@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Pedidos por teléfono</title>
+{% endblock head %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-body">
+                        <br>
+                        <div class="row">
+                            <div class="col-md">
+                                <h5>Busqueda del Cliente</h5>
+                            </div>
+                            <div class="col-md">
+                                <form id="telForm" method="POST"><!-- metemos el input en un form y declaramos método POST -->
+                                {% csrf_token %}
+                                    <div class="input-group">
+                                        <div class="form-outline">
+                                            <input required type="tel" id="telefono" class="form-control" name="telefono" minlength="10" maxlength="10"/><!-- agregamos name que regresará en método POST -->
+                                            <label class="form-label" for="form1">Teléfono</label>
+                                        </div>
+                                        <!-- Cambiamos href por button con type submit -->
+                                        <button type="submit" class="btn btn-warning">
+                                            <i class="fas fa-search"></i>
+                                        </button>  
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+{% endblock content %}
