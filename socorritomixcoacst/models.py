@@ -37,13 +37,13 @@ class Orden(models.Model):
 
 class Platillo(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
-    precio = models.FloatField(max_length=5, null=False)
     descripcion = models.CharField(max_length=256, null=False, blank=False)
     tipo = models.CharField(choices=TIPO_PLATILLO, max_length=2, null=False, blank=False)
     es_complemento = models.BooleanField(null=False)
+    esta_eliminado = models.BooleanField(null= False, default=False)
 
     def __str__(self):
-        return "Nombre: " + self.nombre + ", Precio: " + str(self.precio) + ", Tipo: "+ self.tipo
+        return "Nombre: " + self.nombre  + ", Tipo: "+ self.tipo
 
 
 class OrdenPlatillo(models.Model):
@@ -80,3 +80,9 @@ class PlatilloMenu(models.Model):
 class Usuario(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rol = models.CharField(choices=TIPO_USUARIO, max_length=2, null=False, blank=False)
+
+class HistorialPrecio(models.Model):
+    precio = models.FloatField(null=False)
+    fecha = models.DateTimeField(null=False, auto_now_add=True)
+    es_precio_actual = models.BooleanField(null=False, default=True)
+    platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)

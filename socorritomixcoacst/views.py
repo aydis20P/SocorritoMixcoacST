@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo
+from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo, HistorialPrecio
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.contrib import messages
@@ -8,8 +8,8 @@ import datetime
 from datetime import datetime as dt
 import pytz
 from django.conf import settings
-
-
+from .models import TIPO_PLATILLO
+import re
 
 def principal(request):
      if request.method=="POST":
@@ -296,6 +296,7 @@ def registrar_clientes(request):
                                    )
           """ Manejo de excepciones """
           try:
+               
                """Guarda los datos en BD (mysql)"""
                cliente_registro.save()
                """Redirecciona la página a una url absoluta que contiene los datos del cliente"""
@@ -312,3 +313,62 @@ def registrar_clientes(request):
      else:
           context = {}
           return render (request, 'registrar-clientes.html', context)
+
+def gestion_platillos(request):
+     platillo_tipo = TIPO_PLATILLO
+     platillo_mod = Platillo.objects.all()
+     todos_historial_precio_reciente = HistorialPrecio.objects.filter(es_precio_actual=True)
+     
+     if request.method == "POST":
+          prueba = request.POST.get("complemento")
+         
+          for clave, valor in request.POST.items():
+               print("Clave: %s" % (clave))
+               print("Valor: %s" % (valor))
+               #Buscamos habilitar el campo esta_eliminado del platillo con id=idAeliminar
+               if "True" in valor:
+                    idAeliminar=clave.replace("eliminar_", "")
+                    eliminar_P=Platillo.objects.filter(pk=int(idAeliminar)).update(esta_eliminado = True)
+                    
+                    
+          
+          print(idAeliminar)
+          if not prueba:
+               complemento = False
+          else:
+               complemento = True
+          
+          platillos_nuevos=Platillo(nombre=request.POST.get("nom-plat"),
+                                   
+                                   tipo=request.POST.get("select-tipo"),
+                                   es_complemento=complemento,
+                                   descripcion=request.POST.get("descripcion"))
+          #Genramos este try para atrapar una excepción, en este caso buscamos atrapar el error cuando se repite el nombre de un platillo
+          try:
+               
+               context = {}
+               context['tip_platillo'] = platillo_tipo
+               context['platillo'] = platillo_mod
+               context['hist_precio'] = todos_historial_precio_reciente
+               """Guarda los datos en BD (mysql)"""
+               platillos_nuevos.save()
+               #Creamos un registro que guardará el precio usando la llave foranea que es el objeto "platillos_nuevos"
+               precio = HistorialPrecio(precio=request.POST.get("precio"), platillo=platillos_nuevos)
+               precio.save()
+               
+               return render( request, 'gestion-platillos.html', context)
+          #"""Si existe una excepción de IntegrityError"""
+          except IntegrityError:
+               
+               return render( request, 'gestion-platillos.html', context)
+
+
+
+
+     else:
+          context = {}
+          context['tip_platillo'] = platillo_tipo
+          context['platillos'] = platillo_mod
+          context['hist_precio'] = todos_historial_precio_reciente
+          
+          return render( request, 'gestion-platillos.html', context)
