@@ -10,8 +10,11 @@ import pytz
 from django.conf import settings
 
 
-
 def principal(request):
+     context = {}
+     return render(request, 'principal.html', context)
+
+def busqueda_cliente(request):
      if request.method=="POST":
           qs_clientes = Cliente.objects.filter(telefono=request.POST.get("telefono"))
           if qs_clientes:
@@ -26,7 +29,7 @@ def principal(request):
 
      else:
           context = {}
-          return render(request, 'principal.html', context)
+          return render(request, 'busqueda-cliente-principal.html', context)
 
 
 class BusquedaCliente(DetailView):

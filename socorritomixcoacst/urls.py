@@ -5,6 +5,7 @@ from .views import PerfilCliente
 
 urlpatterns = [
     path('', views.principal, name="principal"),
+    path('busqueda-cliente', views.busqueda_cliente, name="busqueda-cliente"),
     path('cliente/<pk>/', BusquedaCliente.as_view(), name='cliente'),
     path('cliente-no-encontrado', views.cliente_no_encontrado, name = "cliente-no-encontrado"),
     path('menu-orden', views.menu_orden, name = "menu-orden"),
