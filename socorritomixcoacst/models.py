@@ -6,8 +6,8 @@ from django.utils import timezone
 
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
-TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'))
-TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CENAS','cenas'))
+TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'))
+TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CE','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 
 class Cliente(models.Model):
@@ -45,7 +45,7 @@ class Platillo(models.Model):
     esta_eliminado = models.BooleanField(null= False, default=False)
 
     def __str__(self):
-        return "Nombre: " + self.nombre + ", Precio: " + str(self.precio) + ", Tipo: "+ self.tipo
+        return "Nombre: " + self.nombre + ", Tipo: "+ self.tipo + ", Está eliminado: " + str(self.esta_eliminado)
 
 
 class OrdenPlatillo(models.Model):
@@ -74,10 +74,16 @@ class Menu(models.Model):
     dia = models.DateField(null=False)
     tipo = models.CharField(choices=TIPO_MENU, max_length=2, null=False, blank=False)
 
+    def __str__(self):
+        return "Día: " + str(self.dia) + ", Tipo: " + self.tipo
+
 class PlatilloMenu(models.Model):
     disponible = models.BooleanField(null=False)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
     menu = models.ForeignKey(Menu, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return "Menú: (" + str(self.menu) + "), Platillo: (" + str(self.platillo) + "), Disponible: " + str(self.disponible)
 
 class Usuario(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
