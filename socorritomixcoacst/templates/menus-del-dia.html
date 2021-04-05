@@ -8,23 +8,86 @@
 {% block content %}
 <div id="contenedor-general" class="p-3">
 
-    <h3>Menús del día</h3>
-    <!-- primero checamos si hay menús registrados, para asi generar su tabla -->
-    {% if menus %}
+    <form if="form-platillos" method="POST">
+        {% csrf_token %}
 
-    <!-- si no hay platillos, no haremos ninguna tabla, en su lugar pondremos un aviso de que no hay platillos -->
-    {% else %}
-        <div id="tarjeta-aviso" class="card p-2">
-            <h4>No hay menús para el día de hoy<div id="fecha-del-dia"></div></h4>
+        <h3>Menús del día</h3>
+        <!-- primero checamos si hay menús registrados, para asi generar la lista de estos -->
+        {% if menus_platillo %}
+
+        <!-- Vamos a mostrar los menús como entradas de una lista, con sus platillos como una tabla dentro de esa entrada de lista -->
+            {% regroup menus_platillo by menu as lista_menus_platillo %}
+
+            <ul id="lista-menus" class="list-group">
+                {% for menu, platillos in lista_menus_platillo %}
+                    <li class="list-group-item p-3">
+
+                        {% if menu.tipo == "DE" %}
+                            <h5>Menú: Desayuno</h5>
+                        {% endif %}
+                        {% if menu.tipo == "CO" %}
+                            <h5>Menú: Comida</h5>
+                        {% endif %}
+                        {% if menu.tipo == "CE" %}
+                            <h5>Menú: Cena</h5>
+                        {% endif %}
+
+                        <table class="table table-sm">
+
+                            <thead>
+                                <tr>
+                                    <th scope="col">Platillo</th>
+                                    <th scope="col">Descripción</th>
+                                    <th scope="col">¿Agotado?</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for item in platillos %}
+                                    <tr>
+                                        <td>
+                                            {{ item.platillo.nombre }}
+                                        </td>
+                                        <td>
+                                            {{ item.platillo.descripcion }}
+                                        </td>
+                                        <td>
+                                            {% if item.disponible %}
+                                                <input name="{{ item.platillo.nombre }}" type="checkbox" class="custom-control-input">
+                                            {% else %}
+                                                <i class="far fa-check-square fa-lg"></i>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    </li>
+                {% endfor %}
+            </ul>
+
+        <!-- si no hay menús, no haremos ninguna tabla, en su lugar pondremos un aviso de que no hay menús -->
+        {% else %}
+
+            <div id="tarjeta-aviso" class="card p-2">
+                <h4 id="aviso"></h4>
+            </div>
+
+        {% endif %}
+
+        <!-- ponemos una caja flexible para los botones -->
+        <div id="contenedor-botones" class="d-flex justify-content-end flex-wrap py-3">
+            <button id="boton-actualizar-platillos" type="submit" class="btn btn-lg btn-warning m-3">
+                <i class="fas fa-edit fa-lg">&Tab;Actualizar platillos agotados</i>
+            </button>
+            <a id="boton-nuevo-menu" class="btn btn-lg btn-warning m-3" href="/crear-nuevo-menu">
+                <i class="fas fa-file-alt fa-lg">&Tab;Nuevo Menú del día</i>
+            </a>
         </div>
-    {% endif %}
 
-    <!-- ponemos una caja flexible con un botón para agregar un nuevo menú del día -->
-    <div id="contenedor-botones" class="d-flex justify-content-end flex-wrap py-3">
-        <a id="boton-nuevo-menu" class="btn btn-primary btn-lg btn-warning m-3" href="/crear-nuevo-menu">
-            <i class="fas fa-file-alt fa-lg">&Tab;Nuevo Menú del día</i>
-        </a>
-    </div>
+    </form>
 
 </div>
 {% endblock content %}
@@ -33,10 +96,16 @@
 <script>
     //generaremos la fecha del día de hoy para mostrarla cuando no hay menús
     const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+    const diasSemana = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado"]
+
     var fecha = new Date();
-    var dia = fecha.getDay();
+    var semana = diasSemana[fecha.getDay()];
+    var dia = fecha.getDate();
     var mes = meses[fecha.getMonth()];
     var año = fecha.getFullYear();
-    document.getElementById("fecha-del-dia").innerText = "(" + dia + " de " + mes + " del " + año + ")";
+    
+    var aviso = "No hay menús para el día de hoy (" + semana + " " + dia + " de " + mes + " del " + año + ")";
+
+    document.getElementById("aviso").innerText = aviso;
 </script>
 {% endblock script %}

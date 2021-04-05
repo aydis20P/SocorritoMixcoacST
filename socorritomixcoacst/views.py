@@ -314,15 +314,58 @@ def registrar_clientes(request):
           return render (request, 'registrar-clientes.html', context)
 
 def menus_del_dia(request):
-     #Jalamos de la BD todos los Menu para mostrarlos en la vista
-     menus = Menu.objects.all()
 
-     context = {}
-     context["menus"] = menus
-     return render(request, "menus-del-dia.html", context)
+     if request.method == "POST":
+          for clave, valor in request.POST.items():
+               if valor == "on":
+                    platillo = Platillo.objects.filter(nombre=clave)[0]
+                    platillo_menu = PlatilloMenu.objects.filter(platillo=platillo)
+                    platillo_menu.update(disponible=False)
+
+          return redirect("menus-del-dia")
+          
+     else:
+          #Jalamos de la BD todos los platillosMenu para mostrarlos en la vista,
+          #En forma de una lista de diccionarios con cada campo de PlatilloMenu como entrada
+          menus_platillo = []
+          for platillo_menu in PlatilloMenu.objects.all():
+               menus_platillo.append({"disponible": platillo_menu.disponible,
+                                   "platillo": platillo_menu.platillo,
+                                   "menu": platillo_menu.menu})
+                                   
+          context = {}
+          context["menus_platillo"] = menus_platillo
+          return render(request, "menus-del-dia.html", context)
 
 def crear_nuevo_menu(request):
+
+     if request.method == "POST": #cuando mandemos la opcion "Agregar nuevo menú del día"
+
+          #creamos el menú del día, con solo la fecha actual, y la lista de platillosMenu a tratar
+          nuevoMenu = Menu(dia=dt.now())
+          platillosMenu = []
+
+          for clave, valor in request.POST.items():
+
+               #capturemos el select que nos dirá que tipo de menú vamos a manejar
+               if valor in [tipo[0] for tipo in TIPO_MENU]:
+                    nuevoMenu.tipo = valor
+
+               #Ahora capturemos los platillos que fueron marcados en la lista
+               if valor == "on":
+                    platillosMenu.append(PlatilloMenu(disponible=True,
+                                                      platillo=Platillo.objects.filter(nombre=clave)[0],
+                                                      menu=nuevoMenu))
+
+               #guardemos los platillosMenu y el Menú en la BD
+               nuevoMenu.save()
+               for platilloMenu in platillosMenu:
+                    platilloMenu.save()
+
+          return redirect("menus-del-dia")
+
      context = {}
+     context["platillos"] = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
      return render(request, "crear-nuevo-menu.html", context)
 
 def gestion_platillos(request):
