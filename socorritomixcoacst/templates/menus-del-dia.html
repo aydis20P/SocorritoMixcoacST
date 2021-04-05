@@ -19,7 +19,7 @@
             {% regroup menus_platillo by menu as lista_menus_platillo %}
 
             <ul id="lista-menus" class="list-group">
-                {% for menu, platillos in lista_menus_platillo %}
+                {% for menu, platillos_menu in lista_menus_platillo %}
                     <li class="list-group-item p-3">
 
                         {% if menu.tipo == "DE" %}
@@ -43,17 +43,17 @@
                             </thead>
 
                             <tbody>
-                                {% for item in platillos %}
+                                {% for platillo_menu in platillos_menu %}
                                     <tr>
                                         <td>
-                                            {{ item.platillo.nombre }}
+                                            {{ platillo_menu.platillo.nombre }}
                                         </td>
                                         <td>
-                                            {{ item.platillo.descripcion }}
+                                            {{ platillo_menu.platillo.descripcion }}
                                         </td>
                                         <td>
-                                            {% if item.disponible %}
-                                                <input name="{{ item.platillo.nombre }}" type="checkbox" class="custom-control-input">
+                                            {% if platillo_menu.disponible %}
+                                                <input name="{{ platillo_menu.platillo.nombre }}" type="checkbox" class="custom-control-input">
                                             {% else %}
                                                 <i class="far fa-check-square fa-lg"></i>
                                             {% endif %}

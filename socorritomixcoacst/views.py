@@ -323,7 +323,7 @@ def menus_del_dia(request):
                     platillo_menu.update(disponible=False)
 
           return redirect("menus-del-dia")
-          
+
      else:
           #Jalamos de la BD todos los platillosMenu para mostrarlos en la vista,
           #En forma de una lista de diccionarios con cada campo de PlatilloMenu como entrada
