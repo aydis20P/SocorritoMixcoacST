@@ -109,6 +109,8 @@ def menu_orden(request):
           return render(request, 'menu-orden.html', context)
 
 def resumen_pedido(request):
+	
+     #TODO actualizar los atributos compras_realizadas e ingresos_generados del cliente, cada vez que se realiza una orden
      numero_menu = 1
      todos_menus = request.session['todos_menus'] 
      todos_ordenes = request.session['todos_ordenes'] 
