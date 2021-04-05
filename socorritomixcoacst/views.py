@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo
+from .models import Usuario, Cliente, Orden, OrdenPlatillo, Platillo, HistorialPrecio
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.contrib import messages
@@ -8,7 +8,7 @@ import datetime
 from datetime import datetime as dt
 import pytz
 from django.conf import settings
-
+from .models import TIPO_PLATILLO
 
 def principal(request):
      context = {}
@@ -112,6 +112,9 @@ def menu_orden(request):
           return render(request, 'menu-orden.html', context)
 
 def resumen_pedido(request):
+	
+     #TODO actualizar los atributos compras_realizadas e ingresos_generados del cliente, cada vez que se realiza una orden
+     numero_menu = 1
      todos_menus = request.session['todos_menus'] 
      todos_ordenes = request.session['todos_ordenes'] 
      todos_extras = request.session['todos_extras']
@@ -297,6 +300,7 @@ def registrar_clientes(request):
                                    )
           """ Manejo de excepciones """
           try:
+               
                """Guarda los datos en BD (mysql)"""
                cliente_registro.save()
                """Redirecciona la página a una url absoluta que contiene los datos del cliente"""
@@ -313,3 +317,40 @@ def registrar_clientes(request):
      else:
           context = {}
           return render (request, 'registrar-clientes.html', context)
+
+def gestion_platillos(request):
+     platillo_tipo = TIPO_PLATILLO
+     platillo_mod = Platillo.objects.all()
+
+     if request.method == "POST":
+          prueba=request.POST.get("complemento")
+          
+          if not prueba:
+               complemento = False
+          else:
+               complemento = True
+          print ("chjeckbox: "+ str(prueba))
+          platillos_nuevos=Platillo(nombre=request.POST.get("nom-plat"),
+                                   
+                                   tipo=request.POST.get("select-tipo"),
+                                   es_complemento=complemento,
+                                   descripcion=request.POST.get("descripcion"))
+         
+          try:
+               context = {}
+               context['tip_platillo'] = platillo_tipo
+               context['platillo'] = platillo_mod
+               """Guarda los datos en BD (mysql)"""
+               platillos_nuevos.save()
+               #Creamos un registro que guardará el precio usando la llave foranea que es el objeto "platillos_nuevos"
+               precio = HistorialPrecio(precio=request.POST.get("precio"), platillo=platillos_nuevos)
+               precio.save()
+               return render( request, 'gestion-platillos.html', context)
+          #"""Si existe una excepción de IntegrityError"""
+          except IntegrityError:
+               return render( request, 'gestion-platillos.html', context)
+     else:
+          context = {}
+          context['tip_platillo'] = platillo_tipo
+          context['platillos'] = platillo_mod
+          return render( request, 'gestion-platillos.html', context)
