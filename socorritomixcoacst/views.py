@@ -37,7 +37,6 @@ class BusquedaCliente(DetailView):
     template_name = "busqueda-cliente.html"
 
     def get_context_data(self, **kwargs):
-        Orden.objects.filter(fecha=timezone.now.date(), cliente=self.object)
         context = super().get_context_data(**kwargs)
         self.request.session["cliente_actual"] = self.object.id
         return context
@@ -391,7 +390,7 @@ def crear_nuevo_menu(request):
     if request.method == "POST": #cuando mandemos la opcion "Agregar nuevo menú del día"
 
         #creamos el menú del día, con solo la fecha actual, y la lista de platillosMenu a tratar
-        #nuevoMenu = Menu(dia=dt.now())
+        nuevoMenu = Menu(dia=dt.now())
         platillosMenu = []
 
         for clave, valor in request.POST.items():
