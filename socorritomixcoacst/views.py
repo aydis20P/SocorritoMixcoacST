@@ -343,7 +343,7 @@ def gestion_platillos(request):
                     nuevoPrecio = float(valor)
                     idModificar = clave.replace("modprecio_","")
                     
-                    #print ("Paltillo: " + str(platillo) + "--------------->")
+                   
                     idPlatillo = HistorialPrecio.objects.filter(pk = int(idModificar))
                     modificacion_platillo = HistorialPrecio.objects.filter(pk=int(idModificar))
                     modificacion_platillo.update(es_precio_actual = False )
