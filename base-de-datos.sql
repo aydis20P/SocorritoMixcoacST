@@ -8,7 +8,6 @@ INSERT INTO socorritomixcoacst_platillo (nombre, precio, descripcion, tipo, es_c
 INSERT INTO socorritomixcoacst_platillo (nombre, precio, descripcion, tipo, es_complemento) VALUES ("Leche Caliente", "28", "Descripción del platillo", "EX", "0");
 INSERT INTO socorritomixcoacst_platillo (nombre, precio, descripcion, tipo, es_complemento) VALUES ("Té", "15", "Descripción del platillo", "EX", "0");
 INSERT INTO socorritomixcoacst_platillo (nombre, precio, descripcion, tipo, es_complemento) VALUES ("Agua pero nescafe", "15", "Descripción del platillo", "EX", "0");
-INSERT INTO socorritomixcoacst_platillo (nombre, precio, descripcion, tipo, es_complemento) VALUES ("Arroz", "15", "Arroz rojo con chícharos y zanahoria", "ST", "1");
 INSERT INTO socorritomixcoacst_platillo (nombre, precio, descripcion, tipo, es_complemento) VALUES ("Codito a la crema", "15", "Descripción del platillo", "ST", "1");
 INSERT INTO socorritomixcoacst_platillo (nombre, precio, descripcion, tipo, es_complemento) VALUES ("Salchichas fritas", "15", "Descripción del platillo", "ST", "1");
 INSERT INTO socorritomixcoacst_platillo (nombre, precio, descripcion, tipo, es_complemento) VALUES ("Ensalada", "15", "Descripción del platillo", "ST", "1");

@@ -1,0 +1,537 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Administracion de clientes</title>
+{% endblock head %}
+
+{% block content %}
+<div class="col-12 my-3 pt-3 shadow">
+    <h4>Ordenar clientes por:</h4>
+    <select class="form-select"  id="select-filtros" onchange="triggerTabla()">
+        <option disabled>Ordenar clientes por:</option>
+        <option selected value="Fecha de registro (mas antiguos)" >Fecha de registro (mas antiguos)</option>
+        <option value="Fecha de registro (mas recientes)">Fecha de registro (mas recientes)</option>
+        <option value="Nombre (alfabetico)">Nombre (alfabetico)</option>
+        <option value="Top compras realizadas">Top compras realizadas</option>
+        <option value="Top compras realizadas del mes">Top compras realizadas del mes</option>
+        <option value="Top ingresos generados">Top ingresos generados</option>
+        <option value="Top ingresos generados del mes">Top ingresos generados del mes</option>
+        <option value="Ultimas compras">Ultimas compras</option>
+    </select>
+    <div class="table-responsive " id="principal">
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+    <script>
+        // Obtener la referencia del elemento select
+        var selectFiltros = document.getElementById("select-filtros");
+        var padre = document.getElementById("principal");
+        
+        window.onload = function() {
+           triggerTabla();
+        }
+
+        // Remueve todos los hijos del elemento padre de la tabla (id="principal")
+        function vaciarTabla(){
+            while (padre.lastElementChild) {
+                    padre.removeChild(padre.lastElementChild);
+                }
+        }
+
+        // Se activa cada vez que cambia la opcion elegida del componente con id="select-filtros" 
+        function triggerTabla(){
+            vaciarTabla();
+            if(selectFiltros.value == "Fecha de registro (mas antiguos)"){
+                generaTabla1();
+            }else if(selectFiltros.value == "Fecha de registro (mas recientes)"){
+                generaTabla2();
+            }else if(selectFiltros.value == "Nombre (alfabetico)"){
+                generaTabla3();
+            }else if(selectFiltros.value == "Top compras realizadas"){
+                generaTabla4();
+            }else if(selectFiltros.value == "Top compras realizadas del mes"){
+                generaTabla5();
+            }else if(selectFiltros.value == "Top ingresos generados"){
+                generaTabla6();
+            }else if(selectFiltros.value == "Top ingresos generados del mes"){
+                generaTabla7();
+            }else if(selectFiltros.value == "Ultimas compras"){
+                generaTabla8();
+            }
+        }
+
+        // Generar tabla de clientes ordenados por fecha de registro (mas antiguos primero)
+        function generaTabla1() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Fecha de registro");
+            var textoE3 = document.createTextNode("Perfil del cliente");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for cliente in order_by_fecha_registro_antiguos %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{cliente.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{cliente.nombre}}");
+                var textoCelda2 = document.createTextNode("{{cliente.fecha_registro}}");
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(botonPerfil);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);
+        }
+
+        // Generar tabla de clientes ordenados por fecha de registro (mas recientes primero)
+        function generaTabla2() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Fecha de registro");
+            var textoE3 = document.createTextNode("Perfil del cliente");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for cliente in order_by_fecha_registro_recientes %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{cliente.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{cliente.nombre}}");
+                var textoCelda2 = document.createTextNode("{{cliente.fecha_registro}}");
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(botonPerfil);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);  
+        }
+
+        // Generar tabla de clientes ordenados por nombre en orden alfabético
+        function generaTabla3() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Fecha de registro");
+            var textoE3 = document.createTextNode("Perfil del cliente");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for cliente in order_by_nombre %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{cliente.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{cliente.nombre}}");
+                var textoCelda2 = document.createTextNode("{{cliente.fecha_registro}}");
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(botonPerfil);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);  
+        }
+
+        // Generar tabla de clientes ordenados por compras realizadas
+        function generaTabla4() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Compras realizadas");
+            var textoE3 = document.createTextNode("Perfil del cliente");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for cliente in order_by_compras_realizadas %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{cliente.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{cliente.nombre}}");
+                var textoCelda2 = document.createTextNode("{{cliente.compras_realizadas}}");
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(botonPerfil);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);  
+        }
+
+        // Generar tabla de clientes ordenados por compras realizadas
+        function generaTabla5() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Compras realizadas (ultimos 30 dias)");
+            var textoE3 = document.createTextNode("Perfil del cliente");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for cliente in order_by_compras_realizadas_mes %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{cliente.0.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{cliente.0.nombre}}");
+                var textoCelda2 = document.createTextNode("{{cliente.1}}");
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(botonPerfil);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);  
+        }
+
+        // Generar tabla de clientes ordenados por compras realizadas
+        function generaTabla6() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Ingresos generados");
+            var textoE3 = document.createTextNode("Perfil del cliente");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for cliente in order_by_ingresos_generados %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{cliente.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{cliente.nombre}}");
+                var textoCelda2 = document.createTextNode("{{cliente.ingresos_generados}}");
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(botonPerfil);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);  
+        }
+
+        // Generar tabla de clientes ordenados por compras realizadas
+        function generaTabla7() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Ingresos generados (ultimos 30 dias)");
+            var textoE3 = document.createTextNode("Perfil del cliente");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for cliente in order_by_ingresos_mes %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{cliente.0.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{cliente.0.nombre}}");
+                var textoCelda2 = document.createTextNode("{{cliente.1}}");
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(botonPerfil);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);  
+        }
+
+        // Generar tabla de clas ultimas compras (ordenes) realizadas
+        function generaTabla8() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var e4 = document.createElement("th");
+            e4.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Fecha de compra");
+            var textoE3 = document.createTextNode("Total");
+            var textoE4 = document.createTextNode("Perfil del cliente");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            e4.appendChild(textoE4);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            filaEncabezado.appendChild(e4);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for orden in order_by_orden_fecha %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var celda3 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{orden.cliente.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{orden.cliente.nombre}}");
+                var textoCelda2 = document.createTextNode("{{orden.fecha}}");
+                var textoCelda3 = "";
+                {% if orden.promocion %}
+                    textoCelda3 = document.createTextNode("${{orden.total_descuento}}");
+                {% else %}
+                    textoCelda3 = document.createTextNode("${{orden.total}}");
+                {% endif %}
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                celda3.appendChild(textoCelda3);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(celda3);
+                fila.appendChild(botonPerfil);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);  
+        }
+    </script>
+{% endblock script %}

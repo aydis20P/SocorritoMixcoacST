@@ -2,51 +2,26 @@
 {% load static %}
 
 {% block head %}
-    <title>Pedidos por teléfono</title>
+    <title>Principal</title>
 {% endblock head %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md">
-                <div class="card">
-                    <div class="card-body">
-                        <br>
-                        <div class="row">
-                            <div class="col-md">
-                                <h5>Busqueda del Cliente</h5>
-                            </div>
-                            <div class="col-md">
-                                <form id="telForm" method="POST"><!-- metemos el input en un form y declaramos método POST -->
-                                {% csrf_token %}
-                                    <div class="input-group">
-                                        <div class="form-outline">
-                                            <input required type="tel" id="telefono" class="form-control" name="telefono" /><!-- agregamos name que regresará en método POST -->
-                                            <label class="form-label" for="form1">Teléfono</label>
-                                        </div>
-                                        <!-- Cambiamos href por button con type submit -->
-                                        <button type="submit" class="btn btn-warning">
-                                            <i class="fas fa-search"></i>
-                                        </button>  
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <!--Creamos el botón de Editar el menú o los platillos que se mostrará en el menú-->
-                        <div class="row">
-                            <div class="col-md">
-                                <!--Use la etiqueta "a" porque busco solo un redireccionamiento a otra vista html-->
-                                <a href="gestion-platillos">
-                                    <button type="button" class="btn btn-primary">Gestion Platillos</button>
-                                </a>
-                            </div> 
-                        </div>
-                    </div>
-                  </div>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <a href="busqueda-cliente" class="btn btn-lg btn-block btn-warning">Tomar pedido</a>
         </div>
-        <div class="row">
-
+        <div class="col">
+            <a href="gestion-platillos-principal" class="btn btn-lg btn-block btn-warning">Gestión de platillos</a>
         </div>
     </div>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="menus-del-dia" class="btn btn-lg btn-block btn-warning">Gestión de menú del día</a>
+        </div>
+        <div class="col">
+            <a href="admin-cliente" class="btn btn-lg btn-block btn-warning">Análisis de clientes</a>
+        </div>
+    </div>
+</div>
 {% endblock content %}
