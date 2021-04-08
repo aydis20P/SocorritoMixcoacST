@@ -6,101 +6,189 @@
 {% endblock head %}
 
 {% block content %}
-<!-- Contenedor general para toda la vista -->
+<!-- contenedor principal -->
 <div class="container">
-	<!-- Contenedor de caja flexible para poder estirar la tabla -->
+	<h4>Resúmen del pedido del cliente</h4>
+	<!-- contenedor tabla info cliente -->
 	<div class="d-flex">
 		<div class="table-responsive flex-grow-1">
-			<h4>Resúmen del pedido del cliente</h4>
+			<table class="table">
+				<thead>
+				  <tr class="table-dark">
+					<th scope="col">Nombre</th>
+					<th scope="col">Dirección</th>
+					<th scope="col">Referencias</th>
+					<th scope="col">Teléfono</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr class="table-dark">
+					<td>{{ cliente.nombre }}</td>
+					<td>{{ cliente.direccion }}</td>
+					<td>{{ cliente.referencias }}</td>
+					<td>{{ cliente.telefono }}</td>
+				  </tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- contenedor tabla resumen pedidos-->
+	<div class="d-flex">
+		<div class="table-responsive flex-grow-1">
 			<table id="tabla" class="table">
 				<thead>
 					<tr>
 						<th scope="col">Menú completo</th>
 						<th scope="col">Platillo</th>
 						<th scope="col">Cantidad</th>
-						<th scope="col">Subtotal</th>
+						<th scope="col">Sub total</th>
 					</tr>
 				</thead>
 				<!-- Jalamos la lista de órdenesPlatillo y metemos sus elementos uno por uno en la tabla -->
 				<tbody>
 					{% for pedido in pedidos_del_cliente %}
-					<tr>
-						{% if pedido.es_completa %}
-							<td>Menu completo {{ pedido.numero_completa }}</td>
-						{% else %}
-							<td>No aplica</td>
-						{% endif %}
-						<td>{{ pedido.platillo.nombre }}</td>
-						<td>{{ pedido.cantidad }}</td>
-						<td>{{ pedido.sub_total }}</td>
-					<tr>
+						<tr>
+							{% if pedido.es_completa %}
+								<td>Menu completo {{ pedido.numero_completa }}</td>
+							{% else %}
+								<td>No aplica</td>
+							{% endif %}
+							<td>{{ pedido.platillo.nombre }}</td>
+							<td>{{ pedido.cantidad }}</td>
+							<td>{{ pedido.sub_total }}</td>
+						<tr>
 					{% endfor %}
-					<!-- ponemos una última fila con el total (calculado desde views.py) -->
-					<tr>
+					<tr class="table-dark">
 						<td colspan="2"></td>
-						<td><h6>Total</h6></td>
+						<td><h6>Sub total general</h6></td>
 						{% if orden_del_cliente.promocion %}
-							<td >{{ orden_del_cliente.total_descuento }}</td>
+							<td id="sub-total">{{ orden_del_cliente.total_descuento }}</td>
 						{% else %}
-							<td>{{orden_del_cliente.total}}</td>
+							<td id="sub-total">{{orden_del_cliente.total}}</td>
 						{% endif %}
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+	{% if observaciones %}
+		<div class="flex-grow-1 pb-3">
+			<h5>Observaciónes del pedido:<br></h5>
+			{{ observaciones }}
+		</div>
+	{% endif %}
 	<form id="form-confirmarpedido" method="POST">
 		{% csrf_token %}
-		<!-- contenedor de caja flexible para alojar la observación y el botón de cancelar y aceptar -->
-		<div class="container">
-			<div class="row mb-1 g-1">
-				<div class="col">
-					<div class="d-flex justify-content-end mt-2 me-2">
-						<h5>Pago con:</h5>
-					</div>
-				</div>
-				<div class="col">
-					
-					<div class="form-outline">
-						<input type="number" id="pagC" class="form-control" name="pagC" onkeyup="calculaCambio()" onchange="calculaCambio()" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
-						<label class="form-label" for="pagC">Pago con</label>
-					</div>	
-					
-				</div>
+
+		<div class="row justify-content-end p-2">
+			<div class="col d-flex justify-content-end mt-2 me-2">
+				<h5>Método de pago:</h5>
 			</div>
-			<div class="row mb-1 g-1">
-				<div class="col">
-					<div class="d-flex justify-content-end mt-2 me-2">
-						<h5>Cambio :</h5>
-					</div>
-				</div>
-				<div class="col">
-					
-					<div class="form-outline">
-						<input type="text" id="cambio" class="form-control" name="cambio" disabled/>
-						<label id="lbcambio"class="form-label" for="cambio">cambio</label>
-					</div>	
-					
-				</div>
+			<div class="col d-flex">
+				<select id="select-pago" class="form-select" aria-label="Default select example" onchange="muestraPagoEfectivo()">
+					<option selected value="efectivo">Efectivo</option>
+					<option value="terminal">Terminal</option>
+					<option value="pagado">Pagado</option>
+				</select>
 			</div>
 		</div>
-		<div class="d-flex align-items-center justify-content-end flex-wrap pb-3">
-			<!-- Las observaciónes del pedido ocupan todo el espácio posible, dejando el justo para los botónes -->
-			<div class="flex-grow-1 pb-3">
-				<h5>Observaciónes del pedido:<br></h5>
-				{{ observaciones }}
-			</div>
-			<!-- caja flexible para que los botones se agrupen juntos al redimensionar -->
-			<div class="d-flex">
-				<div class="px-3">
-					<a href="menu-orden" class="btn btn-lg btn-danger">Cancelar</a>
+
+		<!-- sección pago -->
+		<div class="container">
+			<!-- chkbox comisión -->
+			<div class="d-flex justify-content-end mt-2 mb-2">
+				<div class="form-check me-3">
+					<input
+					class="form-check-input"
+					type="checkbox"
+					id="chbx-topper"
+					/>
+					<label for="flexCheckDefault">
+					LLevar Topper
+					</label>
 				</div>
-				<div class="px-3">
-					<!-- TODO aquí haría falta meterle que onclick guardara la orden en la BD. -->
-					<button class="btn btn-warning" type="submit">
-						<i class="fas fa-user-plus"></i>
-						Confirmar pedido
-					</button>
+				<div class="form-check">
+					<input
+					class="form-check-input"
+					type="checkbox"
+					id="chbx-comision-extra"
+					onchange="muestraInputComision(); calculaCambio()"
+					/>
+					<label for="flexCheckDefault">
+					Aplica comisión extra de envío
+					</label>
+				</div>
+			</div>
+			<!-- input comisión -->
+			<div id="input-comision" style="display: none;">
+				<div class="row justify-content-end g-1">
+					<div class="col d-flex justify-content-end mt-2 me-2">
+						<h5>Comisión extra:</h5>
+					</div>
+					<div class="col d-flex form-outline mb-3">
+						<input id="input-comision-number" type="number" id="comExt" class="form-control" name="comExt" autocomplete="off" min="0" onkeyup="calculaCambio()" onchange="calculaCambio()"/>
+						<label class="form-label" for="comExt">Comisión extra</label>
+					</div>
+				</div>
+			</div>
+			<div style="background-color: black;" id="seccion-total" class="row g-1">
+				<div class="col d-flex justify-content-end mt-2 me-2">
+					<h5 class="text-light" id="total">Total: ${{orden_del_cliente.total}}</h5>
+				</div>
+			</div>
+			<!-- sección pago efectivo -->
+			<div id="pago-efectivo">
+				<div class="row mt-1 mb-1 g-1">
+					<div class="col">
+						<div class="d-flex justify-content-end mt-2 me-2">
+							<h5>Pago con:</h5>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-outline">
+							<input type="number" id="pagC" class="form-control" name="pagC" onkeyup="calculaCambio()" onchange="calculaCambio()" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
+							<label class="form-label" for="pagC">Pago con</label>
+						</div>	
+					</div>
+				</div>
+				<div class="row mb-1 g-1">
+					<div style="background-color: black;" id="seccion-cambio" class="row g-1">
+						<div class="col d-flex justify-content-end mt-2 me-2">
+							<h5 class="text-light" id="cambio-text"></h5>
+						</div>
+					</div>
+					<div hidden class="col">
+						<div class="d-flex justify-content-end mt-2 me-2">
+							<h5>Cambio :</h5>
+						</div>
+					</div>
+					<div hidden class="col">
+						<div class="form-outline">
+							<input type="text" id="cambio" class="form-control" name="cambio" disabled/>
+							<label id="lbcambio"class="form-label" for="cambio">cambio</label>
+						</div>	
+					</div>
+				</div>	
+			</div>
+		</div>
+		<!-- sección botones -->
+		<div class="d-flex align-items-center justify-content-end flex-wrap pb-3">
+			<div class="container">
+				<div class="row">
+					<div class="d-flex justify-content-end">
+						<div class="p-2">
+							<button class="btn btn-lg btn-warning p-1" onclick="imprimir()">Imprimir</button>
+						</div>
+						<div class="p-2">
+							<a href="menu-orden" class="btn btn-lg btn-danger  p-1">Cancelar</a>
+						</div>
+						<div class="p-2">
+							<button class="btn btn-lg btn-warning p-1" type="submit">
+								Confirmar pedido
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -113,19 +201,76 @@
 	<script>
 	function calculaCambio(){
 		var total = parseFloat({{ orden_del_cliente.total }});
+
+		/**
+		 * flujo de comision
+		 * */
+		//buscamos el checkbox de aplica comisión  extra
+		var chbxComExt = document.getElementById("chbx-comision-extra");
+		if (!chbxComExt.checked){
+			//pass...
+		}
+		else{//si está marcado actualizamos la variable total con el total actual más la comisión de envío
+			total = total + parseFloat(document.getElementById("input-comision-number").value);
+			
+		}
+		var pagC = document.getElementById("pagC");
+		pagC.min = total;//actualizamos el mínimo de paga con
+
+		/**
+		 * flujo de total
+		 * */
+		var totalDescuento = document.getElementById("total");
+		if (isNaN(total)){//i.e. no se ha escrito nada en el input comisión
+			totalDescuento.innerHTML = "Total: $" + document.getElementById("sub-total").innerHTML;
+			total = parseFloat({{ orden_del_cliente.total }});//actualizamos la variable total con el total recibido del contexto
+			pagC.min = total;//actualizamos el pago mínimo
+		}
+		else{
+			totalDescuento.innerHTML = "Total: $" + total;//actualizamos el elemento total con el total actual más la comisión de envío
+		}
+
 		var pagoCon = parseFloat(document.getElementById("pagC").value);
 		var cambio = pagoCon - total;
-		console.log(total+" "+pagoCon+" "+cambio);
+		//console.log(total+" "+pagoCon+" "+cambio);
 		document.getElementById("lbcambio").textContent="";
 		if(pagoCon>0 ){
 			document.getElementById("cambio").value = cambio;
+			document.getElementById("cambio-text").innerText = "Cambio: $" + cambio;
 		}
 		else{
 			document.getElementById("cambio").value = "";
+			document.getElementById("cambio-text").innerText = "";
 		}
 	}
-	function log(){
-		console.log("Entré");
+
+	function muestraInputComision(){
+		var chbxComExt = document.getElementById("chbx-comision-extra")
+		var inCom = document.getElementById("input-comision");
+		if (inCom.style.display == "block"){
+			inCom.style.display = "none";
+			chbxComExt.removeAttribute("checked")
+		}
+		else{
+			inCom.style.display = "block";
+			chbxComExt.setAttribute("checked", "true");
+		}
+	}
+
+	function muestraPagoEfectivo(){
+		var pagoEfectivo = document.getElementById("pago-efectivo")
+		var selectPago = document.getElementById("select-pago")
+
+		if (selectPago.value != "efectivo"){
+			pagoEfectivo.style.display = "none"
+		}
+		else{
+			pagoEfectivo.style.display = "block"
+		}
+	}
+
+	function imprimir(){
+		window.print();
 	}
 	</script>
 {% endblock script %}
