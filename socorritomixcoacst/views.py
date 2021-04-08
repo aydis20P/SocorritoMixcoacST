@@ -416,6 +416,59 @@ def crear_nuevo_menu(request):
     context["platillos"] = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
     return render(request, "crear-nuevo-menu.html", context)
 
+
+def gestion_platillos_principal(request):
+    return render(request, "gestion-platillos-principal.html")
+
+
+def agregar_platillo(request):
+    if request.method == "POST":
+
+        #traceback para verificar lo que viene del post en el diccionario correspondiente
+        print("\nTRACEBACK: MÉTODO POST, RETURN DICT FROM POST")
+        for clave, valor in request.POST.items():
+            print("Clave: %s" % (clave))
+            print("Valor: %s" % (valor))
+        print("END TRACEBACK\n")
+
+        #revisamos si el platillo a registrar es complemeto
+        tipo_platillo = request.POST.get("select-tipo")
+        es_complemento = False
+        if not (tipo_platillo == "GU" or tipo_platillo == "BE"):
+            #en caso de no ser bebida ni guisado cambiamos la variable es_complemento a True
+            es_complemento = True
+
+        #creamos un objeto de tipo platillo que potencialmente se guardará con el método save()
+        nuevo_platillo = Platillo(nombre=request.POST.get("nom-plat"),
+                                   es_complemento=es_complemento,
+                                   descripcion=request.POST.get("descripcion"),
+                                   tipo=tipo_platillo)
+
+        #guardar el platillo
+
+        try:
+            nuevo_platillo.save()
+            #Creamos un registro que guardará el precio usando la llave foranea que es el objeto "platillos_nuevos"
+            precio = HistorialPrecio(precio=request.POST.get("precio"),
+                                     platillo=nuevo_platillo)
+            precio.save()
+
+            return redirect("gestion-platillos-principal")
+
+        except IntegrityError:
+            #TODO enviar mensaje con advertencia.
+            print("\nTRACEBACK: NO SE PUDO GUARDAR EL PLATILLO\n")
+
+            return redirect("gestion-platillos-principal")
+
+    else:
+
+        #estamos en el método GET
+        context = {}
+        context["tip_platillo"] = TIPO_PLATILLO
+        return render(request, "agregar-platillo.html", context)
+
+
 def gestion_platillos(request):
      platillo_tipo = TIPO_PLATILLO
      platillo_mod = Platillo.objects.all()
