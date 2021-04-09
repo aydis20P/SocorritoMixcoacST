@@ -52,7 +52,8 @@ def menu_orden(request):
     segundos_tiempos = []
     guisados = []
 
-    lista_platillos = Platillo.objects.all()
+    #Jalamos de la BD los platillos tales que sean parte de los menús del día y que estén disponibles
+    lista_platillos = [platilloMenu.platillo for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.disponible]
 
     if request.method == "POST":
 
@@ -116,7 +117,7 @@ def resumen_pedido(request):
 
     observaciones = request.session.get('observaciones')
 
-    cliente = Cliente.objects.filter(id=request.session.get("cliente_actual"))[0]
+    cliente = Cliente.objects.filter(id=request.session.get("cliente_actual"))
     pedidos_del_cliente = [] #lista para pasar los pedidos del cliente al frontend
 
     #creamos la potencial orden del clinte
@@ -124,7 +125,7 @@ def resumen_pedido(request):
                   promocion=False,
                   total_descuento=0,
                   fecha=dt.now(),
-                  cliente=cliente)
+                  cliente=cliente[0])
 
     #agregamos los menús completos a la lista pedidos_del_cliente
     numero_menu = 1
@@ -150,7 +151,7 @@ def resumen_pedido(request):
             pedidos_del_cliente.append(platillo_menu_2)
 
         if i % 3 == 2: #Guisado
-            platillo_menu_3 = OrdenPlatillo(sub_total=(platillo_actual.precio + 20),
+            platillo_menu_3 = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio + 20),
                                             es_completa=True,
                                             numero_completa=numero_menu,
                                             cantidad=1,
@@ -164,7 +165,7 @@ def resumen_pedido(request):
     for i in range(len(todos_ordenes)):
         platillo_actual = Platillo.objects.filter(nombre=todos_ordenes[i][0])[0]
         cantidad_platillo_actual = int(todos_ordenes[i][1])
-        platillo_orden = OrdenPlatillo(sub_total=(platillo_actual.precio * cantidad_platillo_actual),
+        platillo_orden = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio * cantidad_platillo_actual),
                                        es_completa=False,
                                        cantidad=cantidad_platillo_actual,
                                        orden=orden,
@@ -176,7 +177,7 @@ def resumen_pedido(request):
     for i in range(len(todos_extras)):
         platillo_actual = Platillo.objects.filter(nombre=todos_extras[i][0])[0]
         cantidad_platillo_actual = int(todos_extras[i][1])
-        platillo_orden = OrdenPlatillo(sub_total=(platillo_actual.precio * cantidad_platillo_actual),
+        platillo_orden = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio * cantidad_platillo_actual),
                                        es_completa=False,
                                        cantidad=cantidad_platillo_actual,
                                        orden=orden,
@@ -198,6 +199,11 @@ def resumen_pedido(request):
         for pedido in pedidos_del_cliente:
             pedido.orden=orden
             pedido.save()
+
+        if orden.promocion:
+            cliente.update(compras_realizadas=cliente[0].compras_realizadas + 1, ingresos_generados=cliente[0].ingresos_generados + orden.total_descuento)
+        else:
+            cliente.update(compras_realizadas=cliente[0].compras_realizadas + 1, ingresos_generados=cliente[0].ingresos_generados + orden.total)
 
         return redirect(principal)
 
@@ -377,7 +383,7 @@ def menus_del_dia(request):
         #Jalamos de la BD todos los platillosMenu para mostrarlos en la vista,
         #En forma de una lista de diccionarios con cada campo de PlatilloMenu como entrada
         menus_platillo = []
-        for platillo_menu in PlatilloMenu.objects.all():
+        for platillo_menu in [platilloMenu for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now())]:
             menus_platillo.append({"disponible": platillo_menu.disponible,
                                    "platillo": platillo_menu.platillo,
                                    "menu": platillo_menu.menu})
