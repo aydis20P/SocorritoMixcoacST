@@ -43,9 +43,10 @@ class Platillo(models.Model):
     tipo = models.CharField(choices=TIPO_PLATILLO, max_length=2, null=False, blank=False)
     es_complemento = models.BooleanField(null=False)
     esta_eliminado = models.BooleanField(null= False, default=False)
+    es_constante = models.BooleanField(null=False, default=False)
 
     def __str__(self):
-        return "Nombre: " + self.nombre + ", Tipo: "+ self.tipo + ", Está eliminado: " + str(self.esta_eliminado)
+        return "Nombre: " + self.nombre + ",\tTipo: "+ self.tipo + ",\tEstá eliminado: " + str(self.esta_eliminado) + ",\tEs complemento: " + str(self.es_complemento) + ",\tEs constante: " + str(self.es_constante)
 
 
 class OrdenPlatillo(models.Model):
