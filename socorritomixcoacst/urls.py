@@ -15,6 +15,7 @@ urlpatterns = [
     path("menus-del-dia", views.menus_del_dia, name="menus-del-dia"),
     path("crear-nuevo-menu", views.crear_nuevo_menu, name="crear-nuevo-menu"),
     path('gestion-platillos-principal',views.gestion_platillos_principal, name="gestion-platillos-principal"),
-    path('gestion-platillos',views.gestion_platillos, name="gestion-platillos"),
-    path('agregar-platillo',views.agregar_platillo, name="agregar-platillo")
+    path('agregar-platillo',views.agregar_platillo, name="agregar-platillo"),
+    path('modificar-platillo',views.modificar_platillo, name="modificar-platillo"),
+    path('eliminar-platillo', views.eliminar_platillo, name ="eliminar-platillo")
 ]
