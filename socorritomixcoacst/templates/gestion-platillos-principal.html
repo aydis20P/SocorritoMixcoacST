@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Principal</title>
+{% endblock head %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <a href="agregar-platillo" class="btn btn-lg btn-block btn-warning">Agregar platillo</a>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="modificar-platillo" class="btn btn-lg btn-block btn-warning">Modificar platillo</a>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="eliminar-platillo" class="btn btn-lg btn-block btn-warning">Eliminar platillo</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
