@@ -434,7 +434,7 @@ def agregar_platillo(request):
         #revisamos si el platillo a registrar es complemeto
         tipo_platillo = request.POST.get("select-tipo")
         es_complemento = False
-        if not (tipo_platillo == "GU" or tipo_platillo == "BE"):
+        if not (tipo_platillo == "GU" or tipo_platillo == "BE" or tipo_platillo == "EX"):
             #en caso de no ser bebida ni guisado cambiamos la variable es_complemento a True
             es_complemento = True
 

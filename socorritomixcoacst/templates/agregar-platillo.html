@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="form-outline mb-4">
-                        <input type="number" id="precio" class="form-control" name="precio"/>
+                        <input required type="number" id="precio" class="form-control" name="precio"/>
                         <label class="form-label" for="form4Example1">Precio</label>
                     </div>
                 </div>
@@ -57,8 +57,8 @@
 
                 <div class="col-md-8">
                     <div class="form-check-label">
-                        <select class="form-select" aria-label="Default select example" name = "select-tipo">
-                            <option selected disabled>Tipo de platillo</option>
+                        <select required class="form-select" name="select-tipo">
+                            <option value="">Tipo de platillo</option>
                             {% for clave, valor in tip_platillo %}
                                 <option value="{{clave}}">{{valor}}</option>
                             {% endfor %}
@@ -76,14 +76,19 @@
                 </div>
                 <div class="col-md-8">
                     <div class="form-outline ">
-                        <textarea class="form-control"  id="descripcion" rows="4" name="descripcion"></textarea>
+                        <textarea required class="form-control"  id="descripcion" rows="4" name="descripcion"></textarea>
                         <label class="form-label" for="descripcion">Descripción</label>
 
                     </div>
                 </div>
             </div>
-            <div class="row mb-1 g-1 mt-2">
-                <button type="submit" class="btn bg-warning btn-block mb-4">Guardar</button>
+            <div class="row mt-4 mb-4">
+                <div class="col d-flex justify-content-start align-items-center">
+                    <a href="gestion-platillos-principal" class="btn bg-warning btn-block">Regresar</a>
+                </div>
+                <div class="col d-flex justify-content-start align-items-center">
+                    <button type="submit" class="btn bg-warning btn-block">Guardar</button>
+                </div>               
             </div>
 
             </div>           
