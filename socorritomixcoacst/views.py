@@ -500,9 +500,11 @@ def modificar_platillo(request):
             #busca el elemento a cambiar con nombre modselect-tipo_ recibido en clave
             if "modselect-tipo_" in clave and valor:
                 idModificar = clave.replace("modselect-tipo_","")
-                if "GU" in valor:
+                if "GU" in valor or "BE" in valor or "EX" in valor:
+                    modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(tipo = valor, es_complemento = False)
                     modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(es_complemento = False)
                 else:
+                    modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(tipo = valor, es_complemento = True)
                     modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(es_complemento = True)
             ##busca el elemento a cambiar con nombre moddescripcion_ recibido en clave        
             if "moddescripcion_" in clave and valor:
