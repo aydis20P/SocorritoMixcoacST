@@ -229,7 +229,7 @@ def resumen_pedido(request):
         context['orden_del_cliente'] = orden
         context['pedidos_del_cliente'] = pedidos_del_cliente
         context["observaciones"] = observaciones
-        context["cliente"] = cliente
+        context["cliente"] = cliente[0]
         return render(request, "resumen-pedido.html", context)
 
 class PerfilCliente(DetailView):
