@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Modificar Platillo</title>
+{% endblock head %}
+
+{% block content %}
+    <div class="container"> 
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Platillo</th>
+                        <th>Precio</th>
+                        <th>Tipo</th>
+                        <th>Complemento</th>
+                        <th>Descripción</th>
+                        <th>Modificaciones</th>
+                    </tr>
+                </thead>
+            
+                <form id = "modificar" method = "POST">
+                {% csrf_token %}
+                    <!--En donde se va mostrar el contenido de la tabla-->
+                    <tbody>
+                       
+                        {% for p in platillos %}
+                            {% if p.platillo.esta_eliminado == False%}
+                                <input hidden id="platillo-id_{{p.platillo.id}}" type="text" name="modificar_{{p.platillo.id}}"/>
+                                <tr id="platillos-i" name="platillo_muestra">
+                                
+                                    <td>{{p.platillo.nombre}}</td>
+                                    <td id="precioactual"><input id="cambiar"hidden/>{{p.precio}}</td>
+                                    <td>{{p.platillo.get_tipo_display}}</td>
+                                    <td>{{p.platillo.es_complemento}}</td>
+                                    <td>{{p.platillo.descripcion}}</td>
+                                    <td>
+                                        
+                                        <button type="button" class="btn btn-primary btn-floating mx-1"  data-mdb-toggle="modal" data-mdb-target="#modificarModal_{{p.platillo.id}}" >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    
+                                        <!--Modal para modificar un platillo-->
+                                        <div class="modal fade" id="modificarModal_{{p.platillo.id}}" tabindex="-1" aria-labelledby="modificarModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modificarModalLabel">Modificar Platillo</h5>
+                                                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <!--Aqui se clocan los elementos html para modificar el formulario-->
+                                                    <div class="modal-body">
+
+                                                         <!--<form id="mod-plat" method="POST">-->
+                                                        
+                                                        <div class="container">
+                                                            <!--Formulario para agregar nuevo platillo-->
+                                                            <!-- Name input -->
+                                                            <!--Nombre del Platilllo-->
+                                                            <div class="row mb-1 g-1">
+                                                                <div class="col-md-3">
+                                                                    <div class="d-flex justify-content-start mt-2 me-2">
+                                                                        <h5>Nombre del platillo:</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <div class="form-outline mb-4">
+                                                                        <input type="text" id="modnom-plat" class="form-control" name="modnom-plat_{{p.platillo.id}}" autocomplete="off"/>
+                                                                        <label class="form-label" for="nom-plat">Nombre del platillo</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--Precio-->
+                                                            <div class="row mb-1 g-1">
+                                                                <div class="col-md-3">
+                                                                    <div class="d-flex justify-content-start mt-2 me-2">
+                                                                        <h5>Precio:</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <div class="form-outline mb-4">
+                                                                        <input type="number" id="modprecio" class="form-control" name="modprecio_{{p.id}}"/>
+                                                                        <label class="form-label" for="form4Example1">Precio</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                    
+                                                            <!--Tipo-->
+                                                            <div class="row mb-1 g-1">
+                                                                
+                                                                <div class="col-md-3">
+                                                                    <div class="d-flex justify-content-start mt-2 me-2">
+                                                                        <h5>Tipo:</h5>
+                                                                    </div>
+                                                                </div>
+                                                            
+                                                                <div class="col-md-8">
+                                                                    <div class="form-check-label">
+                                                                        <select class="form-select" aria-label="Default select example" name = "modselect-tipo_{{p.platillo.id}}">
+                                                                            <option selected disabled>Tipo de platillo</option>
+                                                                            {% for clave, valor in tip_platillo %}
+                                                                                <option value="{{clave}}">{{valor}}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+            
+                                                    
+                                                            <!--Descripción-->
+                                                            <div class="row mb-1 g-1">
+                                                                <div class="col-md-3">
+                                                                    <div class="d-flex justify-content-start mt-2 me-2">
+                                                                        <h5>Descripcion:</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <div class="form-outline ">
+                                                                        <textarea class="form-control"  id="moddescripcion" rows="4" name="moddescripcion_{{p.platillo.id}}"></textarea>
+                                                                        <label class="form-label" for="descripcion">Descripción</label>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                           
+                                                        
+                                                        
+                                                        </div>
+
+
+                                                        <!--</form>  --> 
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                                                    Cancelar
+                                                                </button>
+                                                                <button type="submit" class="btn bg-warning ">Guardar</button>
+                                                    </div>
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% else %}
+                            {% endif %}     
+                        {% endfor %}   
+                    </tbody>
+                </form>
+            </table>
+        </div>
+    </div>
+
+{% endblock content%}
