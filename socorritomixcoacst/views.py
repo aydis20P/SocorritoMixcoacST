@@ -114,6 +114,7 @@ def resumen_pedido(request):
     todos_menus = request.session['todos_menus']
     todos_ordenes = request.session['todos_ordenes']
     todos_extras = request.session['todos_extras']
+    todos_bebidas = request.session['todos_bebidas']
 
     observaciones = request.session.get('observaciones')
 
@@ -184,6 +185,21 @@ def resumen_pedido(request):
                                        platillo=platillo_actual)
         pedidos_del_cliente.append(platillo_orden)
         orden.total += platillo_orden.sub_total
+
+    #agregamos las bebidas a la lista pedidos_del_cliente
+    print(todos_bebidas)
+    for i in range(len(todos_bebidas)):
+        platillo_actual = Platillo.objects.filter(nombre=todos_bebidas[i][0])[0]
+        cantidad_platillo_actual = int(todos_bebidas[i][1])
+        platillo_orden = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio * cantidad_platillo_actual),
+                                       es_completa=False,
+                                       cantidad=cantidad_platillo_actual,
+                                       orden=orden,
+                                       platillo=platillo_actual)
+        pedidos_del_cliente.append(platillo_orden)
+        orden.total += platillo_orden.sub_total
+
+    print(pedidos_del_cliente)
 
     if request.method=="POST":
         for key, value in request.POST.items():
