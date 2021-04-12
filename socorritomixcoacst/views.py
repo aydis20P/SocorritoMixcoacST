@@ -114,6 +114,7 @@ def resumen_pedido(request):
     todos_menus = request.session['todos_menus']
     todos_ordenes = request.session['todos_ordenes']
     todos_extras = request.session['todos_extras']
+    todos_bebidas = request.session['todos_bebidas']
 
     observaciones = request.session.get('observaciones')
 
@@ -185,6 +186,21 @@ def resumen_pedido(request):
         pedidos_del_cliente.append(platillo_orden)
         orden.total += platillo_orden.sub_total
 
+    #agregamos las bebidas a la lista pedidos_del_cliente
+    print(todos_bebidas)
+    for i in range(len(todos_bebidas)):
+        platillo_actual = Platillo.objects.filter(nombre=todos_bebidas[i][0])[0]
+        cantidad_platillo_actual = int(todos_bebidas[i][1])
+        platillo_orden = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio * cantidad_platillo_actual),
+                                       es_completa=False,
+                                       cantidad=cantidad_platillo_actual,
+                                       orden=orden,
+                                       platillo=platillo_actual)
+        pedidos_del_cliente.append(platillo_orden)
+        orden.total += platillo_orden.sub_total
+
+    print(pedidos_del_cliente)
+
     if request.method=="POST":
         for key, value in request.POST.items():
             print('Key: %s' % (key) )
@@ -213,7 +229,7 @@ def resumen_pedido(request):
         context['orden_del_cliente'] = orden
         context['pedidos_del_cliente'] = pedidos_del_cliente
         context["observaciones"] = observaciones
-        context["cliente"] = cliente
+        context["cliente"] = cliente[0]
         return render(request, "resumen-pedido.html", context)
 
 class PerfilCliente(DetailView):
@@ -422,87 +438,125 @@ def crear_nuevo_menu(request):
     context["platillos"] = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
     return render(request, "crear-nuevo-menu.html", context)
 
-def gestion_platillos(request):
-     platillo_tipo = TIPO_PLATILLO
-     platillo_mod = Platillo.objects.all()
-     todos_historial_precio_reciente = HistorialPrecio.objects.filter(es_precio_actual=True)
-     complemento = True
-     if request.method == "POST":
-          
-         
-          for clave, valor in request.POST.items():
-               print("Clave: %s" % (clave))
-               print("Valor: %s" % (valor))
-               #Buscamos habilitar el campo esta_eliminado del platillo con id=idAeliminar
-               if "True" in valor:
-                    idAeliminar = clave.replace("eliminar_", "")
-                    eliminar_P = Platillo.objects.filter(pk=int(idAeliminar)).update(esta_eliminado = True)
-               # Condicional para proporcionar valor False si el complemento es un guizado      
-               if "GU" in valor:
-                    complemento = False  
-               # Condionales para modificar un platillo
-               # Modificar el nombre del plato
-               
-               if "modnom-" in clave and valor:
-                    nuevoNombre = valor
-                    idModificar = clave.replace("modnom-plat_","")
-                    modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(nombre = str(nuevoNombre))      
-               if "modprecio_" in clave and valor:
-                    nuevoPrecio = float(valor)
-                    idModificar = clave.replace("modprecio_","")
-                    
-                    #print ("Paltillo: " + str(platillo) + "--------------->")
-                    idPlatillo = HistorialPrecio.objects.filter(pk = int(idModificar))
-                    modificacion_platillo = HistorialPrecio.objects.filter(pk=int(idModificar))
-                    modificacion_platillo.update(es_precio_actual = False )
 
-                    platillo = modificacion_platillo[0].platillo
-
-                    nuevo_Precio = HistorialPrecio(platillo = platillo, precio = nuevoPrecio)
-                    nuevo_Precio.save()
-
-               if "modselect-tipo_" in clave and valor:
-                    idModificar = clave.replace("modselect-tipo_","")
-                    if "GU" in valor:
-                         modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(es_complemento = False)
-                    else:
-                         modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(es_complemento = True)
-               if "moddescripcion_" in clave and valor:
-                    
-                    nuevaDescripcion = valor
-                    idModificar = clave.replace("moddescripcion_","")
-                    modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(descripcion = nuevaDescripcion)
-
-          platillos_nuevos=Platillo(nombre=request.POST.get("nom-plat"),
-                                   tipo=request.POST.get("select-tipo"),
-                                   es_complemento=complemento,
-                                   descripcion=request.POST.get("descripcion"))
-          #Generamos este try para atrapar una excepción, en este caso buscamos atrapar el error cuando se repite el nombre de un platillo
-          try:
-               print("Entro Aquí")
-               context = {}
-               context['tip_platillo'] = platillo_tipo
-               context['platillo'] = platillo_mod
-               context['hist_precio'] = todos_historial_precio_reciente
-               """Guarda los datos en BD (mysql)"""
-               platillos_nuevos.save()
-               #Creamos un registro que guardará el precio usando la llave foranea que es el objeto "platillos_nuevos"
-               precio = HistorialPrecio(precio=request.POST.get("precio"), platillo=platillos_nuevos)
-               precio.save()
-               
-               return render( request, 'gestion-platillos.html', context)
-          #"""Si existe una excepción de IntegrityError"""
-          except IntegrityError:
-               print("Entro Aquí 2")
-               return render( request, 'gestion-platillos.html', context)
+def gestion_platillos_principal(request):
+    return render(request, "gestion-platillos-principal.html")
 
 
+def agregar_platillo(request):
+    if request.method == "POST":
+
+        #traceback para verificar lo que viene del post en el diccionario correspondiente
+        print("\nTRACEBACK: MÉTODO POST, RETURN DICT FROM POST")
+        for clave, valor in request.POST.items():
+            print("Clave: %s" % (clave))
+            print("Valor: %s" % (valor))
+        print("END TRACEBACK\n")
+
+        #revisamos si el platillo a registrar es complemeto
+        tipo_platillo = request.POST.get("select-tipo")
+        es_complemento = False
+        if not (tipo_platillo == "GU" or tipo_platillo == "BE" or tipo_platillo == "EX"):
+            #en caso de no ser bebida ni guisado cambiamos la variable es_complemento a True
+            es_complemento = True
+
+        #creamos un objeto de tipo platillo que potencialmente se guardará con el método save()
+        nuevo_platillo = Platillo(nombre=request.POST.get("nom-plat"),
+                                   es_complemento=es_complemento,
+                                   descripcion=request.POST.get("descripcion"),
+                                   tipo=tipo_platillo)
+
+        #guardar el platillo
+
+        try:
+            nuevo_platillo.save()
+            #Creamos un registro que guardará el precio usando la llave foranea que es el objeto "platillos_nuevos"
+            precio = HistorialPrecio(precio=request.POST.get("precio"),
+                                     platillo=nuevo_platillo)
+            precio.save()
+
+            return redirect("gestion-platillos-principal")
+
+        except IntegrityError:
+            #TODO enviar mensaje con advertencia.
+            print("\nTRACEBACK: NO SE PUDO GUARDAR EL PLATILLO\n")
+
+            return redirect("gestion-platillos-principal")
+
+    else:
+
+        #estamos en el método GET
+        context = {}
+        context["tip_platillo"] = TIPO_PLATILLO
+        return render(request, "agregar-platillo.html", context)
 
 
-     else:
-          context = {}
-          context['tip_platillo'] = platillo_tipo
-          context['platillos'] = platillo_mod
-          context['hist_precio'] = todos_historial_precio_reciente
-          
-          return render( request, 'gestion-platillos.html', context)
+def modificar_platillo(request):
+    platillos = Platillo.objects.all()
+    precios_de_platillos = HistorialPrecio.objects.filter(es_precio_actual=True)
+    if request.method =="POST":
+        #colocar en una tupla la clave y elvalor del POST
+        for clave, valor in request.POST.items():
+            print("Clave: %s" % (clave))
+            print("Valor: %s" % (valor))  
+            #busca el elemento en html con nombre modnom- recibido en clave 
+            if "modnom-" in clave and valor:
+                nuevoNombre = valor
+                idModificar = clave.replace("modnom-plat_","")
+                modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(nombre = str(nuevoNombre))      
+            #busca el elemento a cambiar con nombre modprecio_ recibido en clave
+            if "modprecio_" in clave and valor:
+                nuevoPrecio = float(valor)
+                idModificar = clave.replace("modprecio_","")
+                
+            
+                idPlatillo = HistorialPrecio.objects.filter(pk = int(idModificar))
+                modificacion_platillo = HistorialPrecio.objects.filter(pk=int(idModificar))
+                modificacion_platillo.update(es_precio_actual = False )
+
+                platillo = modificacion_platillo[0].platillo
+
+                nuevo_Precio = HistorialPrecio(platillo = platillo, precio = nuevoPrecio)
+                nuevo_Precio.save()
+
+            #busca el elemento a cambiar con nombre modselect-tipo_ recibido en clave
+            if "modselect-tipo_" in clave and valor:
+                idModificar = clave.replace("modselect-tipo_","")
+                if "GU" in valor or "BE" in valor or "EX" in valor:
+                    modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(tipo = valor, es_complemento = False)
+                    modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(es_complemento = False)
+                else:
+                    modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(tipo = valor, es_complemento = True)
+                    modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(es_complemento = True)
+            ##busca el elemento a cambiar con nombre moddescripcion_ recibido en clave        
+            if "moddescripcion_" in clave and valor:
+                nuevaDescripcion = valor
+                idModificar = clave.replace("moddescripcion_","")
+                modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(descripcion = nuevaDescripcion)
+            
+        return redirect("gestion-platillos-principal")
+    else:    
+        context = {}
+        context['platillos'] = precios_de_platillos
+        context["tip_platillo"] = TIPO_PLATILLO
+        return render(request, "modificar-platillo.html", context)
+
+def eliminar_platillo(request):
+    platillos = Platillo.objects.all()
+    precios_de_platillos = HistorialPrecio.objects.filter(es_precio_actual=True)
+    if request.method =="POST":
+        for clave, valor in request.POST.items():
+            print("Clave: %s" % (clave))
+            print("Valor: %s" % (valor))
+            #Buscamos habilitar el campo esta_eliminado del platillo con id=idAeliminar
+            if "True" in valor:
+                idAeliminar = clave.replace("eliminar_", "")
+                eliminar_P = Platillo.objects.filter(pk=int(idAeliminar)).update(esta_eliminado = True)
+        return redirect("gestion-platillos-principal")
+
+    else:    
+        context = {}
+        context['platillos'] = precios_de_platillos
+        context["tip_platillo"] = TIPO_PLATILLO
+        return render(request, "eliminar-platillo.html", context)
+
