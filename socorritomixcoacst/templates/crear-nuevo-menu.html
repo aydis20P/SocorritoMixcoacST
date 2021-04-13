@@ -15,38 +15,151 @@
         
         {% csrf_token %}
 
-        <select id="select-tipo-menu" name="tipo-menu" class="form-select" required>
-            <option value="" selected disabled>Seleccione un tipo de menú</option>
-            <option value="DE">Desayuno</option>
-            <option value="CO">Comida</option>
-            <option value="CE">Cena</option>
-        </select>
+        <ul id="lista-menus" class="list-group">
 
-        <!-- tomaremos los platillos que nos provee views.py y los desplegamos en una tabla -->
-        <table class="table table-stripped table-sm">
-            <thead>
-                <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col"><b>Seleccionar</b></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for platillo in platillos %}
-                    <tr>
-                        <td>
-                            {{ platillo.nombre }}
-                        </td>
-                        <td>
-                            {{ platillo.descripcion }}
-                        </td>
-                        <td>
-                            <input id="{{ platillo.nombre }}-checkbox" name="{{ platillo.nombre }}" type="checkbox" class="custom-control-input">
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <li id="menu-desayuno" class="list-group-item p-3">
+
+                <div id="cabecera-desayuno" class="d-flex justify-content-between flex-wrap">
+                    <h4>Desayuno</h4>
+                    <button type="button" class="btn btn-warning" onclick="copiar({{ desayuno_ayer }}, 'check-desayuno')">
+                        <i class="far fa-copy fa-lg">
+                            Copiar el menú de ayer
+                        </i>
+                    </button>
+                </div>
+
+                <div class="table-responsive-xl">
+                    <table id="tabla-desayuno" class="table table-sm">
+
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Tipo</th>
+                                <th>¿Incluir?</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for platillo in platillos %}
+                                <tr>
+                                    <td>
+                                        {{ platillo.nombre }}
+                                    </td>
+                                    <td>
+                                        {{ platillo.descripcion }}
+                                    </td>
+                                    <td>
+                                        {{ platillo.tipo }}
+                                    </td>
+                                    <td>
+                                        <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-desayuno" type="checkbox" class="custom-control-input check-desayuno">
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </li>
+
+            <li id="menu-comida" class="list-group-item p-3">
+
+                <div id="cabecera-comida" class="d-flex justify-content-between flex-wrap">
+                    <h4>Comida</h4>
+                    <button type="button" class="btn btn-warning" onclick="copiar({{ comida_ayer }}, 'check-comida')">
+                        <i class="far fa-copy fa-lg">
+                            Copiar el menú de ayer
+                        </i>
+                    </button>
+                </div>
+
+                <div class="table-responsive-xl">
+                    <table id="tabla-comida" class="table table-sm">
+
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Tipo</th>
+                                <th>¿Incluir?</th>
+                            </tr>
+                        </thead>
+
+                        
+                        <tbody>
+                            {% for platillo in platillos %}
+                                <tr>
+                                    <td>
+                                        {{ platillo.nombre }}
+                                    </td>
+                                    <td>
+                                        {{ platillo.descripcion }}
+                                    </td>
+                                    <td>
+                                        {{ platillo.tipo }}
+                                    </td>
+                                    <td>
+                                        <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-comida" type="checkbox" class="custom-control-input check-comida">
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </li>
+
+            <li id="menu-cena" class="list-group-item p-3">
+
+                <div id="cabecera-cena" class="d-flex justify-content-between flex-wrap">
+                    <h4>Cena</h4>
+                    <button type="button" class="btn btn-warning" onclick="copiar({{ cena_ayer }}, 'check-cena')">
+                        <i class="far fa-copy fa-lg">
+                            Copiar el menú de ayer
+                        </i>
+                    </button>
+                </div>
+
+                <div class="table-responsive-xl">
+                    <table id="tabla-cena" class="table table-sm">
+
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Tipo</th>
+                                <th>¿Incluir?</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for platillo in platillos %}
+                                <tr>
+                                    <td>
+                                        {{ platillo.nombre }}
+                                    </td>
+                                    <td>
+                                        {{ platillo.descripcion }}
+                                    </td>
+                                    <td>
+                                        {{ platillo.tipo }}
+                                    </td>
+                                    <td>
+                                        <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-cena" type="checkbox" class="custom-control-input check-cena">
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </li>
+
+        </ul>
 
         <div id="contenedor-botones" class="d-flex justify-content-end py-3">
             <button id="boton-nuevo-menu" type="submit" class="btn btn-primary btn-lg btn-warning">
@@ -63,6 +176,18 @@
 
 {% block script %}
 <script>
-
+    //función para copiar los platillos de un menu anterior al que se está editando:
+    //recibimos tanto la lista de platillos de es menú, como la clase de checkboxes que vamos a manejar (de desayuno, comida o cena).checked
+    //recorremos todos los checkboxes dados por clase_checkbox, y si su ID corresponde a uno de los platillos en el menú, marcalo.
+    function copiar(menu, clase_checkbox){
+        checkboxes = document.getElementsByClassName(clase_checkbox);
+        for (i=0; i<checkboxes.length; i++){
+            for (j=0; j<menu.length; j++){
+                if (checkboxes[i].id == menu[j]){
+                    checkboxes[i].checked = true;
+                }
+            }
+        }
+    }
 </script>
 {% endblock script %}

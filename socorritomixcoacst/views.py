@@ -411,37 +411,51 @@ def menus_del_dia(request):
 def crear_nuevo_menu(request):
     if request.method == "POST": #cuando mandemos la opcion "Agregar nuevo menú del día"
 
-        #creamos el menú del día, con solo la fecha actual, y la lista de platillosMenu a tratar
-        nuevoMenu = Menu(dia=dt.now())
-        platillosMenu = []
+        #creamos los menú del día, con solo la fecha actual y el tipo de menú
+        nuevaDesayuno = Menu(dia=dt.now(), tipo="DE")
+        nuevaComida = Menu(dia=dt.now(), tipo="CO")
+        nuevaCena = Menu(dia=dt.now(), tipo="CE")
+        nuevaDesayuno.save()
+        nuevaComida.save()
+        nuevaCena.save()
 
+        #Capturemos los platillos que fueron marcados en la lista, acorde a si son desayuno, comida o cena
         for clave, valor in request.POST.items():
+                if valor == "on":
+                    platilloMenu = PlatilloMenu(disponible=True)
 
-            #capturemos el select que nos dirá que tipo de menú vamos a manejar
-            if valor in [tipo[0] for tipo in TIPO_MENU]:
-                nuevoMenu.tipo = valor
+                    if "desayuno" in clave:
+                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-desayuno", ""))[0]
+                        platilloMenu.menu = nuevaDesayuno
+                    
+                    if "comida" in clave:
+                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-comida", ""))[0]
+                        platilloMenu.menu = nuevaComida
+                    
+                    if "cena" in clave:
+                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-cena", ""))[0]
+                        platilloMenu.menu = nuevaCena
 
-            #Ahora capturemos los platillos que fueron marcados en la lista
-            if valor == "on":
-                platillosMenu.append(PlatilloMenu(disponible=True,
-                                            platillo=Platillo.objects.filter(nombre=clave)[0],
-                                            menu=nuevoMenu))
-
-            #guardemos los platillosMenu y el Menú en la BD
-            nuevoMenu.save()
-            for platilloMenu in platillosMenu:
-                platilloMenu.save()
+                    platilloMenu.save()
 
         return redirect("menus-del-dia")
 
-    context = {}
-    context["platillos"] = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
-    return render(request, "crear-nuevo-menu.html", context)
+    else: #el request es GET
+        context = {}
+        #Mandamos listas con nombres de platillos que estaban en los menús del día de ayer:
+        #de todos los platillosMenu en la base de datos tales que su menú sea de ayer y del tipo correspondiente, toma los nombres de sus platillos y pasalo como una lista
+        context["platillos"] = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
+        context["desayuno_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "DE"]
+        context["comida_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "CO"]
+        context["cena_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "CE"]
+        return render(request, "crear-nuevo-menu.html", context)
 
+def editar_menus(request):
+    #TODO mañana
+    print()
 
 def gestion_platillos_principal(request):
     return render(request, "gestion-platillos-principal.html")
-
 
 def agregar_platillo(request):
     if request.method == "POST":
@@ -489,7 +503,6 @@ def agregar_platillo(request):
         context = {}
         context["tip_platillo"] = TIPO_PLATILLO
         return render(request, "agregar-platillo.html", context)
-
 
 def modificar_platillo(request):
     platillos = Platillo.objects.all()
