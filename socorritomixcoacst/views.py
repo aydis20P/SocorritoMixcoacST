@@ -103,7 +103,7 @@ def menu_orden(request):
         context['entradas'] = entradas
         context['segundos_tiempos'] = segundos_tiempos
         context['guisados'] = guisados
-        return render(request, 'menu-orden.html', context)
+        return render(request, 'menu-orden1.html', context)
 
 def resumen_pedido(request):
     #TODO actualizar los atributos compras_realizadas e ingresos_generados del cliente, cada vez que se realiza una orden
