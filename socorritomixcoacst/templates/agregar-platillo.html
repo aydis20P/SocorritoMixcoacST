@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Agregar Platillo</title>
+{% endblock head %}
+
+{% block content %}
+<div class="container">
+
+    <h5>Agregar Platillo</h5>
+    <br>
+    <form id="form-plat" method="POST">
+    {% csrf_token %}
+        <div class="container">
+            <!--Formulario para agregar nuevo platillo-->
+            <!-- Name input -->
+
+            <!--Nombre del Platilllo-->
+            <div class="row mb-1 g-1">
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-start mt-2 me-2">
+                        <h5>Nombre del platillo:</h5>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-outline mb-4">
+                        <input type="text" id="nom-plat" class="form-control" required name="nom-plat" autocomplete="off"/>
+                        <label class="form-label" for="nom-plat">Nombre del platillo</label>
+                    </div>
+                </div>
+            </div>
+
+            <!--Precio-->
+            <div class="row mb-1 g-1">
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-start mt-2 me-2">
+                        <h5>Precio:</h5>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-outline mb-4">
+                        <input required type="number" id="precio" class="form-control" name="precio"/>
+                        <label class="form-label" for="form4Example1">Precio</label>
+                    </div>
+                </div>
+            </div>
+
+           <!--Tipo-->
+            <div class="row mb-1 g-1">
+
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-start mt-2 me-2">
+                        <h5>Tipo:</h5>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="form-check-label">
+                        <select required class="form-select" name="select-tipo">
+                            <option value="">Tipo de platillo</option>
+                            {% for clave, valor in tip_platillo %}
+                                <option value="{{clave}}">{{valor}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!--Descripción-->
+            <div class="row mb-1 g-1">
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-start mt-2 me-2">
+                        <h5>Descripcion:</h5>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-outline ">
+                        <textarea required class="form-control"  id="descripcion" rows="4" name="descripcion"></textarea>
+                        <label class="form-label" for="descripcion">Descripción</label>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4 mb-4">
+                <div class="col d-flex justify-content-start align-items-center">
+                    <a href="gestion-platillos-principal" class="btn bg-warning btn-block">Regresar</a>
+                </div>
+                <div class="col d-flex justify-content-start align-items-center">
+                    <button type="submit" class="btn bg-warning btn-block">Guardar</button>
+                </div>               
+            </div>
+
+            </div>           
+        </div>
+    </form>
+</div>
+{% endblock content %}

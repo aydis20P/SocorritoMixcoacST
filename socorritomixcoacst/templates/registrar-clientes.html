@@ -17,12 +17,18 @@
               <div class="row mb-1 g-1">
                 <div class="col">
                   <div class="form-outline">
+<<<<<<< HEAD
                     <input required type="text" id="form6Example1" class="form-control" name="nombre"/>
                     <label class="form-label" for="form6Example1">Nombre</label>
+=======
+                    <input required type="text" autocomplete="off" id="nombre" class="form-control" name="nombre"/>
+                    <label class="form-label" for="nombre">Nombre</label>
+>>>>>>> a4b4f7f49109791548a44a2aa1e4fbfeb08fee07
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-outline">
+<<<<<<< HEAD
                     <input required type="text" id="form6Example2" class="form-control" name="apellidos"/>
                     <label class="form-label" for="form6Example2">Apellidos</label>
                   </div>
@@ -50,6 +56,46 @@
               <div class="form-outline mb-4">
                 <textarea class="form-control" id="form4Example3" rows="4"></textarea>
                 <label class="form-label" for="form4Example3">Observaciones Dirección</label>
+=======
+                    <input required type="text" autocomplete="off" id="apellidos" class="form-control" name="apellidos"/>
+                    <label class="form-label" for="apellidos">Apellidos</label>
+                  </div>
+                </div>
+              </div>
+              <!-- Text input -->
+              <div class="form-outline mb-1">
+                <input required type="text" autocomplete="off" id="telefono" class="form-control" name="telefono" maxlength="10" minlength="10" value="" onkeyup="this.value=Numeros(this.value)"/>
+                <label class="form-label" for="telefono">Telefono/Celular</label>
+              </div>
+
+              <!-- Text input -->
+              <div class="form-outline mb-1">
+                  <input type="tel" autocomplete="off" id="telefonoalt" class="form-control" name="telefonoalt" maxlength="10" minlength="10" value="" onkeyup="this.value=Numeros(this.value)"/>
+                  <label class="form-label" for="telefonoalt">Tel/Cel Alternativo</label>
+              </div>
+
+              <script>
+                function Numeros(string){ 
+                 var out = '';
+                 var filtro ='1234567890';
+                
+                 for (var i=0; i<string.length; i++)
+                   if(filtro.indexOf(string.charAt(i)) != -1)
+                     out += string.charAt(i);
+                 
+                 return out;
+                }
+               </script>
+              <!-- Text input -->
+              <div class="form-outline mb-1">
+                <input required type="text" autocomplete="off" id="direccion" class="form-control" name="direccion"/>
+                <label class="form-label" for="direccion">Dirección</label>
+              </div>
+              <!-- Text input observaciones-->
+              <div class="form-outline mb-4">
+                <textarea  class="form-control" id="obs" name="obs" rows="4"></textarea>
+                <label class="form-label" for="obs">Referencia Dirección</label>
+>>>>>>> a4b4f7f49109791548a44a2aa1e4fbfeb08fee07
               </div>
 
               <div class="row">
@@ -57,7 +103,11 @@
                   <div class="row gy-0 g-0">
                     <div class="col">
                       <div class="d-grid gap-2 p-1">
+<<<<<<< HEAD
                         <a href="busqueda-cliente" class="btn btn-warning">
+=======
+                        <a href="cliente-no-encontrado" class="btn btn-warning">
+>>>>>>> a4b4f7f49109791548a44a2aa1e4fbfeb08fee07
                           <i class="fas fa-arrow-left"></i>
                           Regresar
                         </a>

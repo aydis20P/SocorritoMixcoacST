@@ -1,11 +1,13 @@
 from django.db import models
 from django.conf import settings
-from django.shortcuts import reverse
+from django.shortcuts import reverse    
 from django.utils import timezone
 
+
+
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
-TIPO_PLATILLO = (('GU', 'guisado'), ('EN', 'entrada'), ('ST', 'segundo tiempo'))
-TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CENAS','cenas'))
+TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'))
+TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CE','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 
 class Cliente(models.Model):
@@ -16,6 +18,8 @@ class Cliente(models.Model):
     tipo = models.CharField(choices=TIPO_CLIENTE, max_length=2, null=False, blank=False)
     telefono_alternativo = models.CharField(max_length=10, null=True, blank=True)
     fecha_registro = models.DateField(null=False, default=timezone.now)
+    compras_realizadas = models.IntegerField(null=False, default=0)
+    ingresos_generados = models.FloatField(null=False, default=0)
 
     def __str__(self):
         return "Nombre: " + self.nombre + ", Tel: " + self.telefono
@@ -35,23 +39,26 @@ class Orden(models.Model):
 
 class Platillo(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
-    precio = models.FloatField(max_length=5, null=False)
     descripcion = models.CharField(max_length=256, null=False, blank=False)
     tipo = models.CharField(choices=TIPO_PLATILLO, max_length=2, null=False, blank=False)
     es_complemento = models.BooleanField(null=False)
-    
+    esta_eliminado = models.BooleanField(null= False, default=False)
+    es_constante = models.BooleanField(null=False, default=False)
+
     def __str__(self):
-        return "Nombre: " + self.nombre + ", Precio: " + str(self.precio) + ", Tipo: "+ self.tipo
+        return "Nombre: " + self.nombre + ",\tTipo: "+ self.tipo + ",\tEstá eliminado: " + str(self.esta_eliminado) + ",\tEs complemento: " + str(self.es_complemento) + ",\tEs constante: " + str(self.es_constante)
+
 
 class OrdenPlatillo(models.Model):
     sub_total = models.FloatField(max_length=5, null=False)
     es_completa = models.BooleanField(null=False)
+    numero_completa = models.IntegerField(null=True)
     cantidad = models.IntegerField(null=False)
     orden = models.ForeignKey(Orden, on_delete=models.PROTECT)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
-    
+
     def __str__(self):
-        return "ID: " + str(self.id) + ", Es completa: " + str(self.es_completa) + ", Platillo: " + self.platillo.nombre + ", Cantidad: " + str(self.cantidad) + ", Subtotal: $" + str(self.sub_total)
+        return "ID: " + str(self.id) + ", Es completa: " + str(self.es_completa) + ", Numero completa: " + str(self.numero_completa) + ", Platillo: " + self.platillo.nombre + ", Cantidad: " + str(self.cantidad) + ", Subtotal: $" + str(self.sub_total)
 
 class Promocion(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
@@ -68,11 +75,23 @@ class Menu(models.Model):
     dia = models.DateField(null=False)
     tipo = models.CharField(choices=TIPO_MENU, max_length=2, null=False, blank=False)
 
+    def __str__(self):
+        return "Día: " + str(self.dia) + ", Tipo: " + self.tipo
+
 class PlatilloMenu(models.Model):
     disponible = models.BooleanField(null=False)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
     menu = models.ForeignKey(Menu, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return "Menú: (" + str(self.menu) + "), Platillo: (" + str(self.platillo) + "), Disponible: " + str(self.disponible)
+
 class Usuario(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rol = models.CharField(choices=TIPO_USUARIO, max_length=2, null=False, blank=False)
+
+class HistorialPrecio(models.Model):
+    precio = models.FloatField(null=False)
+    fecha = models.DateTimeField(null=False, auto_now_add=True)
+    es_precio_actual = models.BooleanField(null=False, default=True)
+    platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)

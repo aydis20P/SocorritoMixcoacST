@@ -1,0 +1,34 @@
+
+<h4>Todos los clientes directamente del queryset:</h4>
+<ul>
+    {% for c in clientes %}
+    <li>
+        {{c}}
+    </li>
+    {% endfor %}
+
+</ul>
+
+<h4>Ordenados por fecha de registro (mas recientes):</h4>
+<ul>
+    {% for c in order_by_fecha_registro_recientes %}
+    <li>
+        {{c}}, Fecha de registro: {{c.fecha_registro}}
+    </li>
+    {% endfor %}
+
+</ul>
+
+<h4>Ordenados por fecha de registro (antiguos):</h4>
+<ul>
+    {% for c in order_by_fecha_registro_antiguos %}
+    <li>
+        {{c}}, Fecha de registro: {{c.fecha_registro}}
+    </li>
+    {% endfor %}
+
+</ul>
+
+
+
+<h4>{{ingresos_de_ulises}}</h4>
