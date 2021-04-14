@@ -61,13 +61,13 @@ class OrdenPlatillo(models.Model):
     def __str__(self):
         return "ID: " + str(self.id) + ", Es completa: " + str(self.es_completa) + ", Numero completa: " + str(self.numero_completa) + ", Platillo: " + self.platillo.nombre + ", Cantidad: " + str(self.cantidad) + ", Subtotal: $" + str(self.sub_total)
 
-class Desayuno():
+class Desayuno(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False)
     precio = models.FloatField(max_length=5, null=False)
     es_aumentado = models.BooleanField(null=False, default=False)
     platillos = models.ManyToManyField(Platillo)     
 
-class OrdenDesayuno():
+class OrdenDesayuno(models.Model):
     orden = models.ForeignKey(Orden, on_delete=models.PROTECT)
     desayuno = models.ForeignKey(Desayuno, on_delete=models.PROTECT)
     sub_total = models.FloatField(max_length=5, null=False)
