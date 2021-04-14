@@ -181,7 +181,7 @@
             </div>
             </div>
 
-            <!-- Contenido de Tab Ordenes del Cliente -->
+            <!-- Contenido de Tab Pedidos del Cliente -->
             <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
                 <div class="row"> 
                     {% if pedidos %}
@@ -202,8 +202,8 @@
                                     <tr>
                                         <td>{{pedido.fecha}}</td>
                                         <td id="a{{forloop.counter}}">${{pedido.total}}</td>
-                                        <td id="b{{forloop.counter}}">{{pedido.promocion}}</td>
-                                        <td id="c{{forloop.counter}}">${{pedido.total_descuento}}</td>
+                                        <td id="b{{forloop.counter}}">{% if pedido.promocion%}Sí{% else %}No{% endif %}</td>
+                                        <td id="c{{forloop.counter}}">{% if pedido.promocion%}${{pedido.total_descuento}}{% else %}${{pedido.total}}{% endif %}</td>
                                         <td><!-- Button trigger modal -->
                                             <button
                                               type="button"
