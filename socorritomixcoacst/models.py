@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
-TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'))
+TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'), ('D1', "desayunito"), ('D2', "desayuno"), ('D3', "desayunote"))
 TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CE','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 
@@ -29,7 +29,8 @@ class Cliente(models.Model):
 
 class Orden(models.Model):
     total = models.FloatField(max_length=5, null=False)
-    promocion = models.BooleanField(null=False)
+    promocion = models.BooleanField(null=False, default=False)
+    lleva_topper = models.BooleanField(null=False, default=False)
     total_descuento = models.FloatField(max_length=5, null=True)
     fecha = models.DateTimeField(null=False)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
@@ -59,6 +60,18 @@ class OrdenPlatillo(models.Model):
 
     def __str__(self):
         return "ID: " + str(self.id) + ", Es completa: " + str(self.es_completa) + ", Numero completa: " + str(self.numero_completa) + ", Platillo: " + self.platillo.nombre + ", Cantidad: " + str(self.cantidad) + ", Subtotal: $" + str(self.sub_total)
+
+class Desayuno(models.Model):
+    nombre = models.CharField(max_length=64, null=False, blank=False)
+    precio = models.FloatField(max_length=5, null=False)
+    es_aumentado = models.BooleanField(null=False, default=False)
+    platillos = models.ManyToManyField(Platillo)     
+
+class OrdenDesayuno(models.Model):
+    orden = models.ForeignKey(Orden, on_delete=models.PROTECT)
+    desayuno = models.ForeignKey(Desayuno, on_delete=models.PROTECT)
+    sub_total = models.FloatField(max_length=5, null=False)
+    cantidad = models.IntegerField(null=False)
 
 class Promocion(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
