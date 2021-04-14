@@ -215,207 +215,139 @@
             <!--Panel Desayunos-->
             <div class="tab-pane fade" id="panel-desayunos" role="tabpanel" aria-labelledby="desayunos-tab">
                 <div class="container">
-                    <form id="paquetes" method="POST">
-                        <input hidden id="desayunos-paquetes">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="card border border-dark mb-3" style="max-width: 18rem">
-                                        <div class="card-header">Paquete 1</div>
-                                            <div class="card-body text-dark">
-                                               <h6>Jugo o fruta:</h6>
-                                                <select name="select" form="paquetes" id="select1-paq1"class="form-select">
-                                                    <option value="value1">Jugo</option>
-                                                    <option value="value2" selected>Fruta</option>
-                                                </select>
-                                                <h6>Hot cakes/molletes/sopes con pollo:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Hot cakes</option>
-                                                    <option value="value2" selected>molletes</option>
-                                                    <option value="value2" selected>Sopes con pollo</option>
-                                                    
-                                                </select>
-                                                <h6>Café de olla/americano/Té:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Café de olla</option>
-                                                    <option value="value2" selected>Café americano</option>
-                                                    <option value="value2" selected>Té</option>
-                                                </select>
-                                                <br></br>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="extras-desayunos"/>
-                                                    <label class="form-check-label" for="flexCheckDefault">
-                                                        Otras bebidas
-                                                    </label>
-                                                </div>
-                                                <h6>Café con leche/leche caliente/Chocolate/Capuchino:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Café de olla</option>
-                                                    <option value="value2" selected>Café americano</option>
-                                                    <option value="value2" selected>Té</option>
-                                                </select>
-                                                <div class="text-center">
-                                                   <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
-                                                </div>
-                                            </div>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="card border border-dark mb-3" style="max-width: 18rem">
-                                        <div class="card-header">Paquete 2</div>
-                                            <div class="card-body text-dark">
-                                                <h6>Jugo o fruta:</h6>
-                                                <select name="select" form="paquetes" id="select1-paq1"class="form-select">
-                                                    <option value="value1">Jugo</option>
-                                                    <option value="value2" selected>Fruta</option>
-                                                </select>
-                                                <h6>Hot cakes/molletes/sopes con pollo:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Hot cakes</option>
-                                                    <option value="value2" selected>molletes</option>
-                                                    <option value="value2" selected>Sopes con pollo</option>
-                                                    
-                                                </select>
-                                                <h6>Café de olla/americano/Té:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Café de olla</option>
-                                                    <option value="value2" selected>Café americano</option>
-                                                    <option value="value2" selected>Té</option>
-                                                </select>
-                                                <br></br>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="extras-desayunos"/>
-                                                    <label class="form-check-label" for="flexCheckDefault">
-                                                        Otras bebidas
-                                                    </label>
-                                                </div>
-                                                <h6>Café con leche/leche caliente/Chocolate/Capuchino:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Café de olla</option>
-                                                    <option value="value2" selected>Café americano</option>
-                                                    <option value="value2" selected>Té</option>
-                                                </select>
-                                                <div class="text-center">
-                                                   <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
-                                                </div>
-                                            </div>
-                                            </div>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="card border border-dark mb-3" style="max-width: 18rem">
-                                        <div class="card-header">Paquete 3</div>
-                                            <div class="card-body text-dark">
-                                                <div class="container">
-                                                    <h6>Jugo o fruta:</h6>
-                                                    <select name="select" form="paquetes" id="select1-paq1"class="form-select">
-                                                        <option value="value1">Jugo</option>
-                                                        <option value="value2" selected>Fruta</option>
-                                                    </select>
-                                                    <h6>Hot cakes/molletes/sopes con pollo:</h6>
-                                                    <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                        <option value="value1">Hot cakes</option>
-                                                        <option value="value2" selected>molletes</option>
-                                                        <option value="value2" selected>Sopes con pollo</option>
-                                                        
-                                                    </select>
-                                                    <h6>Café de olla/americano/Té:</h6>
-                                                    <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                        <option value="value1">Café de olla</option>
-                                                        <option value="value2" selected>Café americano</option>
-                                                        <option value="value2" selected>Té</option>
-                                                    </select>
-                                                    <br></br>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="extras-desayunos"/>
-                                                        <label class="form-check-label" for="flexCheckDefault">
-                                                            Otras bebidas
-                                                        </label>
-                                                    </div>
-                                                    <h6>Café con leche/leche caliente/Chocolate/Capuchino:</h6>
-                                                    <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                        <option value="value1">Café de olla</option>
-                                                        <option value="value2" selected>Café americano</option>
-                                                        <option value="value2" selected>Té</option>
-                                                    </select>
-                                                    <div class="text-center">
-                                                    <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="card border border-dark mb-3" style="max-width: 18rem">
-                                        <div class="card-header">Paquete 4</div>
-                                            <div class="card-body text-dark">
-                                                <h6>Jugo o fruta:</h6>
-                                                <select name="select" form="paquetes" id="select1-paq1"class="form-select">
-                                                    <option value="value1">Jugo</option>
-                                                    <option value="value2" selected>Fruta</option>
-                                                </select>
-                                                <h6>Hot cakes/molletes/sopes con pollo:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Hot cakes</option>
-                                                    <option value="value2" selected>molletes</option>
-                                                    <option value="value2" selected>Sopes con pollo</option>
-                                                    
-                                                </select>
-                                                <h6>Café de olla/americano/Té:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Café de olla</option>
-                                                    <option value="value2" selected>Café americano</option>
-                                                    <option value="value2" selected>Té</option>
-                                                </select>
-                                                <br></br>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="extras-desayunos"/>
-                                                    <label class="form-check-label" for="flexCheckDefault">
-                                                        Otras bebidas
-                                                    </label>
-                                                </div>
-                                                <h6>Café con leche/leche caliente/Chocolate/Capuchino:</h6>
-                                                <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                    <option value="value1">Café de olla</option>
-                                                    <option value="value2" selected>Café americano</option>
-                                                    <option value="value2" selected>Té</option>
-                                                </select>
-                                                <div class="text-center">
-                                                   <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="card border border-dark mb-3" style="max-width: 18rem">
-                                        <div class="card-header">Paquete 5</div>
-                                            <div class="card-body text-dark">
-                                                <h5 class="card-title">Dark card title</h5>
-                                                <p class="card-text">
-                                                Some quick example text to build on the card title and make up the bulk of the
-                                                card's content.
-                                                </p>
-                                            </div>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="card border border-dark mb-3" style="max-width: 18rem">
-                                        <div class="card-header">Paquete 6</div>
-                                            <div class="card-body text-dark">
-                                                <h5 class="card-title">Dark card title</h5>
-                                                <p class="card-text">
-                                                Some quick example text to build on the card title and make up the bulk of the
-                                                card's content.
-                                                </p>
-                                            </div>
-                                    </div>
-                                </div>
-                            </div>
+                    
                        
-                    </div>    
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                <div class="card-header">Paquete 1</div>
+                                    <div class="card-body text-dark">
+                                        <h6>Jugo o fruta:</h6>
+                                        <select name="select" form="paquetes" id="select1-paq1"class="form-select">
+                                            <option value="value1">Jugo</option>
+                                            <option value="value2" selected>Fruta</option>
+                                        </select>
+                                        <h6>Hot cakes/molletes/sopes con pollo:</h6>
+                                        <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                            <option value="value1">Hot cakes</option>
+                                            <option value="value2" selected>molletes</option>
+                                            <option value="value2" selected>Sopes con pollo</option>
+                                            
+                                        </select>
+                                        <h6>Café de olla/americano/Té:</h6>
+                                        <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                            <option value="value1">Café de olla</option>
+                                            <option value="value2" selected>Café americano</option>
+                                            <option value="value2" selected>Té</option>
+                                        </select>
+                                        <br></br>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="extras-desayunos"/>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                Otras bebidas
+                                            </label>
+                                        </div>
+                                        <h6>Café con leche/leche caliente/Chocolate/Capuchino:</h6>
+                                        <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                            <option value="value1">Café de olla</option>
+                                            <option value="value2" selected>Café americano</option>
+                                            <option value="value2" selected>Té</option>
+                                        </select>
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                <div class="card-header">Paquete 2</div>
+                                    <div class="card-body text-dark">
+                                        <h6>Jugo o fruta:</h6>
+                                        <select name="select" form="paquetes" id="select1-paq1"class="form-select">
+                                            <option value="value1">Jugo</option>
+                                            <option value="value2" selected>Fruta</option>
+                                        </select>
+                                        <h6>Guiso del día:</h6>
+                                        <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                            <option value="value1">Hot cakes</option>
+                                            <option value="value2" selected>molletes</option>
+                                            <option value="value2" selected>Sopes con pollo</option>
+                                            
+                                        </select>
+                                        <h6>Café de olla/americano/Té:</h6>
+                                        <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                            <option value="value1">Café de olla</option>
+                                            <option value="value2" selected>Café americano</option>
+                                            <option value="value2" selected>Té</option>
+                                        </select>
+                                        <br></br>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="extras-desayunos"/>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                Otras bebidas
+                                            </label>
+                                        </div>
+                                        <h6>Café con leche/leche caliente/Chocolate/Capuchino:</h6>
+                                        <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                            <option value="value1">Café de olla</option>
+                                            <option value="value2" selected>Café americano</option>
+                                            <option value="value2" selected>Té</option>
+                                        </select>
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                <div class="card-header">Paquete 3</div>
+                                    <div class="card-body text-dark">
+                                        <div class="container">
+                                            <h6>Jugo o fruta:</h6>
+                                            <select name="select" form="paquetes" id="select1-paq1"class="form-select">
+                                                <option value="value1">Jugo</option>
+                                                <option value="value2" selected>Fruta</option>
+                                            </select>
+                                            <h6>Hot cakes/molletes/sopes con pollo:</h6>
+                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                                <option value="value1">Hot cakes</option>
+                                                <option value="value2" selected>molletes</option>
+                                                <option value="value2" selected>Sopes con pollo</option>
+                                                
+                                            </select>
+                                            <h6>Café de olla/americano/Té:</h6>
+                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                                <option value="value1">Café de olla</option>
+                                                <option value="value2" selected>Café americano</option>
+                                                <option value="value2" selected>Té</option>
+                                            </select>
+                                            <br></br>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" id="extras-desayunos"/>
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    Otras bebidas
+                                                </label>
+                                            </div>
+                                            <h6>Café con leche/leche caliente/Chocolate/Capuchino:</h6>
+                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
+                                                <option value="value1">Café de olla</option>
+                                                <option value="value2" selected>Café americano</option>
+                                                <option value="value2" selected>Té</option>
+                                            </select>
+                                            <div class="text-center">
+                                            <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                                   
+                       
                 </div>
             </div>
 
