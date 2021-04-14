@@ -176,10 +176,7 @@
 		<div class="d-flex align-items-center justify-content-end flex-wrap pb-3">
 			<div class="container">
 				<div class="row">
-					<div class="d-flex justify-content-end">
-						<div class="p-2">
-							<button class="btn btn-lg btn-warning p-1" onclick="imprimir()">Imprimir</button>
-						</div>
+					<div class="d-flex justify-content-end">						
 						<div class="p-2">
 							<a href="menu-orden" class="btn btn-lg btn-danger  p-1">Cancelar</a>
 						</div>
@@ -193,6 +190,73 @@
 			</div>
 		</div>
 	</form>
+
+    <div class="p-2">
+    	<button class="btn btn-lg btn-warning p-1" onclick="printDiv('printableArea')">Imprimir</button>
+    </div>
+
+    <!-- div imprimible -->
+    <div hidden id="printableArea">
+
+{% comment %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+        <!-- Font Awesome -->
+        <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        rel="stylesheet"
+        />
+        <!-- Google Fonts -->
+        <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        rel="stylesheet"
+        />
+        <!-- MDB -->
+        <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css"
+        rel="stylesheet"
+        />
+
+        <title>Imprimir ticket</title>
+{% endcomment %}
+ 
+		<div class="table-responsive flex-grow-1">
+			<table class="table">
+				<tbody>
+                    <tr>
+                        <td>{{ cliente.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ cliente.direccion }}</td>
+                    </tr>                  
+                    <tr>
+                        <td>{{ cliente.referencias }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ cliente.telefono }}</td>
+                    </tr>
+				</tbody>
+			</table>
+		</div>
+
+		<button class="btn btn-lg btn-warning p-1" type="submit" onclick="enviaForm()">
+			Confirmar pedido
+		</button>
+
+{% comment %}
+        <!-- MDB -->
+        <script
+        type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"
+        ></script>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>    
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+{% endcomment %}
+    </div>
 	
 </div>
 {% endblock content %}
@@ -272,5 +336,16 @@
 	function imprimir(){
 		window.print();
 	}
+
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        imprimir();
+    }
+
+    function enviaForm() {
+        location.reload();
+    }
 	</script>
 {% endblock script %}
