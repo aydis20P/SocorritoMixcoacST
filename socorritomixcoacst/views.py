@@ -12,7 +12,6 @@ from datetime import datetime as dt, timedelta
 def principal(request):
     context = {}
     return render(request, 'principal.html', context)
-
 def busqueda_cliente(request):
     if request.method=="POST":
         qs_clientes = Cliente.objects.filter(telefono=request.POST.get("telefono"))
