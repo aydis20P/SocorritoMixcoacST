@@ -9,6 +9,7 @@ TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('F
 TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'), ('D1', "desayunito"), ('D2', "desayuno"), ('D3', "desayunote"))
 TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CE','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
+METODO_PAGO = (('EF','efectivo'),('TE','terminál'),('PA','pagado'))
 
 class Cliente(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False)
@@ -34,9 +35,16 @@ class Orden(models.Model):
     total_descuento = models.FloatField(max_length=5, null=True)
     fecha = models.DateTimeField(null=False)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
+    metodo_pago = models.CharField(choices=METODO_PAGO, max_length=2, null=False, blank=False, default="EF")
+    aplica_comision = models.BooleanField(null=False, default=False)
+    comision = models.IntegerField(null=False, default=0)
+    paga_con = models.FloatField(max_length=5, null=False)
+    observaciones = models.CharField(max_length=256, null=True, blank=True)
+    cambio = models.FloatField(max_length=5, null=False)
 
     def __str__(self):
         return "ID: " + str(self.id) + ", Fecha: " + str(self.fecha) + ", Monto: $"+ str(self.total_descuento) + ", Cliente: " + self.cliente.nombre
+
 
 class Platillo(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
