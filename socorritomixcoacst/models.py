@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
-TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'), ('D1', "desayunito"), ('D2', "desayuno"), ('D3', "desayunote"))
+TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'))
 TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CE','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 METODO_PAGO = (('EF','efectivo'),('TE','terminál'),('PA','pagado'))
