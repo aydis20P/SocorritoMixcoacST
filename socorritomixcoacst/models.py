@@ -1,15 +1,16 @@
 from django.db import models
 from django.conf import settings
-from django.shortcuts import reverse    
+from django.shortcuts import reverse
 from django.utils import timezone
 
 
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
-TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'), ('D1', "desayunito"), ('D2', "desayuno"), ('D3', "desayunote"))
+TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'))
 TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CE','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 METODO_PAGO = (('EF','efectivo'),('TE','terminál'),('PA','pagado'))
+TIPO_DESAYUNO = (('D1', "desayunito"), ('D2', "desayuno"), ('D3', "desayunote"))
 
 class Cliente(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False)
@@ -53,9 +54,18 @@ class Platillo(models.Model):
     es_complemento = models.BooleanField(null=False)
     esta_eliminado = models.BooleanField(null= False, default=False)
     es_constante = models.BooleanField(null=False, default=False)
+    tipo_desayuno = models.CharField(choices=TIPO_DESAYUNO, max_length=2, null=True, blank=True)
 
     def __str__(self):
-        return "Nombre: " + self.nombre + ",\tTipo: "+ self.tipo + ",\tEstá eliminado: " + str(self.esta_eliminado) + ",\tEs complemento: " + str(self.es_complemento) + ",\tEs constante: " + str(self.es_constante)
+        cadena_frontend = ("Nombre: " + self.nombre + " Tipo: "+ self.tipo + " Es complemento: " + str(self.es_complemento) + 
+                            " Es constante: " + str(self.es_constante))
+
+        if self.tipo_desayuno:
+            cadena_frontend += (" tipo_desayuno: " + self.tipo_desayuno)
+
+        if self.esta_eliminado:
+            cadena_frontend += (" ELIMINADO")
+        return cadena_frontend
 
 
 class OrdenPlatillo(models.Model):
@@ -72,8 +82,10 @@ class OrdenPlatillo(models.Model):
 class Desayuno(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False)
     precio = models.FloatField(max_length=5, null=False)
-    es_aumentado = models.BooleanField(null=False, default=False)
-    platillos = models.ManyToManyField(Platillo)     
+    platillos = models.ManyToManyField(Platillo)
+
+    def __str__(self):
+        return self.nombre + " Precio: " + str(self.precio)
 
 class OrdenDesayuno(models.Model):
     orden = models.ForeignKey(Orden, on_delete=models.PROTECT)
