@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.shortcuts import render, redirect
+from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
 from django.contrib import messages
@@ -207,22 +208,66 @@ def resumen_pedido(request):
             print('Key: %s' % (key) )
             print('Value %s' % (value) )
 
-        orden.fecha=dt.now().astimezone(pytz.timezone(settings.TIME_ZONE))
-        pago_con=float(request.POST.get('pagC'))
-        cambio=float(pago_con - orden.total)#TODO: try...
+        #actualizar datos conmplementarios de la orden
+        orden.fecha = dt.now().astimezone(pytz.timezone(settings.TIME_ZONE))
 
-        orden.save()
+        if request.POST.get('comision-extra?') == 'on':
+            orden.aplica_comision = True
+            orden.comision = request.POST.get('comExt')
 
-        for pedido in pedidos_del_cliente:
-            pedido.orden=orden
-            pedido.save()
+        if request.POST.get('lleva-topper') == 'on':
+            orden.lleva_topper = True
 
-        if orden.promocion:
-            cliente.update(compras_realizadas=cliente[0].compras_realizadas + 1, ingresos_generados=cliente[0].ingresos_generados + orden.total_descuento)
+        orden.paga_con = float(request.POST.get('pagC'))
+        orden.metodo_pago = request.POST.get('metodo-pago')
+        orden.observaciones = request.POST.get('obs-pedido')
+        orden.cambio = request.POST.get('cambio')
+
+        '''
+        #TRACEBACK nuevos campos de orden
+        print("\nTRACEBACK: nuevos campos de orden")
+        print("método pago: " + orden.metodo_pago)
+        print("topper: " + str(orden.lleva_topper))
+        print("con comisión: " + str(orden.aplica_comision))
+        print("comisión: " + str(orden.comision))
+        print("paga con: " + str(orden.paga_con))
+        print("cambio: " + str(orden.cambio))
+        if orden.observaciones:
+            print("observaciones: " + orden.observaciones)
+        print("termina TRACEBACK\n")
+
+        print("\nComienza TRACEBACK: pagos")
+        print(orden.total)
+        print(orden.comision)
+        print(orden.paga_con)
+        print(orden.cambio)
+        print("termina TRACEBACK\n")
+        '''
+
+        #verificar concordancia entre total, paga con y cambio
+        if (orden.total + int(orden.comision)) == (orden.paga_con - int(orden.cambio)):
+            #guardar la orden
+            orden.save()
+
+            #guardar los registros de OrdenPlatillo asociados a la orden
+            for pedido in pedidos_del_cliente:
+                pedido.orden=orden
+                pedido.save()
+
+            if orden.promocion:
+                cliente.update(compras_realizadas=cliente[0].compras_realizadas + 1, ingresos_generados=cliente[0].ingresos_generados + orden.total_descuento)
+            else:
+                cliente.update(compras_realizadas=cliente[0].compras_realizadas + 1, ingresos_generados=cliente[0].ingresos_generados + orden.total)
+
+            #mandar el id de la orden en una variable de sesión
+            request.session['id_orden_generada'] = orden.id
+
+            #redireccionar a la página de impresión del ticket
+            return redirect(impresion_ticket)
+
         else:
-            cliente.update(compras_realizadas=cliente[0].compras_realizadas + 1, ingresos_generados=cliente[0].ingresos_generados + orden.total)
-
-        return redirect(principal)
+            messages.warning(request, "¡¡¡Error de concordancia en totales!!! contacta al desarrollador")
+            return redirect(resumen_pedido)
 
     else: #Método GET
         context = {}
@@ -232,6 +277,20 @@ def resumen_pedido(request):
         context["observaciones"] = observaciones
         context["cliente"] = cliente[0]
         return render(request, "resumen-pedido.html", context)
+
+def impresion_ticket(request):
+    #recibir la orden de la variable de sesión
+    orden = Orden.objects.filter(id=request.session.get('id_orden_generada'))[0]
+
+    #obtener ordenes platillo correspondientes a la orden:
+    pedidos_del_cliente = OrdenPlatillo.objects.filter(orden=orden)
+
+    print("\nTRACEBACK orden generada: " + str(orden) + "termina TRACEBACK\n")
+
+    context = {}
+    context['orden'] = orden
+    context['pedidos_del_cliente'] = pedidos_del_cliente
+    return render(request, "impresion-ticket.html", context)
 
 class PerfilCliente(DetailView):
     model = Cliente

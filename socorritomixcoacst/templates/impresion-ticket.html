@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>impresión de ticket</title>
+    </head>
+
+    <body>
+        <!-- contenedor principal -->
+        <div id="imprimible">
+        	<table>
+        		<tbody>
+                    <tr>
+                        <td>    
+                            {% load static %}
+                            <img
+                             src="{% static 'images/fonda-socorrito.png' %}"
+                             height="50"
+                             alt=""
+                             loading="lazy"
+                             />
+                        </td>
+                        <td style="padding-left:4em;"></td>
+                        <td>
+                            <h5>orden #{{ orden.id }}</h5>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        	<!-- tabla info cliente -->
+        	<table>
+        		<tbody>
+        		  <tr>
+        			<td>{{ orden.cliente.nombre }}</td>
+                  </tr>
+                  <tr>
+        			<td>{{ orden.cliente.direccion }}</td>
+                  </tr>
+                  <tr>
+        			<td>{{ orden.cliente.referencias }}</td>
+                  </tr>
+                  <tr>
+        			<td>{{ orden.cliente.telefono }}</td>
+        		  </tr>
+        		</tbody>
+        	</table>
+
+            <h6>______________________________</h6>
+        	<!-- tabla resumen pedidos-->
+        	<table>
+        		<thead>
+        			<tr>
+        				<th>Men</th>
+        				<th>Pla</th>
+        				<th>Can</th>
+        				<th>Sub</th>
+        			</tr>
+        		</thead>
+        		<!-- Jalamos la lista de órdenesPlatillo y metemos sus elementos uno por uno en la tabla -->
+        		<tbody>
+        			{% for pedido in pedidos_del_cliente %}
+        				<tr>
+        					{% if pedido.es_completa %}
+        						<td>M {{ pedido.numero_completa }}</td>
+        					{% else %}
+        						<td>NA</td>
+        					{% endif %}
+        					<td>{{ pedido.platillo.nombre }}</td>
+        					<td>{{ pedido.cantidad }}</td>
+        					<td>${{ pedido.sub_total }}</td>
+        				<tr>
+        			{% endfor %}
+        			<tr>
+        				<td></td>
+        				<td>Sub total</td>
+        				{% if orden.promocion %}
+        					<td>{{ orden.total_descuento }}</td>
+        				{% else %}
+        					<td>{{orden.total}}</td>
+        				{% endif %}
+        			</tr>
+        		</tbody>
+        	</table>
+
+            <h6>______________________________</h6>
+
+            <p>
+            	{% if orden.observaciones %}
+            		Observaciónes del pedido:<br>
+            		{{ orden.observaciones }}<br>
+            	{% endif %}
+
+            	Método de pago: {{ orden.get_metodo_pago_display }}<br>
+
+                {% if orden.lleva_topper %}
+            	    Llevar Topper<br>
+                {% endif %}
+
+                {% if orden.aplica_comision %}
+            	    Aplica comisión extra de envío<br>
+                {% endif %}
+
+            	Comisión extra: .... ${{ orden.comision }}<br>
+
+                {% load extras %}
+            	Total: .................. ${% add orden.total orden.comision %}<br>
+
+            	Pago con: ........... ${{ orden.paga_con }}<br>
+
+            	Cambio: ............. ${{ orden.cambio }}<br>
+            </p>
+
+        </div>
+
+        <div>
+        	<!-- sección botones -->
+        	<button onclick="redirectPrincipal()">
+        		Cerrar
+        	</button>
+        	<button onclick="printDiv('imprimible'), irAPrincipal()">Imprimir</button>
+        </div>
+
+    </body>
+
+    <script>
+
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+        }
+
+        function irAPrincipal() {
+            window.location.href = "/impresion-ticket";
+        }
+
+        function redirectPrincipal() {
+            window.location.href = "/"
+        }
+
+    </script>
+
+</html>
