@@ -18,5 +18,6 @@ urlpatterns = [
     path('gestion-platillos-principal',views.gestion_platillos_principal, name="gestion-platillos-principal"),
     path('agregar-platillo',views.agregar_platillo, name="agregar-platillo"),
     path('modificar-platillo',views.modificar_platillo, name="modificar-platillo"),
-    path('eliminar-platillo', views.eliminar_platillo, name ="eliminar-platillo")
+    path('eliminar-platillo', views.eliminar_platillo, name ="eliminar-platillo"),
+    path('impresion-ticket', views.impresion_ticket, name ="impresion-ticket")
 ]
