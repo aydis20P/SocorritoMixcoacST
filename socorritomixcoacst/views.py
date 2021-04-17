@@ -54,7 +54,7 @@ def menu_orden(request):
 
     #Jalamos de la BD los platillos tales que sean parte de los menús del día y que estén disponibles
     lista_platillos = [platilloMenu.platillo for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.disponible]
-
+    platillos = Platillo.objects.all()
     if request.method == "POST":
 
         todos_menus = []
@@ -104,6 +104,7 @@ def menu_orden(request):
         context['entradas'] = entradas
         context['segundos_tiempos'] = segundos_tiempos
         context['guisados'] = guisados
+        context['platillo'] = platillos
         return render(request, 'menu-orden1.html', context)
 
 def resumen_pedido(request):
