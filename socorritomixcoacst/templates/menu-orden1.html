@@ -227,9 +227,9 @@
                                                 <h6>Jugo o fruta:</h6>
                                                 <select name="select-"  id="select"class="form-select">
                                                 <option selected disabled>------</option>
-                                                {% for d in platillo %}
-                                                    {% if d.tipo == "D1" and d.esta_eliminado == False %}    
-                                                    <option value="{{d.nombre}}">{{d.nombre}}</option>
+                                                {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D1" and paq1.esta_eliminado == False %}    
+                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
@@ -237,9 +237,9 @@
                                                 <h6>Hot cakes/molletes/sopes con pollo:</h6>
                                                 <select name="select"  id="select2" class="form-select">
                                                     <option selected disabled>------</option>
-                                                    {% for d in platillo %}
-                                                    {% if d.tipo == "D2" and d.esta_eliminado == False %}    
-                                                    <option value="{{d.nombre}}">{{d.nombre}}</option>
+                                                    {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D2" and paq1.esta_eliminado == False %}    
+                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
@@ -251,9 +251,9 @@
                                                 <h6>Precio -------- 86</h6>
                                                 <select name="select" id="select3" class="form-select">
                                                     <option selected disabled>------</option>
-                                                    {% for d in platillo %}
-                                                    {% if d.tipo == "D3" and d.esta_eliminado == False %}    
-                                                    <option value="{{d.nombre}}">{{d.nombre}}</option>
+                                                    {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D3" and paq1.esta_eliminado == False %}    
+                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
