@@ -10,6 +10,7 @@ import pytz
 import datetime
 from datetime import datetime as dt, timedelta
 
+
 def principal(request):
     context = {}
     return render(request, 'principal.html', context)
@@ -390,12 +391,23 @@ class AdminCliente(ListView):
         context['order_by_fecha_registro_antiguos'] = Cliente.objects.order_by('fecha_registro')
         context['order_by_fecha_registro_recientes'] = Cliente.objects.order_by('-fecha_registro')
         context['order_by_nombre'] = Cliente.objects.order_by('nombre')
-        context['order_by_orden_fecha'] = Orden.objects.filter(fecha__range=[datetime.date.today() - timedelta(days=40), datetime.date.today()]).order_by('-fecha')
+        context['order_by_orden_fecha'] = Orden.objects.filter(fecha__range=[datetime.date.today() - timedelta(days=40), dt.now().astimezone(pytz.timezone(settings.TIME_ZONE))]).order_by('-fecha')
         context['order_by_ingresos_generados'] = Cliente.objects.order_by('-ingresos_generados')
         context['order_by_compras_realizadas'] = Cliente.objects.order_by('-compras_realizadas')
         context['order_by_compras_realizadas_mes'] = self.clientes_orderby_frecuencia
         context['order_by_ingresos_mes'] = self.clientes_orderby_ingresos_mes
+        context['order_by_deben_topper'] = Orden.objects.filter(lleva_topper=True)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        
+        for k, v in request.POST.items():
+            print("\nclave: "+k+" valor: "+v+"\n")
+            if v == "on":
+                orden_id=k.replace("checkbox-","")
+                Orden.objects.filter(pk=int(orden_id)).update(lleva_topper=False)
+        
+        return HttpResponseRedirect(request.path_info)
 
 def registrar_clientes(request):
     #Pregunta si hay datos ocultos(POST)
