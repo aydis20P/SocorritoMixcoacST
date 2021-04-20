@@ -225,7 +225,7 @@
                                             <div class="card-header">Paquete 1</div>
                                             <div class="card-body text-dark">
                                                 <h6>Jugo o fruta:</h6>
-                                                <select name="select-"  id="select"class="form-select">
+                                                <select name="select-"  id="select1"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq1 in paquete1 %}
                                                     {% if paq1.tipo_desayuno == "D1" and paq1.esta_eliminado == False %}    
@@ -260,7 +260,7 @@
                                                 </select>
                                                 <br></br>
                                                 <div class="text-center">
-                                                    <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="paquete1" onclick="agregarDesayuno(this)"value="Paquete1">Enviar</button>
+                                                    <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="Paquete 1" onclick="agregarDesayuno(this,1,2,3)"value="Paquete 1">Enviar</button>
                                                 </div>
                                             </div>    
                                         </div>
@@ -270,34 +270,42 @@
                                             <div class="card-header">Paquete 2</div>
                                             <div class="card-body text-dark">
                                             <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select"class="form-select">
+                                            <select name="select" form="paquetes" id="select4"class="form-select">
                                                 <option selected disabled>------</option>
-                                                {% for d in platillo %}
-                                                    {% if d.tipo == "D1" and d.esta_eliminado == False %}    
-                                                    <option value="{{d.nombre}}">{{d.nombre}}</option>
+                                                {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo_desayuno == "D1" and paq2.esta_eliminado == False %}    
+                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
                                             <h6>Omelet del día o Huevos Rancheros o con jamón o al albañil o con longaniza/ Chilaquiles:</h6>
-                                            <select name="select" form="paquetes" id="select2" class="form-select">
-                                                <option value="value1">Hot cakes</option>
-                                                <option value="value2" selected>molletes</option>
-                                                <option value="value2" selected>Sopes con pollo</option>
+                                            <select name="select" form="paquetes" id="select5" class="form-select">
+                                               <option selected disabled>------</option>
+                                                    {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo == "GU" and paq2.esta_eliminado == False and paq2.tipo_desayuno == "D2" %}    
+                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                                 
                                             </select>
                                             <h6>Café de olla/americano/Té</h6>
                                             <h6>Precio -------- 78</h6>
                                             <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
                                             <h6>Precio -------- 86</h6>
-                                            <select name="select" form="paquetes" id="select3" class="form-select">
-                                                <option value="value1">Café de olla</option>
-                                                <option value="value2" selected>Café americano</option>
-                                                <option value="value2" selected>Té</option>
+                                            <select name="select" form="paquetes" id="select6" class="form-select">
+                                                <option selected disabled>------</option>
+                                                    {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo_desayuno == "D3" and paq2.esta_eliminado == False %}    
+                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete2" onclick="agregarDesayuno(this)">Enviar</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 2" onclick="agregarDesayuno(this,4,5,6)">Enviar</button>
                                             </div>
                                         </div>
                                     </td>
@@ -306,29 +314,42 @@
                                             <div class="card-header">Paquete 3</div>
                                             <div class="card-body text-dark">
                                             <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select1-paq1"class="form-select">
-                                                <option value="value1">Jugo</option>
-                                                <option value="value2" selected>Fruta</option>
+                                            <select name="select" form="paquetes" id="select7"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq3 in paquete3 %}
+                                                    {% if paq3.tipo_desayuno == "D1" and paq3.esta_eliminado == False %}    
+                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                             <h6>Guisado o sugerencia del día:</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                <option value="value1">Hot cakes</option>
-                                                <option value="value2" selected>molletes</option>
-                                                <option value="value2" selected>Sopes con pollo</option>
+                                            <select name="select" form="paquetes" id="select8" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq3 in platillos %}
+                                                    {% if paq3.tipo == "GU" and paq3.esta_eliminado == False %}    
+                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                                 
                                             </select>
                                             <h6>Café de olla/americano/Té</h6>
                                             <h6>Precio -------- 78</h6>
                                             <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
                                             <h6>Precio -------- 86</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                <option value="value1">Café de olla</option>
-                                                <option value="value2" selected>Café americano</option>
-                                                <option value="value2" selected>Té</option>
+                                            <select name="select" form="paquetes" id="select9" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq3 in paquete3 %}
+                                                    {% if paq3.tipo_desayuno == "D3" and paq3.esta_eliminado == False %}    
+                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded"id="paquete">Enviar</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 3" onclick="agregarDesayuno(this,7,8,9)">Enviar</button>
                                             </div>
                                         </div>
                                     </td>
@@ -339,29 +360,42 @@
                                             <div class="card-header">Paquete 4</div>
                                             <div class="card-body text-dark">
                                             <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select1-paq1"class="form-select">
-                                                <option value="value1">Jugo</option>
-                                                <option value="value2" selected>Fruta</option>
+                                            <select name="select" form="paquetes" id="select10"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno == "D1" and paq4.esta_eliminado == False %}    
+                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                             <h6>Costilla con Chilaquiles o con sopes(2)</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                <option value="value1">Hot cakes</option>
-                                                <option value="value2" selected>molletes</option>
-                                                <option value="value2" selected>Sopes con pollo</option>
+                                            <select name="select" form="paquetes" id="select11" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno == "D2" and paq4.esta_eliminado == False %}    
+                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %} pollo</option>
                                                 
                                             </select>
                                             <h6>Café de olla/americano/Té</h6>
                                             <h6>Precio -------- 78</h6>
                                             <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
                                             <h6>Precio -------- 86</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                <option value="value1">Café de olla</option>
-                                                <option value="value2" selected>Café americano</option>
-                                                <option value="value2" selected>Té</option>
+                                            <select name="select" form="paquetes" id="select12" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno == "D3" and paq4.esta_eliminado == False %}    
+                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %} pollo</option>
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 4" onclick="agregarDesayuno(this,10,11,12)">Enviar</button>
                                             </div>
                                         </div>
                                     </td>
@@ -370,29 +404,42 @@
                                             <div class="card-header">Paquete 5</div>
                                             <div class="card-body text-dark">
                                             <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select1-paq1"class="form-select">
-                                                <option value="value1">Jugo</option>
-                                                <option value="value2" selected>Fruta</option>
+                                            <select name="select" form="paquetes" id="select13"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno == "D1" and paq5.esta_eliminado == False %}    
+                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                             <h6>Milanesa o Pechuga asada, empanizada o Cecina:</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                <option value="value1">Hot cakes</option>
-                                                <option value="value2" selected>molletes</option>
-                                                <option value="value2" selected>Sopes con pollo</option>
+                                            <select name="select" form="paquetes" id="select14" class="form-select">
+                                                 <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno == "D2" and paq5.esta_eliminado == False %}    
+                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                                 
                                             </select>
                                             <h6>Café de olla/americano/Té</h6>
                                             <h6>Precio -------- 78</h6>
                                             <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
                                             <h6>Precio -------- 86</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                <option value="value1">Café de olla</option>
-                                                <option value="value2" selected>Café americano</option>
-                                                <option value="value2" selected>Té</option>
+                                            <select name="select" form="paquetes" id="select15" class="form-select">
+                                                 <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno == "D3" and paq5.esta_eliminado == False %}    
+                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 5" onclick="agregarDesayuno(this,13,14,15)">Enviar</button>
                                             </div>
                                         </div>
                                     </td>
@@ -401,29 +448,42 @@
                                             <div class="card-header">Paquete 6</div>
                                             <div class="card-body text-dark">
                                             <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select1-paq1"class="form-select">
-                                                <option value="value1">Jugo</option>
-                                                <option value="value2" selected>Fruta</option>
+                                            <select name="select" form="paquetes" id="select16"class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno == "D1" and paq6.esta_eliminado == False %}    
+                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                             <h6>Pancita:</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                <option value="value1">Hot cakes</option>
-                                                <option value="value2" selected>molletes</option>
-                                                <option value="value2" selected>Sopes con pollo</option>
+                                            <select name="select" form="paquetes" id="select17" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno == "D2" and paq6.esta_eliminado == False %}    
+                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                                 
                                             </select>
                                             <h6>Café de olla/americano/Té</h6>
                                             <h6>Precio -------- 78</h6>
                                             <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
                                             <h6>Precio -------- 86</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select">
-                                                <option value="value1">Café de olla</option>
-                                                <option value="value2" selected>Café americano</option>
-                                                <option value="value2" selected>Té</option>
+                                            <select name="select" form="paquetes" id="select18" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno == "D3" and paq6.esta_eliminado == False %}    
+                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded">Enviar</button>
+                                               <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 6" onclick="agregarDesayuno(this,16,17,18)">Enviar</button>
                                             </div>
                                         </div>
                                     </td>
@@ -431,35 +491,35 @@
                                 <tr>
                                     <td>
                                         <div class="card text-white bg-success mb-3" style="max-width: 18rem">
-                                            <div class="card-header">Paquete infantil</div>
+                                            <div class="card-header" style="color:white; background:#FFEA00;">Paquete infantil</div>
                                             <div class="card-body text-white">
                                             <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select1-paq1" class="form-select bg-success text-white">
-                                                <option value="value1">Jugo</option>
-                                                <option value="value2" selected>Fruta</option>
+                                            <select name="select" form="paquetes" id="select19" class="form-select bg-success text-white">
+                                                <option selected disabled>------</option>
+                                                {% for paq7 in paquete7 %}
+                                                    {% if paq7.tipo_desayuno == "D1" and paq7.esta_eliminado == False %}    
+                                                    <option value="{{paq7.nombre}}">{{paq7.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
-                                            <h6>Café de olla/americano/Té</h6>
-                                            <h6>Precio -------- 78</h6>
-                                            <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                            <h6>Cereal con leche/Hot Cakes/Huevos con jamón o con salchica</h6>
+                                            <h6>Salchipullpos/ Croquetas de pollo</h6>
                                             <h6>Precio -------- 86</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select bg-success text-white">
-                                                <option value="value1">Hot cakes</option>
-                                                <option value="value2" selected>molletes</option>
-                                                <option value="value2" selected>Sopes con pollo</option>
+                                            <select name="select" form="paquetes" id="select20" class="form-select bg-success text-white">
+                                               option selected disabled>------</option>
+                                                {% for paq7 in paquete7 %}
+                                                    {% if paq7.tipo_desayuno == "D2" and paq7.esta_eliminado == False %}    
+                                                    <option value="{{paq7.nombre}}">{{paq7.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
                                                 
                                             </select>
-                                            <h6>Café de olla/americano/Té</h6>
-                                            <h6>Precio -------- 78</h6>
-                                            <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
-                                            <h6>Precio -------- 86</h6>
-                                            <select name="select" form="paquetes" id="select2-paq1" class="form-select bg-success text-white">
-                                                <option value="value1">Café de olla</option>
-                                                <option value="value2" selected>Café americano</option>
-                                                <option value="value2" selected>Té</option>
-                                            </select>
+                                            
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-primary btn-rounded">Enviar</button>
+                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="PaqueteInfantil" onclick="agregarDesayuno(this,19,20,null)">Enviar</button>
                                             </div>
                                         </div>
                                     </td>
@@ -472,7 +532,7 @@
                     <div class="table-responsive">
                         <table class="table" >
                             <thead class="table-dark">
-                                <tr>
+                                <tr >
                                     <th scope="col">Paquete</th>
                                     <th scope="col">Jugo o fruta</th>
                                     <th scope="col">Desayuno</th>
@@ -631,31 +691,43 @@
             }
         }
         var indice = 1;
-        function agregarDesayuno(bot_env){
+        function agregarDesayuno(bot_env,a,b,c){
             //Primero vamos a obtener las ordenes 
             //var paquete = document.getElementById("paquete").value;
             paquete = bot_env.value;
-           
-            var combo = document.getElementById("select");
+           //Obtenemos el valor del primer select
+            var combo = document.getElementById("select"+a);
             var select = combo.options[combo.selectedIndex].text;
-            
-            var combo2 = document.getElementById("select2");
+            document.ready = document.getElementById("select"+a).value = '0';
+            //Obtenemos el valor del segundo select
+            var combo2 = document.getElementById("select"+b);
             var select2 = combo2.options[combo2.selectedIndex].text;
-           
-            var combo3 = document.getElementById("select3");
-            var select3 = combo3.options[combo3.selectedIndex].text;
-            
-            
-            
+            document.ready = document.getElementById("select"+b).value = '0';
+           //Obtenemos el valor del tercer select
+            if(c == null){
+               
+                var limpia = ""
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="select-desayunos1_'+indice+'" value="'+select+'"></input><td>'+select+'</td><input hidden name="select-desayunos2_'+indice+'" value="'+select2+'"></input><td>'+select2 +'</td><td>'+limpia+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+            }   
+            else{
+                var combo3 = document.getElementById("select"+c);
+                var select3 = combo3.options[combo3.selectedIndex].text;
+                document.ready = document.getElementById("select"+c).value = '0';
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="select-desayunos1_'+indice+'" value="'+select+'"></input><td>'+select+'</td><input hidden name="select-desayunos2_'+indice+'" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="select-desayunos3_'+indice+'" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+              
+            }
 
-            var fila='<tr id="ordenes-tabla"'+indice+'><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="select-desayunos1_'+indice+'" value="'+select+'"></input><td>'+select+'</td><input hidden name="select-desayunos2_'+indice+'" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="select-desayunos3_'+indice+'" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id=btn_'+indice+'> <i class="far fa-trash-alt"></i> </button></td></tr>';
+           
 
             var orden = document.createElement("TR");
    	        orden.innerHTML=fila;
             document.getElementById("ordenes-desayunos").appendChild(orden);
             indice++;
         }
-        function eliminarOrdesayuno(){
+        function eliminarFila(eliminar,index) {
+            var btn = eliminar.value;
+            var borrar = eliminar.parentElement.parentElement;
+            borrar.remove();
 
         }
         

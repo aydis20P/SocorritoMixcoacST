@@ -344,47 +344,6 @@
             }
         }
 
-        /*//función para marcar que selección se hizo en los menús completos
-        function seleccionar(boton){
-            seleccion = boton.parentElement.parentElement.getElementsByClassName("seleccion")[0]
-            boton_dropdown = boton.parentElement.parentElement.parentElement.getElementsByClassName("btn")[0]
-
-            seleccion.innerText = boton.innerText
-            boton_dropdown.innerText = boton.innerText
-        }
-
-        function incrementaSpinner(platillo){
-            console.log(String(platillo));
-            var id = "['"+String(platillo[0])+"', "+String(platillo[1]+"]");//dar formato al arreglo que recibe como parámetro para concordar con el id del elemento
-            var val = document.getElementById(id).value;//obtenemos el valor del elemento
-            val = parseInt(val) + 1;//lo parseamos a int e incrementamos en 1
-            if(!isNaN(val)){//validación Is Not a Number
-                if(val<100)
-                    document.getElementById(id).value = val;//actualizamos el valor
-            }
-        }
-
-        function decrementaSpinner(platillo){
-            var id = "['"+String(platillo[0])+"', "+String(platillo[1]+"]");
-            var val = document.getElementById(id).value;
-            val = parseInt(val) - 1;
-            if(!isNaN(val)){
-                if(val>=0)
-                    document.getElementById(id).value = val;
-            }
-        }
-
-        //objeto de tipo internacionalización para formatear cifras a precios
-        const formato = new Intl.NumberFormat('es-MX',{
-            style: 'currency',
-            currency: 'MXN',
-            minimumFractionDigits: 2
-        })
-
-        //formateamos los objetos de la clase "precio" en formato monetario
-        precios =  document.getElementsByClassName("precio")
-        for(var i=0; i<precios.length; i++){
-            precios[i].innerHTML = formato.format(precios[i].innerHTML)
-        }*/
+        
     </script>
 {% endblock script %}

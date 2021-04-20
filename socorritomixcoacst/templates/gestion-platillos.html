@@ -313,9 +313,10 @@
         location.reload('ex1-tabs-2')
         }
 
-        function enviar(){
-            document.getElementById("elimim-platillo").submit();
-            console.log(document.getElementById("elimim-platillo"));
+        
+            function eliminarFila(index) {
+                $("#fila" + index).remove();
+
         }
 
     </script>

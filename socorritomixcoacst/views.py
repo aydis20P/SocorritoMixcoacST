@@ -57,7 +57,13 @@ def menu_orden(request):
     lista_platillos = [platilloMenu.platillo for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.disponible]
     platillos = Platillo.objects.all()
     paquete1=Platillo.objects.filter(desayuno__nombre = "Paquete 1")
-    #platillos_paquete1 = paquete1.platillos.all()
+    paquete2=Platillo.objects.filter(desayuno__nombre = "Paquete 2")
+    paquete3=Platillo.objects.filter(desayuno__nombre = "Paquete 3")
+    paquete4=Platillo.objects.filter(desayuno__nombre = "Paquete 4")
+    paquete5=Platillo.objects.filter(desayuno__nombre = "Paquete 5")
+    paquete6=Platillo.objects.filter(desayuno__nombre = "Paquete 6")
+    paquete7=Platillo.objects.filter(desayuno__nombre = "PaqueteInfantil")
+    
     if request.method == "POST":
 
         todos_menus = []
@@ -109,7 +115,14 @@ def menu_orden(request):
         context['guisados'] = guisados
         context['platillo'] = platillos
         context['paquete1'] = paquete1
-        return render(request, 'menu-orden1.html', context)
+        context['paquete2'] = paquete2
+        context['paquete3'] = paquete3
+        context['paquete4'] = paquete4
+        context['paquete5'] = paquete5
+        context['paquete6'] = paquete6
+        context['paquete7'] = paquete7
+        
+        return render(request, 'menu-orden.html', context)
 
 def resumen_pedido(request):
     #TODO actualizar los atributos compras_realizadas e ingresos_generados del cliente, cada vez que se realiza una orden
