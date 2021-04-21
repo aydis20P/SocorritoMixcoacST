@@ -2,35 +2,25 @@
 {% load static %}
 
 {% block head %}
-<title>Crear nuevo menú del día</title>
+<title>Editar el menú del día</title>
 {% endblock head %}
 
 {% block content %}
-
 <div id="contenedor-general" class="d-flex flex-column mx-4">
 
-    <h3>Crear nuevo menú del día</h3>
+    <h3>Editar el menú del día</h3>
 
-    <form if="form-menu-nuevo" method="POST">
+    <form id="form-editar-menu" method="POST">
         
         {% csrf_token %}
 
+        <!-- creamos una lista de tablas donde mostramos cada menú -->
         <ul id="lista-menus" class="list-group">
 
             <li id="menu-desayuno" class="list-group-item p-3">
-
-                <div id="cabecera-desayuno" class="d-flex justify-content-between flex-wrap">
-                    <h5>Desayuno</h5>
-                    <button type="button" class="btn btn-warning" onclick="copiar({{ desayuno_ayer }}, 'check-desayuno')">
-                        <i class="far fa-copy fa-lg">
-                            Copiar el menú de ayer
-                        </i>
-                    </button>
-                </div>
-
+                <h5>Desayuno</h5>
                 <div class="table-responsive-xl">
                     <table id="tabla-desayuno" class="table table-sm">
-
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -39,7 +29,6 @@
                                 <th>¿Incluir?</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             {% for platillo in platillos %}
                                 <tr>
@@ -58,26 +47,14 @@
                                 </tr>
                             {% endfor %}
                         </tbody>
-
                     </table>
                 </div>
-
             </li>
 
             <li id="menu-comida" class="list-group-item p-3">
-
-                <div id="cabecera-comida" class="d-flex justify-content-between flex-wrap">
-                    <h5>Comida</h5>
-                    <button type="button" class="btn btn-warning" onclick="copiar({{ comida_ayer }}, 'check-comida')">
-                        <i class="far fa-copy fa-lg">
-                            Copiar el menú de ayer
-                        </i>
-                    </button>
-                </div>
-
+                <h5>Comida</h5>
                 <div class="table-responsive-xl">
                     <table id="tabla-comida" class="table table-sm">
-
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -86,8 +63,6 @@
                                 <th>¿Incluir?</th>
                             </tr>
                         </thead>
-
-                        
                         <tbody>
                             {% for platillo in platillos %}
                                 <tr>
@@ -106,26 +81,14 @@
                                 </tr>
                             {% endfor %}
                         </tbody>
-
                     </table>
                 </div>
-
             </li>
 
             <li id="menu-cena" class="list-group-item p-3">
-
-                <div id="cabecera-cena" class="d-flex justify-content-between flex-wrap">
-                    <h5>Cena</h5>
-                    <button type="button" class="btn btn-warning" onclick="copiar({{ cena_ayer }}, 'check-cena')">
-                        <i class="far fa-copy fa-lg">
-                            Copiar el menú de ayer
-                        </i>
-                    </button>
-                </div>
-
+                <h5>Cena</h5>
                 <div class="table-responsive-xl">
                     <table id="tabla-cena" class="table table-sm">
-
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -134,7 +97,6 @@
                                 <th>¿Incluir?</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             {% for platillo in platillos %}
                                 <tr>
@@ -153,18 +115,16 @@
                                 </tr>
                             {% endfor %}
                         </tbody>
-
                     </table>
                 </div>
-
             </li>
 
         </ul>
 
-        <div id="contenedor-botones" class="d-flex justify-content-end py-3">
+        <div id="contenedor-botones" class="d-flex justify-content-end flex-wrap py-3">
             <button id="boton-nuevo-menu" type="submit" class="btn btn-primary btn-lg btn-warning">
                 <i class="fas fa-file-alt fa-lg">
-                    &Tab;Guardar Nuevo Menú del día
+                    &Tab;Guardar Menú del día
                 </i>
             </button>
         </div>
@@ -189,5 +149,10 @@
             }
         }
     }
+
+    //hacemos que los platillos actualmente en el menú se seleccionen solos
+    copiar({{ desayuno_hoy|safe }}, "check-desayuno")
+    copiar({{ comida_hoy|safe }}, "check-comida")
+    copiar({{ cena_hoy|safe }}, "check-cena")
 </script>
 {% endblock script %}

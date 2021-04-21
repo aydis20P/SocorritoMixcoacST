@@ -448,52 +448,130 @@ def menus_del_dia(request):
         return redirect("menus-del-dia")
 
     else:
-        #Jalamos de la BD todos los platillosMenu para mostrarlos en la vista,
-        #En forma de una lista de diccionarios con cada campo de PlatilloMenu como entrada
-        menus_platillo = []
-        for platillo_menu in [platilloMenu for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now())]:
-            menus_platillo.append({"disponible": platillo_menu.disponible,
-                                   "platillo": platillo_menu.platillo,
-                                   "menu": platillo_menu.menu})
+        menus_hoy = Menu.objects.filter(dia=dt.now())
 
         context = {}
-        context["menus_platillo"] = menus_platillo
+
+        #creamos listas con los nombres de los platillos del menú del día de hoy, muy similar a crear-nuevo-menu con los platillos de ayer:
+        #de todos los platillosMenu en la base de datos tales que su menú sea de hoy y del tipo correspondiente, forma con ellos una lista
+        context["menu_desayuno"] = [platilloMenu for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in menus_hoy and platilloMenu.menu.tipo == "DE"]
+        context["menu_comida"] = [platilloMenu for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in menus_hoy and platilloMenu.menu.tipo == "CO"]
+        context["menu_cena"] = [platilloMenu for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in menus_hoy and platilloMenu.menu.tipo == "CE"]
+        context["menus_hoy"] = menus_hoy
+
         return render(request, "menus-del-dia.html", context)
 
 def crear_nuevo_menu(request):
     if request.method == "POST": #cuando mandemos la opcion "Agregar nuevo menú del día"
 
-        #creamos el menú del día, con solo la fecha actual, y la lista de platillosMenu a tratar
-        nuevoMenu = Menu(dia=dt.now())
-        platillosMenu = []
+        #creamos los menú del día, con solo la fecha actual y el tipo de menú
+        nuevaDesayuno = Menu(dia=dt.now(), tipo="DE")
+        nuevaComida = Menu(dia=dt.now(), tipo="CO")
+        nuevaCena = Menu(dia=dt.now(), tipo="CE")
+        nuevaDesayuno.save()
+        nuevaComida.save()
+        nuevaCena.save()
 
+        #Capturemos los platillos que fueron marcados en la lista, acorde a si son desayuno, comida o cena
         for clave, valor in request.POST.items():
+                if valor == "on":
+                    platilloMenu = PlatilloMenu(disponible=True)
 
-            #capturemos el select que nos dirá que tipo de menú vamos a manejar
-            if valor in [tipo[0] for tipo in TIPO_MENU]:
-                nuevoMenu.tipo = valor
+                    if "desayuno" in clave:
+                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-desayuno", ""))[0]
+                        platilloMenu.menu = nuevaDesayuno
 
-            #Ahora capturemos los platillos que fueron marcados en la lista
-            if valor == "on":
-                platillosMenu.append(PlatilloMenu(disponible=True,
-                                            platillo=Platillo.objects.filter(nombre=clave)[0],
-                                            menu=nuevoMenu))
+                    if "comida" in clave:
+                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-comida", ""))[0]
+                        platilloMenu.menu = nuevaComida
 
-            #guardemos los platillosMenu y el Menú en la BD
-            nuevoMenu.save()
-            for platilloMenu in platillosMenu:
-                platilloMenu.save()
+                    if "cena" in clave:
+                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-cena", ""))[0]
+                        platilloMenu.menu = nuevaCena
+
+                    platilloMenu.save()
 
         return redirect("menus-del-dia")
 
-    context = {}
-    context["platillos"] = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
-    return render(request, "crear-nuevo-menu.html", context)
+    else: #el request es GET
+        context = {}
 
+        #Mandamos una lista con todos los platillos de la BD que no están eliminados
+        context["platillos"] = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
+
+        #Mandamos listas con nombres de platillos que estaban en los menús del día de ayer:
+        #de todos los platillosMenu en la base de datos tales que su menú sea de ayer y del tipo correspondiente, toma los nombres de sus platillos y pasalo como una lista
+        context["desayuno_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "DE"]
+        context["comida_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "CO"]
+        context["cena_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "CE"]
+
+        return render(request, "crear-nuevo-menu.html", context)
+
+def editar_menus(request):
+    #creamos listas con los nombres de los platillos del menú del día de hoy, muy similar a crear-nuevo-menu con los platillos de ayer:
+    #de todos los platillosMenu en la base de datos tales que su menú sea de hoy y del tipo correspondiente, toma los nombres de sus platillos, y forma con ellos una lista
+    desayuno_hoy = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.menu.tipo == "DE"]
+    comida_hoy = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.menu.tipo == "CO"]
+    cena_hoy = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.menu.tipo == "CE"]
+
+    #extraemos de la BD todos los platillos que no estén eliminados
+    platillos = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
+
+    if request.method == "GET":
+        context = {}
+
+        context["platillos"] = platillos
+
+        context["desayuno_hoy"] = desayuno_hoy
+        context["comida_hoy"] = comida_hoy
+        context["cena_hoy"] = cena_hoy
+
+        return render(request, "editar-menus.html", context)
+
+    if request.method == "POST":
+        #recuperamos los 3 menus del día de hoy
+        desayuno = Menu.objects.filter(dia=dt.now(), tipo="DE")[0]
+        comida = Menu.objects.filter(dia=dt.now(), tipo="CO")[0]
+        cena = Menu.objects.filter(dia=dt.now(), tipo="CE")[0]
+
+        #actualizamos los platilloMenu acorde a lo ingresado en la vista para cada tipo de menú:
+        # Si el platillo no está incluido en el menú pero el checkbox correspondiente está marcado, creamos y guardamos un nuevo PlatilloMenu.
+        # Si el platillo está incluido en el menú pero el checkbox correspondiente está desmarcado, borramos el PlatilloMenu correspondiente.
+        for platillo in platillos:
+            if request.POST.get(platillo.nombre + "-desayuno") == "on" and not platillo.nombre in desayuno_hoy:
+                nuevoPlatilloMenu = PlatilloMenu(disponible=True,
+                                                 platillo=Platillo.objects.filter(nombre=platillo.nombre)[0],
+                                                 menu=desayuno)
+                nuevoPlatilloMenu.save()
+            if request.POST.get(platillo.nombre + "-desayuno") == None and platillo.nombre in desayuno_hoy:
+                platilloMenuBorrado = PlatilloMenu.objects.filter(platillo=platillo,
+                                                                  menu=desayuno)[0]
+                platilloMenuBorrado.delete()
+
+            if request.POST.get(platillo.nombre + "-comida") == "on" and not platillo.nombre in comida_hoy:
+                nuevoPlatilloMenu = PlatilloMenu(disponible=True,
+                                                 platillo=Platillo.objects.filter(nombre=platillo.nombre)[0],
+                                                 menu=comida)
+                nuevoPlatilloMenu.save()
+            if request.POST.get(platillo.nombre + "-comida") == None and platillo.nombre in comida_hoy:
+                platilloMenuBorrado = PlatilloMenu.objects.filter(platillo=platillo,
+                                                                  menu=comida)[0]
+                platilloMenuBorrado.delete()
+
+            if request.POST.get(platillo.nombre + "-cena") == "on" and not platillo.nombre in cena_hoy:
+                nuevoPlatilloMenu = PlatilloMenu(disponible=True,
+                                                 platillo=Platillo.objects.filter(nombre=platillo.nombre)[0],
+                                                 menu=cena)
+                nuevoPlatilloMenu.save()
+            if request.POST.get(platillo.nombre + "-cena") == None and platillo.nombre in cena_hoy:
+                platilloMenuBorrado = PlatilloMenu.objects.filter(platillo=platillo,
+                                                                  menu=cena)[0]
+                platilloMenuBorrado.delete()
+
+        return redirect("menus-del-dia")
 
 def gestion_platillos_principal(request):
     return render(request, "gestion-platillos-principal.html")
-
 
 def agregar_platillo(request):
     if request.method == "POST":
@@ -542,7 +620,6 @@ def agregar_platillo(request):
         context["tip_platillo"] = TIPO_PLATILLO
         return render(request, "agregar-platillo.html", context)
 
-
 def modificar_platillo(request):
     platillos = Platillo.objects.all()
     precios_de_platillos = HistorialPrecio.objects.filter(es_precio_actual=True)
@@ -550,18 +627,18 @@ def modificar_platillo(request):
         #colocar en una tupla la clave y elvalor del POST
         for clave, valor in request.POST.items():
             print("Clave: %s" % (clave))
-            print("Valor: %s" % (valor))  
-            #busca el elemento en html con nombre modnom- recibido en clave 
+            print("Valor: %s" % (valor))
+            #busca el elemento en html con nombre modnom- recibido en clave
             if "modnom-" in clave and valor:
                 nuevoNombre = valor
                 idModificar = clave.replace("modnom-plat_","")
-                modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(nombre = str(nuevoNombre))      
+                modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(nombre = str(nuevoNombre))
             #busca el elemento a cambiar con nombre modprecio_ recibido en clave
             if "modprecio_" in clave and valor:
                 nuevoPrecio = float(valor)
                 idModificar = clave.replace("modprecio_","")
-                
-            
+
+
                 idPlatillo = HistorialPrecio.objects.filter(pk = int(idModificar))
                 modificacion_platillo = HistorialPrecio.objects.filter(pk=int(idModificar))
                 modificacion_platillo.update(es_precio_actual = False )
@@ -580,14 +657,14 @@ def modificar_platillo(request):
                 else:
                     modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(tipo = valor, es_complemento = True)
                     modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(es_complemento = True)
-            ##busca el elemento a cambiar con nombre moddescripcion_ recibido en clave        
+            ##busca el elemento a cambiar con nombre moddescripcion_ recibido en clave
             if "moddescripcion_" in clave and valor:
                 nuevaDescripcion = valor
                 idModificar = clave.replace("moddescripcion_","")
                 modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(descripcion = nuevaDescripcion)
-            
+
         return redirect("gestion-platillos-principal")
-    else:    
+    else:
         context = {}
         context['platillos'] = precios_de_platillos
         context["tip_platillo"] = TIPO_PLATILLO
@@ -606,7 +683,7 @@ def eliminar_platillo(request):
                 eliminar_P = Platillo.objects.filter(pk=int(idAeliminar)).update(esta_eliminado = True)
         return redirect("gestion-platillos-principal")
 
-    else:    
+    else:
         context = {}
         context['platillos'] = precios_de_platillos
         context["tip_platillo"] = TIPO_PLATILLO
