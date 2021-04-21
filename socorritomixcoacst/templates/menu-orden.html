@@ -519,7 +519,7 @@
                                             
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="PaqueteInfantil" onclick="agregarDesayuno(this,19,20,null)">Enviar</button>
+                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="Paquete infantil" onclick="agregarDesayuno(this,19,20,null)">Enviar</button>
                                             </div>
                                         </div>
                                     </td>
@@ -690,6 +690,7 @@
                 menus[i].id = "menu-" + i
             }
         }
+
         var indice = 1;
         function agregarDesayuno(bot_env,a,b,c){
             //Primero vamos a obtener las ordenes 
@@ -707,13 +708,13 @@
             if(c == null){
                
                 var limpia = ""
-                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="select-desayunos1_'+indice+'" value="'+select+'"></input><td>'+select+'</td><input hidden name="select-desayunos2_'+indice+'" value="'+select2+'"></input><td>'+select2 +'</td><td>'+limpia+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><td>'+limpia+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
             }   
             else{
                 var combo3 = document.getElementById("select"+c);
                 var select3 = combo3.options[combo3.selectedIndex].text;
                 document.ready = document.getElementById("select"+c).value = '0';
-                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="select-desayunos1_'+indice+'" value="'+select+'"></input><td>'+select+'</td><input hidden name="select-desayunos2_'+indice+'" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="select-desayunos3_'+indice+'" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="orden-desayunos_'+indice+'_3" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
               
             }
 

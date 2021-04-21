@@ -70,8 +70,8 @@ def menu_orden(request):
         todos_ordenes = []
         todos_bebidas = []
         todos_extras = []
+        todos_desayunos = [] #lista de los potenciales ordenplatillo que se mandará a la vista resumen_pedido
 
-        pedido = []
         request.session['observaciones'] = request.POST.get('observaciones')
 
         for clave, valor in request.POST.items():
@@ -93,10 +93,16 @@ def menu_orden(request):
                 if int(valor) > 0:
                     todos_extras.append(tuple((clave.replace("orden_extra_de_", ""), valor)))
 
+            #si es un paquete de desayuno
+            if "orden-desayunos" in clave:
+                todos_desayunos.append(tuple((clave.replace("orden-desayunos_", ""), valor)))
+
         request.session['todos_menus'] = todos_menus
         request.session['todos_ordenes'] = todos_ordenes
         request.session['todos_bebidas'] = todos_bebidas
         request.session['todos_extras'] = todos_extras
+        request.session['todos_desayunos'] = todos_desayunos
+
         #TODO request.session['todos_desayunos'] = todos_desayunos
 
         return redirect('resumen-pedido')
@@ -133,6 +139,7 @@ def resumen_pedido(request):
     todos_ordenes = request.session['todos_ordenes']
     todos_extras = request.session['todos_extras']
     todos_bebidas = request.session['todos_bebidas']
+    todos_desayunos = request.session['todos_desayunos']
 
     observaciones = request.session.get('observaciones')
 
@@ -217,7 +224,61 @@ def resumen_pedido(request):
         pedidos_del_cliente.append(platillo_orden)
         orden.total += platillo_orden.sub_total
 
-    print(pedidos_del_cliente)
+    #agregamos los deayunos a la lista pedidos_del_cliente
+    #ordenar todos desayunos en una tupla con paquete, platillos correspondientes
+    desayunos = []
+    platillos = []
+    for c, v in todos_desayunos:
+        #verificar si hay _
+        if not "_" in c:
+            #agregar el paquete a la lista desayunos
+            desayunos.append((numero_menu, v))
+            numero_menu += 1
+        else:
+            #agregar los platillos de los paquetes a la lista platillos con la clave correspondiente a su paquete
+            platillos.append((numero_menu - 1, v))
+
+    print("\nTRACEBACK desayunos ordenados")
+    for c, v in desayunos:
+        print("clave: " + str(c) + " valor: " + v)
+    for c, v in platillos:
+        print("clave: " + str(c) + " valor: " + v)
+
+    for clave, desayuno in desayunos:
+        #obtener sus platillos
+        platillos_desayuno = [platillo for c, platillo in platillos if c == clave]
+        print("\nTRACEBACK"+ str(platillos_desayuno))
+
+        #obterner su precio
+        precio = Desayuno.objects.filter(nombre=desayuno)[0].precio
+        print("precio original: "+ str(precio))
+        #verificar si el precio es aumentado
+        for platillo in platillos_desayuno:
+            if "Leche Caliente" in platillo or "chino" in platillo or "late" in platillo or "Café con leche" in platillo:
+                precio = precio +10
+        print("precio nuevo: "+ str(precio) + " termina TRACEBACK\n")
+
+        #obtener el numero_completa
+        numero_completa = clave
+
+        #crear las ordenes platillos asociados al desayuno
+
+        for i in range(len(platillos_desayuno)):
+            sub_total = 0
+            if i == len(platillos_desayuno) - 1:
+                sub_total = precio
+            orden_platillo = OrdenPlatillo(sub_total=sub_total,
+                                            es_completa=True,
+                                            numero_completa=numero_completa,
+                                            cantidad=1,
+                                            orden=orden,
+                                            platillo=Platillo.objects.filter(nombre=platillos_desayuno[i])[0])
+            pedidos_del_cliente.append(orden_platillo)
+
+    print("\nTRACEBACK pedidos_del_cliente: ")
+    for op in pedidos_del_cliente:
+        print(op)
+    print("termina TRACEBACK\n")
 
     if request.method=="POST":
         for key, value in request.POST.items():

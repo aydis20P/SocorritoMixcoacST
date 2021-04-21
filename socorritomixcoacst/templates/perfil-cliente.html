@@ -201,9 +201,10 @@
                                     {% for pedido in pedidos %}
                                     <tr>
                                         <td>{{pedido.fecha}}</td>
-                                        <td id="a{{forloop.counter}}">${{pedido.total}}</td>
+                                        {% load extras %}
+                                        <td id="a{{forloop.counter}}">${% add pedido.total pedido.comision %}</td>
                                         <td id="b{{forloop.counter}}">{% if pedido.promocion%}Sí{% else %}No{% endif %}</td>
-                                        <td id="c{{forloop.counter}}">{% if pedido.promocion%}${{pedido.total_descuento}}{% else %}${{pedido.total}}{% endif %}</td>
+                                        <td id="c{{forloop.counter}}">{% if pedido.promocion%}${% add pedido.total_descuento pedido.comision %}{% else %}${% add pedido.total pedido.comision %}{% endif %}</td>
                                         <td><!-- Button trigger modal -->
                                             <button
                                               type="button"
@@ -310,7 +311,8 @@
                         var cadenaHTML = "";
                         {% if ordenPlatillo.es_completa and not ordenPlatillo.platillo.es_complemento %}
                         cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} Menú-{{ordenPlatillo.platillo.nombre}}(s)</div><div>${{ordenPlatillo.sub_total}}</div></div>";
-                        {% elif ordenPlatillo.sub_total == 0 %}
+                        {% endif %}
+                        {% if ordenPlatillo.sub_total == 0 %}
                         cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s)</div><div>(Complemento)</div></div>";
                         {% else %}
                         cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s)</div><div>${{ordenPlatillo.sub_total}}</div></div>";
