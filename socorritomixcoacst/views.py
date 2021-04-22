@@ -63,7 +63,10 @@ def menu_orden(request):
     paquete5=Platillo.objects.filter(desayuno__nombre = "Paquete 5")
     paquete6=Platillo.objects.filter(desayuno__nombre = "Paquete 6")
     paquete7=Platillo.objects.filter(desayuno__nombre = "PaqueteInfantil")
-    
+    Desayunos = Desayuno.objects.all()
+    print("Aquí comienza:----------------------------------------------------------------------------------------------------")
+    print (Desayunos)
+
     if request.method == "POST":
 
         todos_menus = []
@@ -127,7 +130,8 @@ def menu_orden(request):
         context['paquete5'] = paquete5
         context['paquete6'] = paquete6
         context['paquete7'] = paquete7
-        
+        context['desayunos'] = Desayunos
+
         return render(request, 'menu-orden.html', context)
 
 def resumen_pedido(request):
@@ -705,11 +709,7 @@ def modificar_platillo(request):
         for clave, valor in request.POST.items():
             print("Clave: %s" % (clave))
             print("Valor: %s" % (valor))
-            #busca el elemento en html con nombre modnom- recibido en clave
-            if "modnom-" in clave and valor:
-                nuevoNombre = valor
-                idModificar = clave.replace("modnom-plat_","")
-                modificacion_platillo  = Platillo.objects.filter(pk=int(idModificar)).update(nombre = str(nuevoNombre))
+            
             #busca el elemento a cambiar con nombre modprecio_ recibido en clave
             if "modprecio_" in clave and valor:
                 nuevoPrecio = float(valor)
