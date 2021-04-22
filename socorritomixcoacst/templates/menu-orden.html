@@ -245,10 +245,15 @@
                                                 {% endfor %}
                                                     
                                                 </select>
-                                                <h6>Café de olla/americano/Té</h6>
-                                                <h6>Precio -------- 78</h6>
-                                                <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
-                                                <h6>Precio -------- 86</h6>
+                                               
+                                                {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 1"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo1">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra1"></h6>
+                                                {%endif%}
+                                                {%endfor%}
                                                 <select name="select" id="select3" class="form-select">
                                                     <option selected disabled>------</option>
                                                     {% for paq1 in paquete1 %}
@@ -260,7 +265,7 @@
                                                 </select>
                                                 <br></br>
                                                 <div class="text-center">
-                                                    <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="Paquete 1" onclick="agregarDesayuno(this,1,2,3)"value="Paquete 1">Enviar</button>
+                                                    <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="Paquete 1" onload="sumarextra(costo,extra)" onclick="agregarDesayuno(this,1,2,3)"value="Paquete 1">Añadir</button>
                                                 </div>
                                             </div>    
                                         </div>
@@ -290,10 +295,14 @@
                                                 {% endfor %}
                                                 
                                             </select>
-                                            <h6>Café de olla/americano/Té</h6>
-                                            <h6>Precio -------- 78</h6>
-                                            <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
-                                            <h6>Precio -------- 86</h6>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 2"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo2">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra2"></h6>
+                                                {%endif%}
+                                            {%endfor%}
                                             <select name="select" form="paquetes" id="select6" class="form-select">
                                                 <option selected disabled>------</option>
                                                     {% for paq2 in paquete2 %}
@@ -305,7 +314,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 2" onclick="agregarDesayuno(this,4,5,6)">Enviar</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 2" onclick="agregarDesayuno(this,4,5,6)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -334,10 +343,14 @@
                                                 {% endfor %}
                                                 
                                             </select>
-                                            <h6>Café de olla/americano/Té</h6>
-                                            <h6>Precio -------- 78</h6>
-                                            <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
-                                            <h6>Precio -------- 86</h6>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 3"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo3">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra3"></h6>
+                                                {%endif%}
+                                            {%endfor%}
                                             <select name="select" form="paquetes" id="select9" class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq3 in paquete3 %}
@@ -349,7 +362,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 3" onclick="agregarDesayuno(this,7,8,9)">Enviar</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 3" onclick="agregarDesayuno(this,7,8,9)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -380,10 +393,14 @@
                                                 {% endfor %} pollo</option>
                                                 
                                             </select>
-                                            <h6>Café de olla/americano/Té</h6>
-                                            <h6>Precio -------- 78</h6>
-                                            <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
-                                            <h6>Precio -------- 86</h6>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 4"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo4">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra4"></h6>
+                                                {%endif%}
+                                            {%endfor%}
                                             <select name="select" form="paquetes" id="select12" class="form-select">
                                                <option selected disabled>------</option>
                                                 {% for paq4 in paquete4 %}
@@ -395,7 +412,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 4" onclick="agregarDesayuno(this,10,11,12)">Enviar</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 4" onclick="agregarDesayuno(this,10,11,12)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -424,10 +441,14 @@
                                                 {% endfor %}
                                                 
                                             </select>
-                                            <h6>Café de olla/americano/Té</h6>
-                                            <h6>Precio -------- 78</h6>
-                                            <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
-                                            <h6>Precio -------- 86</h6>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 5"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo5">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra5"></h6>
+                                                {%endif%}
+                                            {%endfor%}
                                             <select name="select" form="paquetes" id="select15" class="form-select">
                                                  <option selected disabled>------</option>
                                                 {% for paq5 in paquete5 %}
@@ -439,7 +460,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 5" onclick="agregarDesayuno(this,13,14,15)">Enviar</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 5" onclick="agregarDesayuno(this,13,14,15)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -468,10 +489,14 @@
                                                 {% endfor %}
                                                 
                                             </select>
-                                            <h6>Café de olla/americano/Té</h6>
-                                            <h6>Precio -------- 78</h6>
-                                            <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
-                                            <h6>Precio -------- 86</h6>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 6"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo6">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra6"></h6>
+                                                {%endif%}
+                                            {%endfor%}
                                             <select name="select" form="paquetes" id="select18" class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq6 in paquete6 %}
@@ -483,7 +508,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                               <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 6" onclick="agregarDesayuno(this,16,17,18)">Enviar</button>
+                                               <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 6" onclick="agregarDesayuno(this,16,17,18)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -505,9 +530,15 @@
                                             </select>
                                             <h6>Cereal con leche/Hot Cakes/Huevos con jamón o con salchica</h6>
                                             <h6>Salchipullpos/ Croquetas de pollo</h6>
-                                            <h6>Precio -------- 86</h6>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "PaqueteInfantil"%}
+                                                    
+                                                    <h6 id="costo6">Precio --------{{precios.precio}} </h6>
+                                                    
+                                                {%endif%}
+                                            {%endfor%}
                                             <select name="select" form="paquetes" id="select20" class="form-select bg-success text-white">
-                                               option selected disabled>------</option>
+                                               <option selected disabled>------</option>
                                                 {% for paq7 in paquete7 %}
                                                     {% if paq7.tipo_desayuno == "D2" and paq7.esta_eliminado == False %}    
                                                     <option value="{{paq7.nombre}}">{{paq7.nombre}}</option>
@@ -519,7 +550,7 @@
                                             
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="Paquete infantil" onclick="agregarDesayuno(this,19,20,null)">Enviar</button>
+                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="Paquete infantil" onclick="agregarDesayuno(this,19,20,null)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -621,7 +652,8 @@
     <script>
         window.onload = function() {
             //agregamos la primera órden
-            agregarMenu()
+            agregarMenu();
+            sumarextra();
         }
         function incrementaSpinner(platilloNombre){
             console.log(platilloNombre);
@@ -694,7 +726,7 @@
         var indice = 1;
         function agregarDesayuno(bot_env,a,b,c){
             //Primero vamos a obtener las ordenes 
-            //var paquete = document.getElementById("paquete").value;
+            
             paquete = bot_env.value;
            //Obtenemos el valor del primer select
             var combo = document.getElementById("select"+a);
@@ -719,16 +751,31 @@
             }
 
            
-
-            var orden = document.createElement("TR");
-   	        orden.innerHTML=fila;
-            document.getElementById("ordenes-desayunos").appendChild(orden);
-            indice++;
+            if ((select !== "------" && select2 !== "------" && select3 !== "------")){
+                var orden = document.createElement("TR");
+                orden.innerHTML=fila;
+                document.getElementById("ordenes-desayunos").appendChild(orden);
+                indice++;
+            }    
         }
         function eliminarFila(eliminar,index) {
             var btn = eliminar.value;
             var borrar = eliminar.parentElement.parentElement;
             borrar.remove();
+
+        }
+
+        function sumarextra(){
+            for (i=1; i<7; i++){
+                var operacion = document.getElementById("costo"+i).textContent;
+                var contenido = parseInt(operacion.replace("Precio --------", ""));
+                contenido = contenido + 10;
+                console.log(contenido);
+                
+                //console.log(elem2);
+                var nuevo = document.getElementById("extra"+i).innerHTML = "Precio ------- "+contenido;
+            }  
+
 
         }
         
