@@ -611,3 +611,6 @@ def eliminar_platillo(request):
         context['platillos'] = precios_de_platillos
         context["tip_platillo"] = TIPO_PLATILLO
         return render(request, "eliminar-platillo.html", context)
+def aux(request):
+    context = {}
+    return render(request, "aux.html", context)

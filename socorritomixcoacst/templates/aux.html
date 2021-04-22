@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+th, td {border: 1px solid black;
+ border-collapse: collapse;
+ padding-top: 5px;
+ padding-bottom: 5px;
+ padding-left: 5px;
+ padding-right: 5px;
+
+}
+</style>
+<body class="w3-theme-l5">
+
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Inicio</a>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-shopping-cart"></i></a>
+  <div class="w3-dropdown-hover w3-hide-small">
+    <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-green">3</span></button>     
+    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px">
+      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
+      <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
+      <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
+    </div>
+  </div>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
+    
+  </a>
+ </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+  <!-- The Grid -->
+  <div class="w3-row">
+    <!-- Left Column -->
+    <div class="w3-col m3">
+      <!-- Profile -->
+      <div class="w3-card w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">Perfil del cliente</h4>
+         <p class="w3-center"><i class="fa fa-user fa-5x" aria-hidden="true"></i></p>
+         <hr>
+         <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> Editar Foto</p>
+         <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> Calle #3, Colonia Pegaso, Del Iztapalapa</p>
+         <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> April 1, 1988</p>
+        </div>
+      </div>
+      <br>
+
+      <div class="w3-card w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">Estadisticas</h4>
+         <p class="w3-center"><i class="fa fa-bar-chart fa-5x"  aria-hidden="true"></i></p>
+         <hr>
+         <p>Compras realizadas (historico): 48</p>
+         <p>Compras realizadas (del mes): 8</p>
+         <p>Ingresos generados (historico): $7641.0</p>
+         <p>Ingresos generados (del mes): $1350.0</p>
+         <p>Fecha de registro: 9 de noviembre de 2020</p>
+         <p>Fecha de ultima compra: 29 de abril de 2021</p>
+        </div>
+      </div>
+      <br>
+    
+    <!-- End Left Column -->
+    </div>
+    
+    <!-- Middle Column -->
+    <div class="w3-col m7">
+    
+      
+      
+      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+        <span class="w3-right w3-opacity">1 min</span>
+        <h1>Pedidos del cliente</h1><br>
+        <hr class="w3-clear">
+        <div class="table-responsive">
+            <table style="width:100%">
+                <tr>
+                  <th>Fecha de compra</th>
+                  <th>Monto total</th> 
+                  <th>Metodo de pago</th>
+                  <th>Ver detalle de orden</th>
+                </tr>
+                <tr>
+                  <td>29 de abril de 2021</td>
+                  <td>$150</td>
+                  <td>Efectivo</td>
+                  <td><button type="button">Ver detalle</button></td>
+                </tr>
+                <tr>
+                  <td>28 de abril de 2021</td>
+                  <td>$310</td>
+                  <td>Efectivo</td>
+                  <td><button type="button">Ver detalle</button></td>
+                </tr>
+                <tr>
+                  <td>26 de abril de 2021</td>
+                  <td>$75</td>
+                  <td>Efectivo</td>
+                  <td><button type="button">Ver detalle</button></td>
+                </tr>
+                <tr>
+                    <td>24 de abril de 2021</td>
+                    <td>$150</td>
+                    <td>Pago con tarjeta</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>20 de abril de 2021</td>
+                    <td>$503</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>14 de abril de 2021</td>
+                    <td>$110</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>10 de abril de 2021</td>
+                    <td>$150</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>3 de abril de 2021</td>
+                    <td>$299</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>26 de marzo de 2021</td>
+                    <td>$75</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>25 de marzo 2021</td>
+                    <td>$299</td>
+                    <td>Pago con tarjeta</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>24 de marzo de 2021</td>
+                    <td>$75</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>20 de marzo 2021</td>
+                    <td>$299</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>19 de marzo de 2021</td>
+                    <td>$75</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>10 de marzo de 2021</td>
+                    <td>$299</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>6 de marzo de 2021</td>
+                    <td>$75</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>4 de marzo de 2021</td>
+                    <td>$100</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+                  <tr>
+                    <td>1 de marzo de 2021</td>
+                    <td>$80</td>
+                    <td>Efectivo</td>
+                    <td><button type="button">Ver detalle</button></td>
+                  </tr>
+              </table>
+              
+        </div>
+          
+        </div>
+      </div>
+      
+      
+      
+    <!-- End Middle Column -->
+    </div>
+    
+    <!-- Right Column -->
+
+      <div class="w3-card w3-round w3-white w3-padding-16 w3-center">
+        <p>ADS</p>
+      </div>
+      <br>
+      
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+<!-- End Page Container -->
+</div>
+<br>
+
+<!-- Footer -->
+<footer class="w3-container w3-theme-d3 w3-padding-16">
+  <h5>Footer</h5>
+</footer>
+
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+ 
+<script>
+// Accordion
+function myFunction(id) {
+  var x = document.getElementById(id);
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+    x.previousElementSibling.className += " w3-theme-d1";
+  } else { 
+    x.className = x.className.replace("w3-show", "");
+    x.previousElementSibling.className = 
+    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+  }
+}
+
+// Used to toggle the menu on smaller screens when clicking on the menu button
+function openNav() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+</script>
+
+</body>
+</html> 
+
