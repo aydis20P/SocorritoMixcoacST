@@ -335,18 +335,28 @@ class PerfilCliente(DetailView):
         direccion = str(request.POST.get("direccion"))
         referencias = request.POST.get("referencias")
         tipo = request.POST.get("nombre")
+        
+        if request.POST.get("input"):
+            ordensita = Orden.objects.filter(id=request.POST.get("input"))[0]
+            ordensita_platillos = OrdenPlatillo.objects.filter(orden=ordensita)
+            context={}
+            context['orden'] = ordensita
+            print("la ordenswita es = " +str(ordensita))
+            context['pedidos_del_cliente'] = ordensita_platillos
+            print("la otra es "+str(ordensita_platillos))
+            return render(request, "impresion-ticket.html", context)
+        else:
+            if nombre:
+                self.object.nombre=nombre
+            if telefono_alternativo:
+                self.object.telefono_alternativo=telefono_alternativo
+            if direccion:
+                self.object.direccion=direccion
+            if referencias:
+                self.object.referencias=referencias
+            self.object.save()
 
-        if nombre:
-            self.object.nombre=nombre
-        if telefono_alternativo:
-            self.object.telefono_alternativo=telefono_alternativo
-        if direccion:
-            self.object.direccion=direccion
-        if referencias:
-            self.object.referencias=referencias
-        self.object.save()
-
-        return HttpResponseRedirect(request.path_info)
+            return HttpResponseRedirect(request.path_info)
 
 class AdminCliente(ListView):
     model = Cliente
