@@ -19,6 +19,12 @@
 
             <li id="menu-desayuno" class="list-group-item p-3">
                 <h5>Desayuno</h5>
+                <button id="btn-desplegar-desayunos" type="button" class="btn btn-warning btn-floating" onclick="desplegarDesayunos()">
+                    <i class="fas fa-angle-right"></i>
+                </button>
+                <button id="btn-ocultar-desayunos" type="button" class="btn btn-warning btn-floating" onclick="ocultarDesayunos()">
+                    <i class="fas fa-angle-up"></i>
+                </button>
                 <div class="table-responsive-xl">
                     <table id="tabla-desayuno" class="table table-sm">
                         <thead>
@@ -39,7 +45,7 @@
                                         {{ platillo.descripcion }}
                                     </td>
                                     <td>
-                                        {{ platillo.tipo }}
+                                        {{ platillo.get_tipo_display }}
                                     </td>
                                     <td>
                                         <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-desayuno" type="checkbox" class="custom-control-input check-desayuno">
@@ -53,6 +59,12 @@
 
             <li id="menu-comida" class="list-group-item p-3">
                 <h5>Comida</h5>
+                <button id="btn-desplegar-comidas" type="button" class="btn btn-warning btn-floating" onclick="desplegarComidas()">
+                    <i class="fas fa-angle-right"></i>
+                </button>
+                <button id="btn-ocultar-comidas" type="button" class="btn btn-warning btn-floating" onclick="ocultarComidas()">
+                    <i class="fas fa-angle-up"></i>
+                </button>
                 <div class="table-responsive-xl">
                     <table id="tabla-comida" class="table table-sm">
                         <thead>
@@ -73,7 +85,7 @@
                                         {{ platillo.descripcion }}
                                     </td>
                                     <td>
-                                        {{ platillo.tipo }}
+                                        {{ platillo.get_tipo_display }}
                                     </td>
                                     <td>
                                         <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-comida" type="checkbox" class="custom-control-input check-comida">
@@ -87,6 +99,12 @@
 
             <li id="menu-cena" class="list-group-item p-3">
                 <h5>Cena</h5>
+                <button id="btn-desplegar-cenas" type="button" class="btn btn-warning btn-floating" onclick="desplegarCenas()">
+                    <i class="fas fa-angle-right"></i>
+                </button>
+                <button id="btn-ocultar-cenas" type="button" class="btn btn-warning btn-floating" onclick="ocultarCenas()">
+                    <i class="fas fa-angle-up"></i>
+                </button>
                 <div class="table-responsive-xl">
                     <table id="tabla-cena" class="table table-sm">
                         <thead>
@@ -107,7 +125,7 @@
                                         {{ platillo.descripcion }}
                                     </td>
                                     <td>
-                                        {{ platillo.tipo }}
+                                        {{ platillo.get_tipo_display }}
                                     </td>
                                     <td>
                                         <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-cena" type="checkbox" class="custom-control-input check-cena">
@@ -135,7 +153,16 @@
 {% endblock content %}
 
 {% block script %}
+
 <script>
+    window.onload = function() {
+        document.getElementById("tabla-desayuno").style.display = "none";
+        document.getElementById("tabla-comida").style.display = "none";
+        document.getElementById("tabla-cena").style.display = "none";
+        document.getElementById("btn-ocultar-desayunos").style.display = "none";
+        document.getElementById("btn-ocultar-comidas").style.display = "none";
+        document.getElementById("btn-ocultar-cenas").style.display = "none";
+    }
     //función para copiar los platillos de un menu anterior al que se está editando:
     //recibimos tanto la lista de platillos de es menú, como la clase de checkboxes que vamos a manejar (de desayuno, comida o cena).checked
     //recorremos todos los checkboxes dados por clase_checkbox, y si su ID corresponde a uno de los platillos en el menú, marcalo.
@@ -154,5 +181,36 @@
     copiar({{ desayuno_hoy|safe }}, "check-desayuno")
     copiar({{ comida_hoy|safe }}, "check-comida")
     copiar({{ cena_hoy|safe }}, "check-cena")
+
+    function desplegarDesayunos(){
+        document.getElementById("tabla-desayuno").style.display = "table";
+        document.getElementById("btn-desplegar-desayunos").style.display = "none";
+        document.getElementById("btn-ocultar-desayunos").style.display = "initial";
+    }
+    function ocultarDesayunos(){
+        document.getElementById("tabla-desayuno").style.display = "none";
+        document.getElementById("btn-desplegar-desayunos").style.display = "initial";
+        document.getElementById("btn-ocultar-desayunos").style.display = "none";
+    }
+    function desplegarComidas(){
+        document.getElementById("tabla-comida").style.display = "table";
+        document.getElementById("btn-desplegar-comidas").style.display = "none";
+        document.getElementById("btn-ocultar-comidas").style.display = "initial";
+    }
+    function ocultarComidas(){
+        document.getElementById("tabla-comida").style.display = "none";
+        document.getElementById("btn-desplegar-comidas").style.display = "initial";
+        document.getElementById("btn-ocultar-comidas").style.display = "none";
+    }
+    function desplegarCenas(){
+        document.getElementById("tabla-cena").style.display = "table";
+        document.getElementById("btn-desplegar-cenas").style.display = "none";
+        document.getElementById("btn-ocultar-cenas").style.display = "initial";
+    }
+    function ocultarCenas(){
+        document.getElementById("tabla-cena").style.display = "none";
+        document.getElementById("btn-desplegar-cenas").style.display = "initial";
+        document.getElementById("btn-ocultar-cenas").style.display = "none";
+    }
 </script>
 {% endblock script %}

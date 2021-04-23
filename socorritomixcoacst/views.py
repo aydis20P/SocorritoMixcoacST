@@ -588,7 +588,7 @@ def crear_nuevo_menu(request):
         context = {}
 
         #Mandamos una lista con todos los platillos de la BD que no están eliminados
-        context["platillos"] = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
+        context["platillos"] = Platillo.objects.all().filter(esta_eliminado=False).order_by('nombre')
 
         #Mandamos listas con nombres de platillos que estaban en los menús del día de ayer:
         #de todos los platillosMenu en la base de datos tales que su menú sea de ayer y del tipo correspondiente, toma los nombres de sus platillos y pasalo como una lista
