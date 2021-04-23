@@ -62,7 +62,7 @@ def menu_orden(request):
     paquete4=Platillo.objects.filter(desayuno__nombre = "Paquete 4")
     paquete5=Platillo.objects.filter(desayuno__nombre = "Paquete 5")
     paquete6=Platillo.objects.filter(desayuno__nombre = "Paquete 6")
-    paquete7=Platillo.objects.filter(desayuno__nombre = "PaqueteInfantil")
+    paquete7=Platillo.objects.filter(desayuno__nombre = "Paquete infantil")
     Desayunos = Desayuno.objects.all()
     print("Aquí comienza:----------------------------------------------------------------------------------------------------")
     print (Desayunos)

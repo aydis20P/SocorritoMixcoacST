@@ -386,7 +386,7 @@
                                             <select name="select" form="paquetes" id="select11" class="form-select">
                                                <option selected disabled>------</option>
                                                 {% for paq4 in paquete4 %}
-                                                    {% if paq4.tipo_desayuno == "D2" and paq4.esta_eliminado == False %}    
+                                                    {% if paq4.tipo_desayuno != "D1" and paq4.tipo_desayuno != "D3" and paq4.esta_eliminado == False %}    
                                                     <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
                                                     
                                                     {% endif %}
@@ -434,7 +434,7 @@
                                             <select name="select" form="paquetes" id="select14" class="form-select">
                                                  <option selected disabled>------</option>
                                                 {% for paq5 in paquete5 %}
-                                                    {% if paq5.tipo_desayuno == "D2" and paq5.esta_eliminado == False %}    
+                                                    {% if paq5.tipo_desayuno != "D1" and paq5.tipo_desayuno != "D3" and paq5.esta_eliminado == False %}    
                                                     <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
                                                     
                                                     {% endif %}
@@ -482,7 +482,7 @@
                                             <select name="select" form="paquetes" id="select17" class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq6 in paquete6 %}
-                                                    {% if paq6.tipo_desayuno == "D2" and paq6.esta_eliminado == False %}    
+                                                    {% if paq6.tipo_desayuno != "D1" and paq6.tipo_desayuno != "D3" and paq6.esta_eliminado == False %}    
                                                     <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
                                                     
                                                     {% endif %}
@@ -531,7 +531,7 @@
                                             <h6>Cereal con leche/Hot Cakes/Huevos con jamón o con salchica</h6>
                                             <h6>Salchipullpos/ Croquetas de pollo</h6>
                                             {% for  precios in desayunos%}
-                                                {%if precios.nombre == "PaqueteInfantil"%}
+                                                {%if precios.nombre == "Paquete infantil"%}
                                                     
                                                     <h6 id="costo6">Precio --------{{precios.precio}} </h6>
                                                     
