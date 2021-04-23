@@ -326,7 +326,7 @@ def resumen_pedido(request):
         '''
 
         #verificar concordancia entre total, paga con y cambio
-        if (orden.total + int(orden.comision)) == (orden.paga_con - int(orden.cambio)):
+        if (orden.total + float(orden.comision)) == (orden.paga_con - float(orden.cambio)):
             #guardar la orden
             orden.save()
 
