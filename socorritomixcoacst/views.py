@@ -271,6 +271,7 @@ def resumen_pedido(request):
             sub_total = 0
             if i == len(platillos_desayuno) - 1:
                 sub_total = precio
+                orden.total += precio
             orden_platillo = OrdenPlatillo(sub_total=sub_total,
                                             es_completa=True,
                                             numero_completa=numero_completa,
