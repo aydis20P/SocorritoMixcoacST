@@ -62,7 +62,7 @@ def menu_orden(request):
     paquete4=Platillo.objects.filter(desayuno__nombre = "Paquete 4")
     paquete5=Platillo.objects.filter(desayuno__nombre = "Paquete 5")
     paquete6=Platillo.objects.filter(desayuno__nombre = "Paquete 6")
-    paquete7=Platillo.objects.filter(desayuno__nombre = "PaqueteInfantil")
+    paquete7=Platillo.objects.filter(desayuno__nombre = "Paquete infantil")
     Desayunos = Desayuno.objects.all()
     print("Aquí comienza:----------------------------------------------------------------------------------------------------")
     print (Desayunos)
@@ -271,6 +271,7 @@ def resumen_pedido(request):
             sub_total = 0
             if i == len(platillos_desayuno) - 1:
                 sub_total = precio
+                orden.total += precio
             orden_platillo = OrdenPlatillo(sub_total=sub_total,
                                             es_completa=True,
                                             numero_completa=numero_completa,
@@ -326,7 +327,7 @@ def resumen_pedido(request):
         '''
 
         #verificar concordancia entre total, paga con y cambio
-        if (orden.total + int(orden.comision)) == (orden.paga_con - int(orden.cambio)):
+        if (orden.total + float(orden.comision)) == (orden.paga_con - float(orden.cambio)):
             #guardar la orden
             orden.save()
 
@@ -681,28 +682,46 @@ def agregar_platillo(request):
             #en caso de no ser bebida ni guisado cambiamos la variable es_complemento a True
             es_complemento = True
 
-        #creamos un objeto de tipo platillo que potencialmente se guardará con el método save()
-        nuevo_platillo = Platillo(nombre=request.POST.get("nom-plat"),
-                                   es_complemento=es_complemento,
-                                   descripcion=request.POST.get("descripcion"),
-                                   tipo=tipo_platillo)
-
-        #guardar el platillo
-
-        try:
-            nuevo_platillo.save()
-            #Creamos un registro que guardará el precio usando la llave foranea que es el objeto "platillos_nuevos"
-            precio = HistorialPrecio(precio=request.POST.get("precio"),
-                                     platillo=nuevo_platillo)
-            precio.save()
-
-            return redirect("gestion-platillos-principal")
-
-        except IntegrityError:
-            #TODO enviar mensaje con advertencia.
-            print("\nTRACEBACK: NO SE PUDO GUARDAR EL PLATILLO\n")
+        #consultamos si hay un platillo con ese nombre en la base de datos
+        platillo_qs = Platillo.objects.filter(nombre=request.POST.get("nom-plat"))
+        #si está regitrado solo lo actualizamos con los valores ingresados por el usuario:
+        if platillo_qs:
+            platillo = platillo_qs[0]
+            #actualizamos el precio
+            hist_precio = HistorialPrecio.objects.filter(platillo=platillo)[0]
+            hist_precio.precio = request.POST.get("precio")
+            hist_precio.save()
+            #actualizamos los atributos del platillo
+            platillo.es_complemento = es_complemento
+            platillo.descripcion = request.POST.get("descripcion")
+            platillo.tipo = tipo_platillo
+            #modificamos su estatus de eliminado
+            platillo.esta_eliminado = False
+            platillo.save()
 
             return redirect("gestion-platillos-principal")
+        else:
+            #creamos un objeto de tipo platillo que potencialmente se guardará con el método save()
+            nuevo_platillo = Platillo(nombre=request.POST.get("nom-plat"),
+                                       es_complemento=es_complemento,
+                                       descripcion=request.POST.get("descripcion"),
+                                       tipo=tipo_platillo)
+
+            #guardar el platillo
+            try:
+                nuevo_platillo.save()
+                #Creamos un registro que guardará el precio usando la llave foranea que es el objeto "platillos_nuevos"
+                precio = HistorialPrecio(precio=request.POST.get("precio"),
+                                         platillo=nuevo_platillo)
+                precio.save()
+
+                return redirect("gestion-platillos-principal")
+
+            except IntegrityError:
+                messages.warning(request, "¡¡¡No se pudo resgistrar el platillo!!!")
+                print("\nTRACEBACK: NO SE PUDO GUARDAR EL PLATILLO\n")
+
+                return redirect("gestion-platillos-principal")
 
     else:
 
