@@ -12,14 +12,14 @@
     
         {% csrf_token %}
 
-        <h3>Menús del día</h3>
+        <h3>Menú del día</h3>
         <!-- primero checamos si hay menús del día registrados, para asi generar la lista de estos -->
         {% if menus_hoy %}
 
             <!-- creamos una lista de tablas donde mostramos cada menú -->
             <ul id="lista-menus" class="list-group">
 
-                <li id="menu-desayuno" class="list-group-item p-3">
+<!--                <li id="menu-desayuno" class="list-group-item p-3">
                     <h5>Menú: Desayuno</h5>
                     <div class="table-responsive-xl">
                         <table id="tabla-desayuno" class="table table-sm">
@@ -55,7 +55,7 @@
                             </tbody>
                         </table>
                     </div>
-                </li>
+                </li>-->
 
                 <li id="menu-comida" class="list-group-item p-3">
                     <h5>Menú: Comida</h5>
@@ -95,7 +95,7 @@
                     </div>
                 </li>
 
-                <li id="menu-cena" class="list-group-item p-3">
+<!--                <li id="menu-cena" class="list-group-item p-3">
                     <h5>Menú: Cena</h5>
                     <div class="table-responsive-xl">
                         <table id="tabla-cena" class="table table-sm">
@@ -131,7 +131,7 @@
                             </tbody>
                         </table>
                     </div>
-                </li>
+                </li>-->
 
             </ul>
 
