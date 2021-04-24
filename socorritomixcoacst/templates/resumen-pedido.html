@@ -72,24 +72,28 @@
 			</table>
 		</div>
 	</div>
-	{% if observaciones %}
-		<div class="flex-grow-1 pb-3">
-			<h5>Observaciónes del pedido:<br></h5>
-			{{ observaciones }}
-		</div>
-	{% endif %}
+
+    <!-- comienza formulario detalles de pago -->
 	<form id="form-confirmarpedido" method="POST">
 		{% csrf_token %}
+
+    	{% if observaciones %}
+    		<div class="flex-grow-1 pb-3">
+    			<h5>Observaciónes del pedido:<br></h5>
+    			{{ observaciones }}
+    		</div>
+            <input hidden type="text" id="obs-pedido" name="obs-pedido" value="{{ observaciones }}"/>
+    	{% endif %}
 
 		<div class="row justify-content-end p-2">
 			<div class="col d-flex justify-content-end mt-2 me-2">
 				<h5>Método de pago:</h5>
 			</div>
 			<div class="col d-flex">
-				<select id="select-pago" class="form-select" aria-label="Default select example" onchange="muestraPagoEfectivo()">
-					<option selected value="efectivo">Efectivo</option>
-					<option value="terminal">Terminal</option>
-					<option value="pagado">Pagado</option>
+				<select id="select-pago" class="form-select" aria-label="Default select example" name="metodo-pago" onchange="muestraPagoEfectivo(), calculaCambio()">
+					<option selected value="EF">Efectivo</option>
+					<option value="TE">Terminal</option>
+					<option value="PA">Pagado</option>
 				</select>
 			</div>
 		</div>
@@ -103,6 +107,7 @@
 					class="form-check-input"
 					type="checkbox"
 					id="chbx-topper"
+                    name="lleva-topper"
 					/>
 					<label for="flexCheckDefault">
 					Llevar Topper
@@ -113,6 +118,7 @@
 					class="form-check-input"
 					type="checkbox"
 					id="chbx-comision-extra"
+                    name="comision-extra?"
 					onchange="muestraInputComision(); calculaCambio()"
 					/>
 					<label for="flexCheckDefault">
@@ -147,7 +153,7 @@
 					</div>
 					<div class="col">
 						<div class="form-outline">
-							<input type="number" id="pagC" class="form-control" name="pagC" onkeyup="calculaCambio()" onchange="calculaCambio()" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
+							<input type="number" step="0.00001" id="pagC" class="form-control" name="pagC" value="{{ orden_del_cliente.total }}" onkeyup="calculaCambio()" onchange="calculaCambio()" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
 							<label class="form-label" for="pagC">Pago con</label>
 						</div>	
 					</div>
@@ -165,7 +171,7 @@
 					</div>
 					<div hidden class="col">
 						<div class="form-outline">
-							<input type="text" id="cambio" class="form-control" name="cambio" disabled/>
+							<input type="text" id="cambio" class="form-control" name="cambio" value="0"/>
 							<label id="lbcambio"class="form-label" for="cambio">cambio</label>
 						</div>	
 					</div>
@@ -176,10 +182,7 @@
 		<div class="d-flex align-items-center justify-content-end flex-wrap pb-3">
 			<div class="container">
 				<div class="row">
-					<div class="d-flex justify-content-end">
-						<div class="p-2">
-							<button class="btn btn-lg btn-warning p-1" onclick="imprimir()">Imprimir</button>
-						</div>
+					<div class="d-flex justify-content-end">						
 						<div class="p-2">
 							<a href="menu-orden" class="btn btn-lg btn-danger  p-1">Cancelar</a>
 						</div>
@@ -193,12 +196,13 @@
 			</div>
 		</div>
 	</form>
-	
 </div>
+
 {% endblock content %}
 
 {% block script %}
-	<script>
+<script>
+
 	function calculaCambio(){
 		var total = parseFloat({{ orden_del_cliente.total }});
 
@@ -220,16 +224,29 @@
 		/**
 		 * flujo de total
 		 * */
-		var totalDescuento = document.getElementById("total");
+		var totalFinal = document.getElementById("total");
 		if (isNaN(total)){//i.e. no se ha escrito nada en el input comisión
-			totalDescuento.innerHTML = "Total: $" + document.getElementById("sub-total").innerHTML;
+			totalFinal.innerHTML = "Total: $" + document.getElementById("sub-total").innerHTML;
 			total = parseFloat({{ orden_del_cliente.total }});//actualizamos la variable total con el total recibido del contexto
 			pagC.min = total;//actualizamos el pago mínimo
 		}
 		else{
-			totalDescuento.innerHTML = "Total: $" + total;//actualizamos el elemento total con el total actual más la comisión de envío
+			totalFinal.innerHTML = "Total: $" + total;//actualizamos el elemento total con el total actual más la comisión de envío
 		}
 
+        /**
+         * flujo pago terminal
+         * */
+		var pagoEfectivo = document.getElementById("pago-efectivo")
+		var selectPago = document.getElementById("select-pago")
+
+		if (selectPago.value != "EF"){
+			pagC.value = total
+		}
+
+        /**
+         * flujo text e input cambio
+         * */
 		var pagoCon = parseFloat(document.getElementById("pagC").value);
 		var cambio = pagoCon - total;
 		//console.log(total+" "+pagoCon+" "+cambio);
@@ -242,6 +259,7 @@
 			document.getElementById("cambio").value = "";
 			document.getElementById("cambio-text").innerText = "";
 		}
+
 	}
 
 	function muestraInputComision(){
@@ -261,7 +279,7 @@
 		var pagoEfectivo = document.getElementById("pago-efectivo")
 		var selectPago = document.getElementById("select-pago")
 
-		if (selectPago.value != "efectivo"){
+		if (selectPago.value != "EF"){
 			pagoEfectivo.style.display = "none"
 		}
 		else{
@@ -269,8 +287,5 @@
 		}
 	}
 
-	function imprimir(){
-		window.print();
-	}
-	</script>
+</script>
 {% endblock script %}

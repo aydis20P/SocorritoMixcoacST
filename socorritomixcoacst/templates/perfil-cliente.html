@@ -181,7 +181,7 @@
             </div>
             </div>
 
-            <!-- Contenido de Tab Ordenes del Cliente -->
+            <!-- Contenido de Tab Pedidos del Cliente -->
             <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
                 <div class="row"> 
                     {% if pedidos %}
@@ -201,9 +201,10 @@
                                     {% for pedido in pedidos %}
                                     <tr>
                                         <td>{{pedido.fecha}}</td>
-                                        <td id="a{{forloop.counter}}">${{pedido.total}}</td>
-                                        <td id="b{{forloop.counter}}">{{pedido.promocion}}</td>
-                                        <td id="c{{forloop.counter}}">${{pedido.total_descuento}}</td>
+                                        {% load extras %}
+                                        <td id="a{{forloop.counter}}">${% add pedido.total pedido.comision %}</td>
+                                        <td id="b{{forloop.counter}}">{% if pedido.promocion%}Sí{% else %}No{% endif %}</td>
+                                        <td id="c{{forloop.counter}}">{% if pedido.promocion%}${% add pedido.total_descuento pedido.comision %}{% else %}${% add pedido.total pedido.comision %}{% endif %}</td>
                                         <td><!-- Button trigger modal -->
                                             <button
                                               type="button"
@@ -215,37 +216,42 @@
                                             </button>
                                             
                                             <!-- Modal -->
-                                            <div
-                                              class="modal fade"
-                                              id="modal{{forloop.counter}}"
-                                              tabindex="-1"
-                                              aria-labelledby="exampleModalLabel"
-                                              aria-hidden="true"
-                                            >
-                                              <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                  <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Detalle del pedido</h5>
-                                                    <button
-                                                      type="button"
-                                                      class="btn-close"
-                                                      data-mdb-dismiss="modal"
-                                                      aria-label="Close"
-                                                    ></button>
-                                                  </div>
-                                                  <div class="modal-body">
-                                                      <ul id="modal_ul{{pedido.id}}">
-
-                                                      </ul>
-                                                  </div>
-                                                  <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                                                      Cerrar
-                                                    </button>
-                                                  </div>
+                                            <form method="POST" id="form-modal{{pedido.id}}">
+                                                {% csrf_token %}
+                                                <div
+                                                class="modal fade"
+                                                id="modal{{forloop.counter}}"
+                                                tabindex="-1"
+                                                aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true"
+                                                >
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Detalle del pedido</h5>
+                                                        <button
+                                                        type="button"
+                                                        class="btn-close"
+                                                        data-mdb-dismiss="modal"
+                                                        aria-label="Close"
+                                                        ></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <ul id="modal_ul{{pedido.id}}">
+                                                            
+                                                        </ul>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button id="btn{{pedido.id}}" type="button" class="btn btn-secondary" data-mdb-dismiss="modal" onclick="impresionTicket({{pedido.id}})">
+                                                        Imprimir ticket
+                                                        </button>
+                                                        <input hidden name="input" value="{{pedido.id}}"
+                
+                                                    </div>
+                                                    </div>
                                                 </div>
-                                              </div>
-                                            </div>
+                                                </div>
+                                            </form>
                                         </td>
                                     </tr>
                                         
@@ -310,7 +316,8 @@
                         var cadenaHTML = "";
                         {% if ordenPlatillo.es_completa and not ordenPlatillo.platillo.es_complemento %}
                         cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} Menú-{{ordenPlatillo.platillo.nombre}}(s)</div><div>${{ordenPlatillo.sub_total}}</div></div>";
-                        {% elif ordenPlatillo.sub_total == 0 %}
+                        {% endif %}
+                        {% if ordenPlatillo.sub_total == 0 %}
                         cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s)</div><div>(Complemento)</div></div>";
                         {% else %}
                         cadenaHTML = "<div class='d-flex justify-content-between'><div>{{ordenPlatillo.cantidad}} {{ordenPlatillo.platillo.nombre}}(s)</div><div>${{ordenPlatillo.sub_total}}</div></div>";
@@ -392,6 +399,10 @@
             document.getElementById('formReferencias').focus();
             document.getElementById('formReferencias').blur();
             document.getElementById('formReferencias').readOnly = true;
+        }
+
+        function impresionTicket(id){
+            document.getElementById('form-modal'+id).submit();
         }
 
     </script>
