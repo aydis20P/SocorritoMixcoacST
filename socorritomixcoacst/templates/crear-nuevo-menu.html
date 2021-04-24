@@ -21,10 +21,16 @@
 
                 <div id="cabecera-desayuno" class="d-flex justify-content-between flex-wrap">
                     <h5>Desayuno</h5>
-                    <button type="button" class="btn btn-warning" onclick="copiar({{ desayuno_ayer }}, 'check-desayuno')">
+                    <button id="btn-copiar-desayunos" type="button" class="btn btn-warning" onclick="copiar({{ desayuno_ayer }}, 'check-desayuno')">
                         <i class="far fa-copy fa-lg">
                             Copiar el menú de ayer
                         </i>
+                    </button>
+                    <button id="btn-desplegar-desayunos" type="button" class="btn btn-warning btn-floating" onclick="desplegarDesayunos()">
+                        <i class="fas fa-angle-right"></i>
+                    </button>
+                    <button id="btn-ocultar-desayunos" type="button" class="btn btn-warning btn-floating" onclick="ocultarDesayunos()">
+                        <i class="fas fa-angle-up"></i>
                     </button>
                 </div>
 
@@ -50,7 +56,7 @@
                                         {{ platillo.descripcion }}
                                     </td>
                                     <td>
-                                        {{ platillo.tipo }}
+                                        {{ platillo.get_tipo_display }}
                                     </td>
                                     <td>
                                         <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-desayuno" type="checkbox" class="custom-control-input check-desayuno">
@@ -68,10 +74,16 @@
 
                 <div id="cabecera-comida" class="d-flex justify-content-between flex-wrap">
                     <h5>Comida</h5>
-                    <button type="button" class="btn btn-warning" onclick="copiar({{ comida_ayer }}, 'check-comida')">
+                    <button id="btn-copiar-comidas" type="button" class="btn btn-warning" onclick="copiar({{ comida_ayer }}, 'check-comida')">
                         <i class="far fa-copy fa-lg">
                             Copiar el menú de ayer
                         </i>
+                    </button>
+                    <button id="btn-desplegar-comidas" type="button" class="btn btn-warning btn-floating" onclick="desplegarComidas()">
+                        <i class="fas fa-angle-right"></i>
+                    </button>
+                    <button id="btn-ocultar-comidas" type="button" class="btn btn-warning btn-floating" onclick="ocultarComidas()">
+                        <i class="fas fa-angle-up"></i>
                     </button>
                 </div>
 
@@ -98,7 +110,7 @@
                                         {{ platillo.descripcion }}
                                     </td>
                                     <td>
-                                        {{ platillo.tipo }}
+                                        {{ platillo.get_tipo_display }}
                                     </td>
                                     <td>
                                         <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-comida" type="checkbox" class="custom-control-input check-comida">
@@ -116,10 +128,16 @@
 
                 <div id="cabecera-cena" class="d-flex justify-content-between flex-wrap">
                     <h5>Cena</h5>
-                    <button type="button" class="btn btn-warning" onclick="copiar({{ cena_ayer }}, 'check-cena')">
+                    <button id="btn-copiar-cenas" type="button" class="btn btn-warning" onclick="copiar({{ cena_ayer }}, 'check-cena')">
                         <i class="far fa-copy fa-lg">
                             Copiar el menú de ayer
                         </i>
+                    </button>
+                    <button id="btn-desplegar-cenas" type="button" class="btn btn-warning btn-floating" onclick="desplegarCenas()">
+                        <i class="fas fa-angle-right"></i>
+                    </button>
+                    <button id="btn-ocultar-cenas" type="button" class="btn btn-warning btn-floating" onclick="ocultarCenas()">
+                        <i class="fas fa-angle-up"></i>
                     </button>
                 </div>
 
@@ -145,7 +163,7 @@
                                         {{ platillo.descripcion }}
                                     </td>
                                     <td>
-                                        {{ platillo.tipo }}
+                                        {{ platillo.get_tipo_display }}
                                     </td>
                                     <td>
                                         <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-cena" type="checkbox" class="custom-control-input check-cena">
@@ -176,6 +194,17 @@
 
 {% block script %}
 <script>
+    window.onload = function() {
+        document.getElementById("tabla-desayuno").style.display = "none";
+        document.getElementById("tabla-comida").style.display = "none";
+        document.getElementById("tabla-cena").style.display = "none";
+        document.getElementById("btn-ocultar-desayunos").style.display = "none";
+        document.getElementById("btn-ocultar-comidas").style.display = "none";
+        document.getElementById("btn-ocultar-cenas").style.display = "none";
+        document.getElementById("btn-copiar-desayunos").style.display = "none";
+        document.getElementById("btn-copiar-comidas").style.display = "none";
+        document.getElementById("btn-copiar-cenas").style.display = "none";
+    }
     //función para copiar los platillos de un menu anterior al que se está editando:
     //recibimos tanto la lista de platillos de es menú, como la clase de checkboxes que vamos a manejar (de desayuno, comida o cena).checked
     //recorremos todos los checkboxes dados por clase_checkbox, y si su ID corresponde a uno de los platillos en el menú, marcalo.
@@ -189,5 +218,43 @@
             }
         }
     }
+
+    function desplegarDesayunos(){
+        document.getElementById("tabla-desayuno").style.display = "table";
+        document.getElementById("btn-desplegar-desayunos").style.display = "none";
+        document.getElementById("btn-ocultar-desayunos").style.display = "initial";
+        document.getElementById("btn-copiar-desayunos").style.display = "initial";
+    }
+    function ocultarDesayunos(){
+        document.getElementById("tabla-desayuno").style.display = "none";
+        document.getElementById("btn-desplegar-desayunos").style.display = "initial";
+        document.getElementById("btn-ocultar-desayunos").style.display = "none";
+        document.getElementById("btn-copiar-desayunos").style.display = "none";
+    }
+    function desplegarComidas(){
+        document.getElementById("tabla-comida").style.display = "table";
+        document.getElementById("btn-desplegar-comidas").style.display = "none";
+        document.getElementById("btn-ocultar-comidas").style.display = "initial";
+        document.getElementById("btn-copiar-comidas").style.display = "initial";
+    }
+    function ocultarComidas(){
+        document.getElementById("tabla-comida").style.display = "none";
+        document.getElementById("btn-desplegar-comidas").style.display = "initial";
+        document.getElementById("btn-ocultar-comidas").style.display = "none";
+        document.getElementById("btn-copiar-comidas").style.display = "none";
+    }
+    function desplegarCenas(){
+        document.getElementById("tabla-cena").style.display = "table";
+        document.getElementById("btn-desplegar-cenas").style.display = "none";
+        document.getElementById("btn-ocultar-cenas").style.display = "initial";
+        document.getElementById("btn-copiar-cenas").style.display = "initial";
+    }
+    function ocultarCenas(){
+        document.getElementById("tabla-cena").style.display = "none";
+        document.getElementById("btn-desplegar-cenas").style.display = "initial";
+        document.getElementById("btn-ocultar-cenas").style.display = "none";
+        document.getElementById("btn-copiar-cenas").style.display = "none";
+    }
+
 </script>
 {% endblock script %}

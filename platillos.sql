@@ -33,12 +33,21 @@ INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemen
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Costilla de puerco en verde con verdolagas", "Descripción del platillo", "GU", "0", "0" ,"0");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Pollo con mole", "Descripción del platillo", "GU", "0", "0" ,"0");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Enchiladas de mole", "Descripción del platillo", "GU", "0", "0" ,"0");
-
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Milanesa", "Descripción del platillo", "GU", "0", "0" ,"0");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Pechuga asada", "Descripción del platillo", "GU", "0", "0" ,"0");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Empanizada", "Descripción del platillo", "GU", "0", "0" ,"0");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Cecina", "Descripción del platillo", "GU", "0", "0" ,"0");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Costilla", "Acompañadas con chilaquiles o con sopes(2)", "GU", "0", "0" ,"0");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Pancita", "Descripción del platillo", "GU", "0", "0" ,"0");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante) VALUES ("Chilaquiles", "Descripción del platillo", "GU", "0", "0" ,"0");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Jugo", "vaso chico", "BE", "0", "0" ,"0", "D1");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Fruta", "de temporada", "EX", "0", "0" ,"0", "D1");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Molletes", "con pico de gallo", "EX", "0", "0" ,"0", "D2");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Hotcakes", "2 piezas", "EX", "0", "0" ,"0", "D2");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Sopes con pollo", "2 piezas", "EX", "0", "0" ,"0", "D2");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Huevos Al gusto", "Rancheros,con Jamón, al albañil o con longaniza", "GU", "0", "0" ,"0", "D2");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Cereal con Leche", "Descripción", "EX", "0", "0" ,"0", "D2");
+INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Salchipulpos", "Descripción de platillo", "EX", "0", "0" ,"0", "D2");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Té", "taza chica", "BE", "0", "0" ,"0", "D3");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Café de olla", "taza chica", "BE", "0", "0" ,"0", "D3");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Café americano", "taza chica", "BE", "0", "0" ,"0", "D3");
@@ -46,3 +55,4 @@ INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemen
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Leche Caliente", "taza chica", "BE", "0", "0" ,"0", "D3");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Capuchino", "taza chica", "BE", "0", "0" ,"0", "D3");
 INSERT INTO socorritomixcoacst_platillo (nombre, descripcion, tipo, es_complemento, esta_eliminado, es_constante, tipo_desayuno) VALUES ("Chocolate", "taza chica", "BE", "0", "0" ,"0", "D3");
+

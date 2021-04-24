@@ -57,7 +57,7 @@ class Platillo(models.Model):
     tipo_desayuno = models.CharField(choices=TIPO_DESAYUNO, max_length=2, null=True, blank=True)
 
     def __str__(self):
-        cadena_frontend = ("Nombre: " + self.nombre + " Tipo: "+ self.tipo + " Es complemento: " + str(self.es_complemento) + 
+        cadena_frontend = ("ID:" +str(self.id) + " Nombre: " + self.nombre + " Tipo: "+ self.tipo + " Es complemento: " + str(self.es_complemento) + 
                             " Es constante: " + str(self.es_constante))
 
         if self.tipo_desayuno:
@@ -80,7 +80,7 @@ class OrdenPlatillo(models.Model):
         return "ID: " + str(self.id) + ", Es completa: " + str(self.es_completa) + ", Numero completa: " + str(self.numero_completa) + ", Platillo: " + self.platillo.nombre + ", Cantidad: " + str(self.cantidad) + ", Subtotal: $" + str(self.sub_total)
 
 class Desayuno(models.Model):
-    nombre = models.CharField(max_length=64, null=False, blank=False)
+    nombre = models.CharField(max_length=64, null=False, blank=False, unique=True)
     precio = models.FloatField(max_length=5, null=False)
     platillos = models.ManyToManyField(Platillo)
 

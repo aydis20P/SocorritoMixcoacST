@@ -22,6 +22,9 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="extras-tab" data-mdb-toggle="tab" href="#panel-extras" role="tab" aria-controls="panel-extras" aria-selected="false">Extras</a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="desayunos-tab" data-mdb-toggle="tab" href="#panel-desayunos" role="tab" aria-controls="panel-desayunos" aria-selected="false">Desayunos</a>
+            </li>
         </ul>
 
         <!-- Definimos los elementos de la tabla como divisiónes de la clase "tab-pane" -->
@@ -37,7 +40,7 @@
                                 <div class="row justify-content-between">
                                     <div class="col">
                                         <div class="row mb-1">
-                                            <select class="form-select" aria-label="Default select example" name = "select-entrada">
+                                            <select class="form-select" aria-label="Default select example" name = "select-entrada" >
                                                 <option selected disabled>Entrada</option>
                                                 {% for platillo in platillos %}
                                                     {% if platillo.tipo == 'EN' %}
@@ -209,6 +212,381 @@
                 </table>
             </div>
 
+            <!--Panel Desayunos-->
+            <div class="tab-pane fade" id="panel-desayunos" role="tabpanel" aria-labelledby="desayunos-tab">
+                <div class="container-lg">
+                    <!-- Comienza la tabla que contendrá los paquetes-->
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="card border border-primary mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 1</div>
+                                            <div class="card-body text-dark">
+                                                <h6>Jugo o fruta:</h6>
+                                                <select name="select-"  id="select1"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D1" and paq1.esta_eliminado == False %}    
+                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </select>
+                                                <h6>Hot cakes/molletes/sopes con pollo:</h6>
+                                                <select name="select"  id="select2" class="form-select">
+                                                    <option selected disabled>------</option>
+                                                    {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D2" and paq1.esta_eliminado == False %}    
+                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                    
+                                                </select>
+                                               
+                                                {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 1"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo1">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra1"></h6>
+                                                {%endif%}
+                                                {%endfor%}
+                                                <select name="select" id="select3" class="form-select">
+                                                    <option selected disabled>------</option>
+                                                    {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D3" and paq1.esta_eliminado == False %}    
+                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </select>
+                                                <br></br>
+                                                <div class="text-center">
+                                                    <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="Paquete 1" onload="sumarextra(costo,extra)" onclick="agregarDesayuno(this,1,2,3)"value="Paquete 1">Añadir</button>
+                                                </div>
+                                            </div>    
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 2</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo o fruta:</h6>
+                                            <select name="select" form="paquetes" id="select4"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo_desayuno == "D1" and paq2.esta_eliminado == False %}    
+                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Omelet del día o Huevos Rancheros o con jamón o al albañil o con longaniza/ Chilaquiles:</h6>
+                                            <select name="select" form="paquetes" id="select5" class="form-select">
+                                               <option selected disabled>------</option>
+                                                    {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo == "GU" and paq2.esta_eliminado == False and paq2.tipo_desayuno == "D2" %}    
+                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 2"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo2">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra2"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select6" class="form-select">
+                                                <option selected disabled>------</option>
+                                                    {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo_desayuno == "D3" and paq2.esta_eliminado == False %}    
+                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 2" onclick="agregarDesayuno(this,4,5,6)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="card border border-primary mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 3</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo o fruta:</h6>
+                                            <select name="select" form="paquetes" id="select7"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq3 in paquete3 %}
+                                                    {% if paq3.tipo_desayuno == "D1" and paq3.esta_eliminado == False %}    
+                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Guisado o sugerencia del día:</h6>
+                                            <select name="select" form="paquetes" id="select8" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq3 in platillos %}
+                                                    {% if paq3.tipo == "GU" and paq3.esta_eliminado == False %}    
+                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 3"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo3">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra3"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select9" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq3 in paquete3 %}
+                                                    {% if paq3.tipo_desayuno == "D3" and paq3.esta_eliminado == False %}    
+                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 3" onclick="agregarDesayuno(this,7,8,9)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 4</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo o fruta:</h6>
+                                            <select name="select" form="paquetes" id="select10"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno == "D1" and paq4.esta_eliminado == False %}    
+                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Costilla con Chilaquiles o con sopes(2)</h6>
+                                            <select name="select" form="paquetes" id="select11" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno != "D1" and paq4.tipo_desayuno != "D3" and paq4.esta_eliminado == False %}    
+                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %} pollo</option>
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 4"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo4">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra4"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select12" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno == "D3" and paq4.esta_eliminado == False %}    
+                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %} pollo</option>
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 4" onclick="agregarDesayuno(this,10,11,12)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="card border border-primary mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 5</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo o fruta:</h6>
+                                            <select name="select" form="paquetes" id="select13"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno == "D1" and paq5.esta_eliminado == False %}    
+                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Milanesa o Pechuga asada, empanizada o Cecina:</h6>
+                                            <select name="select" form="paquetes" id="select14" class="form-select">
+                                                 <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno != "D1" and paq5.tipo_desayuno != "D3" and paq5.esta_eliminado == False %}    
+                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 5"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo5">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra5"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select15" class="form-select">
+                                                 <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno == "D3" and paq5.esta_eliminado == False %}    
+                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 5" onclick="agregarDesayuno(this,13,14,15)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 6</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo o fruta:</h6>
+                                            <select name="select" form="paquetes" id="select16"class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno == "D1" and paq6.esta_eliminado == False %}    
+                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Pancita:</h6>
+                                            <select name="select" form="paquetes" id="select17" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno != "D1" and paq6.tipo_desayuno != "D3" and paq6.esta_eliminado == False %}    
+                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 6"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo6">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra6"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select18" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno == "D3" and paq6.esta_eliminado == False %}    
+                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                               <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 6" onclick="agregarDesayuno(this,16,17,18)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="card text-white bg-success mb-3" style="max-width: 18rem">
+                                            <div class="card-header" style="color:white; background:#FFEA00;">Paquete infantil</div>
+                                            <div class="card-body text-white">
+                                            <h6>Jugo o fruta:</h6>
+                                            <select name="select" form="paquetes" id="select19" class="form-select bg-success text-white">
+                                                <option selected disabled>------</option>
+                                                {% for paq7 in paquete7 %}
+                                                    {% if paq7.tipo_desayuno == "D1" and paq7.esta_eliminado == False %}    
+                                                    <option value="{{paq7.nombre}}">{{paq7.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Cereal con leche/Hot Cakes/Huevos con jamón o con salchica</h6>
+                                            <h6>Salchipullpos/ Croquetas de pollo</h6>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete infantil"%}
+                                                    
+                                                    <h6 id="costo6">Precio --------{{precios.precio}} </h6>
+                                                    
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select20" class="form-select bg-success text-white">
+                                               <option selected disabled>------</option>
+                                                {% for paq7 in paquete7 %}
+                                                    {% if paq7.tipo_desayuno == "D2" and paq7.esta_eliminado == False %}    
+                                                    <option value="{{paq7.nombre}}">{{paq7.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="Paquete infantil" onclick="agregarDesayuno(this,19,20,null)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!--Tabla de ordenes-->
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead class="table-dark">
+                                <tr >
+                                    <th scope="col">Paquete</th>
+                                    <th scope="col">Jugo o fruta</th>
+                                    <th scope="col">Desayuno</th>
+                                    <th scope="col">Bebidas</th>
+                                    <th scope="col">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordenes-desayunos">
+                               
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+                       
+                   
+                                                   
+                       
+                </div>
+            </div>
+
         </div>
 
         <div class="card">
@@ -246,7 +624,7 @@
                 <div class="card">
                     <div class="card-body">
                     <p class="card-text">
-                        No hay menús para el día de hoy en el sistema.
+                        ¡No hay platillos registrados en la base de datos!
                     </p>
                     <div class="row">
                         <div class="col-md">
@@ -274,7 +652,8 @@
     <script>
         window.onload = function() {
             //agregamos la primera órden
-            agregarMenu()
+            agregarMenu();
+            sumarextra();
         }
         function incrementaSpinner(platilloNombre){
             console.log(platilloNombre);
@@ -344,47 +723,61 @@
             }
         }
 
-        /*//función para marcar que selección se hizo en los menús completos
-        function seleccionar(boton){
-            seleccion = boton.parentElement.parentElement.getElementsByClassName("seleccion")[0]
-            boton_dropdown = boton.parentElement.parentElement.parentElement.getElementsByClassName("btn")[0]
-
-            seleccion.innerText = boton.innerText
-            boton_dropdown.innerText = boton.innerText
-        }
-
-        function incrementaSpinner(platillo){
-            console.log(String(platillo));
-            var id = "['"+String(platillo[0])+"', "+String(platillo[1]+"]");//dar formato al arreglo que recibe como parámetro para concordar con el id del elemento
-            var val = document.getElementById(id).value;//obtenemos el valor del elemento
-            val = parseInt(val) + 1;//lo parseamos a int e incrementamos en 1
-            if(!isNaN(val)){//validación Is Not a Number
-                if(val<100)
-                    document.getElementById(id).value = val;//actualizamos el valor
+        var indice = 1;
+        function agregarDesayuno(bot_env,a,b,c){
+            //Primero vamos a obtener las ordenes 
+            
+            paquete = bot_env.value;
+           //Obtenemos el valor del primer select
+            var combo = document.getElementById("select"+a);
+            var select = combo.options[combo.selectedIndex].text;
+            document.ready = document.getElementById("select"+a).value = '0';
+            //Obtenemos el valor del segundo select
+            var combo2 = document.getElementById("select"+b);
+            var select2 = combo2.options[combo2.selectedIndex].text;
+            document.ready = document.getElementById("select"+b).value = '0';
+           //Obtenemos el valor del tercer select
+            if(c == null){
+               
+                var limpia = ""
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><td>'+limpia+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+            }   
+            else{
+                var combo3 = document.getElementById("select"+c);
+                var select3 = combo3.options[combo3.selectedIndex].text;
+                document.ready = document.getElementById("select"+c).value = '0';
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="orden-desayunos_'+indice+'_3" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+              
             }
+
+           
+            if ((select !== "------" && select2 !== "------" && select3 !== "------")){
+                var orden = document.createElement("TR");
+                orden.innerHTML=fila;
+                document.getElementById("ordenes-desayunos").appendChild(orden);
+                indice++;
+            }    
+        }
+        function eliminarFila(eliminar,index) {
+            var btn = eliminar.value;
+            var borrar = eliminar.parentElement.parentElement;
+            borrar.remove();
+
         }
 
-        function decrementaSpinner(platillo){
-            var id = "['"+String(platillo[0])+"', "+String(platillo[1]+"]");
-            var val = document.getElementById(id).value;
-            val = parseInt(val) - 1;
-            if(!isNaN(val)){
-                if(val>=0)
-                    document.getElementById(id).value = val;
-            }
+        function sumarextra(){
+            for (i=1; i<7; i++){
+                var operacion = document.getElementById("costo"+i).textContent;
+                var contenido = parseInt(operacion.replace("Precio --------", ""));
+                contenido = contenido + 10;
+                console.log(contenido);
+                
+                //console.log(elem2);
+                var nuevo = document.getElementById("extra"+i).innerHTML = "Precio ------- "+contenido;
+            }  
+
+
         }
-
-        //objeto de tipo internacionalización para formatear cifras a precios
-        const formato = new Intl.NumberFormat('es-MX',{
-            style: 'currency',
-            currency: 'MXN',
-            minimumFractionDigits: 2
-        })
-
-        //formateamos los objetos de la clase "precio" en formato monetario
-        precios =  document.getElementsByClassName("precio")
-        for(var i=0; i<precios.length; i++){
-            precios[i].innerHTML = formato.format(precios[i].innerHTML)
-        }*/
+        
     </script>
 {% endblock script %}
