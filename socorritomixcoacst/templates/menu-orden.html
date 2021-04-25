@@ -224,12 +224,12 @@
                                         <div class="card border border-primary mb-3" style="max-width: 18rem">
                                             <div class="card-header">Paquete 1</div>
                                             <div class="card-body text-dark">
-                                                <h6>Jugo o fruta:</h6>
-                                                <select name="select-"  id="select1"class="form-select">
+                                                <h6>Jugo y fruta</h6>
+                                                <select hidden name="select-"  id="select1"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq1 in paquete1 %}
                                                     {% if paq1.tipo_desayuno == "D1" and paq1.esta_eliminado == False %}    
-                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
+                                                    <option selected disabled value="{{paq1.nombre}}">{{paq1.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
@@ -274,12 +274,12 @@
                                         <div class="card border border-dark mb-3" style="max-width: 18rem">
                                             <div class="card-header">Paquete 2</div>
                                             <div class="card-body text-dark">
-                                            <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select4"class="form-select">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select4"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq2 in paquete2 %}
                                                     {% if paq2.tipo_desayuno == "D1" and paq2.esta_eliminado == False %}    
-                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    <option selected disabled value="{{paq2.nombre}}">{{paq2.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
@@ -322,12 +322,12 @@
                                         <div class="card border border-primary mb-3" style="max-width: 18rem">
                                             <div class="card-header">Paquete 3</div>
                                             <div class="card-body text-dark">
-                                            <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select7"class="form-select">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select7"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq3 in paquete3 %}
                                                     {% if paq3.tipo_desayuno == "D1" and paq3.esta_eliminado == False %}    
-                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    <option selected disabled value="{{paq3.nombre}}">{{paq3.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
@@ -372,12 +372,12 @@
                                         <div class="card border border-dark mb-3" style="max-width: 18rem">
                                             <div class="card-header">Paquete 4</div>
                                             <div class="card-body text-dark">
-                                            <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select10"class="form-select">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select10"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq4 in paquete4 %}
                                                     {% if paq4.tipo_desayuno == "D1" and paq4.esta_eliminado == False %}    
-                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    <option selected disabled value="{{paq4.nombre}}">{{paq4.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
@@ -420,12 +420,12 @@
                                         <div class="card border border-primary mb-3" style="max-width: 18rem">
                                             <div class="card-header">Paquete 5</div>
                                             <div class="card-body text-dark">
-                                            <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select13"class="form-select">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select13"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq5 in paquete5 %}
                                                     {% if paq5.tipo_desayuno == "D1" and paq5.esta_eliminado == False %}    
-                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    <option selected disabled value="{{paq5.nombre}}">{{paq5.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
@@ -468,12 +468,12 @@
                                         <div class="card border border-dark mb-3" style="max-width: 18rem">
                                             <div class="card-header">Paquete 6</div>
                                             <div class="card-body text-dark">
-                                            <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select16"class="form-select">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select16"class="form-select">
                                                <option selected disabled>------</option>
                                                 {% for paq6 in paquete6 %}
                                                     {% if paq6.tipo_desayuno == "D1" and paq6.esta_eliminado == False %}    
-                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    <option selected disabled value="{{paq6.nombre}}">{{paq6.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}
@@ -518,12 +518,12 @@
                                         <div class="card text-white bg-success mb-3" style="max-width: 18rem">
                                             <div class="card-header" style="color:white; background:#FFEA00;">Paquete infantil</div>
                                             <div class="card-body text-white">
-                                            <h6>Jugo o fruta:</h6>
-                                            <select name="select" form="paquetes" id="select19" class="form-select bg-success text-white">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select19" class="form-select bg-success text-white">
                                                 <option selected disabled>------</option>
                                                 {% for paq7 in paquete7 %}
                                                     {% if paq7.tipo_desayuno == "D1" and paq7.esta_eliminado == False %}    
-                                                    <option value="{{paq7.nombre}}">{{paq7.nombre}}</option>
+                                                    <option selected disabled value="{{paq7.nombre}}">{{paq7.nombre}}</option>
                                                     
                                                     {% endif %}
                                                 {% endfor %}

@@ -17,7 +17,8 @@ def principal(request):
 
 def busqueda_cliente(request):
     if request.method=="POST":
-        qs_clientes = Cliente.objects.filter(telefono=request.POST.get("telefono"))
+        telefono = request.POST.get("telefono")
+        qs_clientes = Cliente.objects.filter(telefono=telefono)
 
         if qs_clientes:
             cliente_encontrado = qs_clientes[0]
@@ -25,8 +26,9 @@ def busqueda_cliente(request):
             return redirect(cliente_url)
 
         else:
-            print("No se encontró el cliente")#TODO desplegar mensaje advirtiendo
+            print("No se encontró el cliente")
             messages.warning(request, "¡¡¡No se encontró al cliente!!!")
+            request.session["telefono"] = telefono
             context = {}
             return redirect('cliente-no-encontrado')
 
@@ -538,7 +540,9 @@ def registrar_clientes(request):
             return render (request, 'registrar-clientes.html', context)
 
     else:
-        context = {}
+        context = {
+            "telefono": request.session["telefono"]
+        }
         return render (request, 'registrar-clientes.html', context)
 
 def menus_del_dia(request):
