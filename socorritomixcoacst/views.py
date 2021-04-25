@@ -182,7 +182,18 @@ def resumen_pedido(request):
             pedidos_del_cliente.append(platillo_menu_2)
 
         if i % 3 == 2: #Guisado
-            platillo_menu_3 = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio + 20),
+            sub_total = HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio
+            if sub_total > 65:
+                if platillo_actual.nombre == "Salmón a la plancha":
+                    sub_total += 20
+                else:
+                    sub_total += 15
+            else:
+                if platillo_actual.nombre == "Caldo de res" or platillo_actual.nombre == "Mole de olla":
+                    sub_total += 15
+                else:
+                    sub_total += 20
+            platillo_menu_3 = OrdenPlatillo(sub_total=sub_total,
                                             es_completa=True,
                                             numero_completa=numero_menu,
                                             cantidad=1,
@@ -418,7 +429,7 @@ class PerfilCliente(DetailView):
         direccion = str(request.POST.get("direccion"))
         referencias = request.POST.get("referencias")
         tipo = request.POST.get("nombre")
-        
+
         if request.POST.get("input"):
             ordensita = Orden.objects.filter(id=request.POST.get("input"))[0]
             ordensita_platillos = OrdenPlatillo.objects.filter(orden=ordensita)
@@ -491,15 +502,15 @@ class AdminCliente(ListView):
         context['order_by_ingresos_mes'] = self.clientes_orderby_ingresos_mes
         context['order_by_deben_topper'] = Orden.objects.filter(lleva_topper=True)
         return context
-    
+
     def post(self, request, *args, **kwargs):
-        
+
         for k, v in request.POST.items():
             print("\nclave: "+k+" valor: "+v+"\n")
             if v == "on":
                 orden_id=k.replace("checkbox-","")
                 Orden.objects.filter(pk=int(orden_id)).update(lleva_topper=False)
-        
+
         return HttpResponseRedirect(request.path_info)
 
 def registrar_clientes(request):
@@ -737,9 +748,9 @@ def modificar_platillo(request):
     if request.method =="POST":
         #colocar en una tupla la clave y elvalor del POST
         for clave, valor in request.POST.items():
-            print("Clave: %s" % (clave))
-            print("Valor: %s" % (valor))
-            
+            #print("Clave: %s" % (clave))
+            #print("Valor: %s" % (valor))
+
             #busca el elemento a cambiar con nombre modprecio_ recibido en clave
             if "modprecio_" in clave and valor:
                 nuevoPrecio = float(valor)
