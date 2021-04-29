@@ -14,6 +14,7 @@ from datetime import datetime as dt, timedelta
 def principal(request):
     context = {}
     return render(request, 'principal.html', context)
+
 def busqueda_cliente(request):
     if request.method=="POST":
         qs_clientes = Cliente.objects.filter(telefono=request.POST.get("telefono"))
@@ -607,7 +608,7 @@ def editar_menus(request):
     cena_hoy = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.menu.tipo == "CE"]
 
     #extraemos de la BD todos los platillos que no estén eliminados
-    platillos = [platillo for platillo in Platillo.objects.all() if platillo.esta_eliminado == False]
+    platillos = Platillo.objects.all().filter(esta_eliminado=False).order_by('nombre')
 
     if request.method == "GET":
         context = {}
