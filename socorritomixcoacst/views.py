@@ -16,6 +16,7 @@ def principal(request):
     return render(request, 'principal.html', context)
 
 def busqueda_cliente(request):
+    testTelefono = request.POST.get("telefono")
     if request.method=="POST":
         qs_clientes = Cliente.objects.filter(telefono=request.POST.get("telefono"))
 
@@ -28,6 +29,7 @@ def busqueda_cliente(request):
             print("No se encontró el cliente")#TODO desplegar mensaje advirtiendo
             messages.warning(request, "¡¡¡No se encontró al cliente!!!")
             context = {}
+            request.session['telefono'] = testTelefono
             return redirect('cliente-no-encontrado')
 
     else:
@@ -503,6 +505,7 @@ class AdminCliente(ListView):
         return HttpResponseRedirect(request.path_info)
 
 def registrar_clientes(request):
+    telefono_nuevocliente = request.session['telefono']
     #Pregunta si hay datos ocultos(POST)
     if request.method == "POST":
         cliente_registro = Cliente(nombre=request.POST.get("nombre")+" "+request.POST.get("apellidos"),
@@ -528,6 +531,7 @@ def registrar_clientes(request):
 
     else:
         context = {}
+        context ['nuevoTelefono'] = telefono_nuevocliente
         return render (request, 'registrar-clientes.html', context)
 
 def menus_del_dia(request):
