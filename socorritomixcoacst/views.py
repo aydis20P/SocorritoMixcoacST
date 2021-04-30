@@ -798,3 +798,22 @@ def eliminar_platillo(request):
 def aux(request):
     context = {}
     return render(request, "aux.html", context)
+
+def modificar_precios_desayuno(request):
+    desayunos = Desayuno.objects.all()
+    if request.method == "POST":
+        for clave, valor in request.POST.items():
+            print("Clave: %s" % (clave))
+            print("Valor: %s" % (valor))
+            #busca el elemento a cambiar con nombre modprecio_ recibido en clave
+            if "modprecio_" in clave and valor:
+                nuevoPrecio = float(valor)
+                idModificar = clave.replace("modprecio_","")
+                #Usamos update para modificar el precio del paquete
+                Desayuno.objects.filter(pk=idModificar).update(precio=nuevoPrecio)
+
+        return redirect("modificar-precios-desayuno")
+    else:
+        context = {}
+        context['desayunos'] = desayunos
+        return render(request,"modificar-precios-desayuno.html", context)
