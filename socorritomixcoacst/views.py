@@ -576,12 +576,12 @@ def crear_nuevo_menu(request):
     if request.method == "POST": #cuando mandemos la opcion "Agregar nuevo menú del día"
 
         #creamos los menú del día, con solo la fecha actual y el tipo de menú
-        nuevaDesayuno = Menu(dia=dt.now(), tipo="DE")
+        #nuevaDesayuno = Menu(dia=dt.now(), tipo="DE")
         nuevaComida = Menu(dia=dt.now(), tipo="CO")
-        nuevaCena = Menu(dia=dt.now(), tipo="CE")
-        nuevaDesayuno.save()
+        #nuevaCena = Menu(dia=dt.now(), tipo="CE")
+        #nuevaDesayuno.save()
         nuevaComida.save()
-        nuevaCena.save()
+        #nuevaCena.save()
 
         #Capturemos los platillos que fueron marcados en la lista, acorde a si son desayuno, comida o cena
         for clave, valor in request.POST.items():
@@ -612,9 +612,9 @@ def crear_nuevo_menu(request):
 
         #Mandamos listas con nombres de platillos que estaban en los menús del día de ayer:
         #de todos los platillosMenu en la base de datos tales que su menú sea de ayer y del tipo correspondiente, toma los nombres de sus platillos y pasalo como una lista
-        context["desayuno_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "DE"]
-        context["comida_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "CO"]
-        context["cena_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "CE"]
+        #context["desayuno_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "DE"]
+        context["comida_anterior"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu == Menu.objects.last() and platilloMenu.menu.tipo == "CO"]
+        #context["cena_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "CE"]
 
         return render(request, "crear-nuevo-menu.html", context)
 
