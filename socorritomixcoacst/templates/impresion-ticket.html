@@ -7,25 +7,17 @@
     <body>
         <!-- contenedor principal -->
         <div id="imprimible">
-        	<table>
-        		<tbody>
-                    <tr>
-                        <td>    
-                            {% load static %}
-                            <img
-                             src="{% static 'images/fonda-socorrito.png' %}"
-                             height="50"
-                             alt=""
-                             loading="lazy"
-                             />
-                        </td>
-                        <td style="padding-left:4em;"></td>
-                        <td>
-                            <h5>orden #{{ orden.id }}</h5>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <h5>{{ orden.fecha }}</h5>
+            {% load static %}
+            <img
+             src="{% static 'images/fonda-socorrito.png' %}"
+             height="50"
+             alt=""
+             loading="lazy"
+             />
+
+            <h5>orden #{{ orden.id }}</h5>
+
         	<!-- tabla info cliente -->
         	<table>
         		<tbody>
@@ -116,7 +108,7 @@
         	<button onclick="redirectPrincipal()">
         		Cerrar
         	</button>
-        	<button onclick="printDiv('imprimible'), irAPrincipal()">Imprimir</button>
+        	<button onclick="window.print()">Imprimir</button>
         </div>
 
     </body>
