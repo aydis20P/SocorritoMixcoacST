@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Modificar Precios a Desayuno</title>
+{% endblock head %}
+{% block content %}
+<div class="container">
+  
+    <div class="table-responsive">
+        <table class="table">
+            <form id="modificar-precios-desayunos" method="POST">
+            {% csrf_token %}
+                <thead>
+                    <tr>
+                    <th scope="col">Paquete</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Modificar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {%for paquete in desayunos%}
+                    <tr>
+                        <td>
+                            {{paquete.nombre}}
+                        </td>
+                        <td>
+                            {{paquete.precio}}
+                        </td>
+                        <td>
+                            
+                            <button type="button" class="btn btn-primary btn-floating mx-1"  data-mdb-toggle="modal" data-mdb-target="#modificarModal_{{paquete.id}}" >
+                            <i class="fas fa-edit"></i>
+                            </button>
+                            <!--Modal para modificar el precio de un paquete-->
+                            <div class="modal fade" id="modificarModal_{{paquete.id}}" tabindex="-1" aria-labelledby="modificarModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modificarModalLabel">Modificar Platillo</h5>
+                                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <!--Aqui se clocan los elementos html para modificar el formulario-->
+                                        <div class="modal-body">
+                                            <div class="container">
+                                                <!--Precio-->
+                                                <div class="row mb-1 g-1">
+                                                    <div class="col-md-3">
+                                                        <div class="d-flex justify-content-start mt-2 me-2">
+                                                            <h5>Precio:</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-outline mb-4">
+                                                            <input type="number" id="modprecio" class="form-control" name="modprecio_{{paquete.id}}" value="{{paquete.precio}}"/>
+                                                            <label class="form-label" for="form4Example1">Precio</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                                Cancelar
+                                            </button>
+                                            <button type="submit" class="btn bg-warning ">Guardar</button>
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+                            </div>    
+                        </td>
+                    </tr>
+                {% endfor %}   
+                </tbody>
+            </form>
+        </table>
+    </div>
+    
+</div>
+{% endblock content%}

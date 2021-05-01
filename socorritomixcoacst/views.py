@@ -16,6 +16,7 @@ def principal(request):
     return render(request, 'principal.html', context)
 
 def busqueda_cliente(request):
+    testTelefono = request.POST.get("telefono")
     if request.method=="POST":
         telefono = request.POST.get("telefono")
         qs_clientes = Cliente.objects.filter(telefono=telefono)
@@ -30,6 +31,7 @@ def busqueda_cliente(request):
             messages.warning(request, "¡¡¡No se encontró al cliente!!!")
             request.session["telefono"] = telefono
             context = {}
+            request.session['telefono'] = testTelefono
             return redirect('cliente-no-encontrado')
 
     else:
@@ -516,6 +518,7 @@ class AdminCliente(ListView):
         return HttpResponseRedirect(request.path_info)
 
 def registrar_clientes(request):
+    telefono_nuevocliente = request.session['telefono']
     #Pregunta si hay datos ocultos(POST)
     if request.method == "POST":
         cliente_registro = Cliente(nombre=request.POST.get("nombre")+" "+request.POST.get("apellidos"),
@@ -813,3 +816,22 @@ def eliminar_platillo(request):
 def aux(request):
     context = {}
     return render(request, "aux.html", context)
+
+def modificar_precios_desayuno(request):
+    desayunos = Desayuno.objects.all()
+    if request.method == "POST":
+        for clave, valor in request.POST.items():
+            print("Clave: %s" % (clave))
+            print("Valor: %s" % (valor))
+            #busca el elemento a cambiar con nombre modprecio_ recibido en clave
+            if "modprecio_" in clave and valor:
+                nuevoPrecio = float(valor)
+                idModificar = clave.replace("modprecio_","")
+                #Usamos update para modificar el precio del paquete
+                Desayuno.objects.filter(pk=idModificar).update(precio=nuevoPrecio)
+
+        return redirect("modificar-precios-desayuno")
+    else:
+        context = {}
+        context['desayunos'] = desayunos
+        return render(request,"modificar-precios-desayuno.html", context)
