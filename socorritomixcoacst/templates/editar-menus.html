@@ -155,6 +155,7 @@
 {% block script %}
 
 <script>
+    /*
     window.onload = function() {
         document.getElementById("tabla-desayuno").style.display = "none";
         document.getElementById("tabla-comida").style.display = "none";
@@ -163,6 +164,7 @@
         document.getElementById("btn-ocultar-comidas").style.display = "none";
         document.getElementById("btn-ocultar-cenas").style.display = "none";
     }
+    */
     //función para copiar los platillos de un menu anterior al que se está editando:
     //recibimos tanto la lista de platillos de es menú, como la clase de checkboxes que vamos a manejar (de desayuno, comida o cena).checked
     //recorremos todos los checkboxes dados por clase_checkbox, y si su ID corresponde a uno de los platillos en el menú, marcalo.
@@ -182,6 +184,7 @@
     copiar({{ comida_hoy|safe }}, "check-comida")
     copiar({{ cena_hoy|safe }}, "check-cena")
 
+    /*
     function desplegarDesayunos(){
         document.getElementById("tabla-desayuno").style.display = "table";
         document.getElementById("btn-desplegar-desayunos").style.display = "none";
@@ -212,5 +215,6 @@
         document.getElementById("btn-desplegar-cenas").style.display = "initial";
         document.getElementById("btn-ocultar-cenas").style.display = "none";
     }
+    /*
 </script>
 {% endblock script %}
