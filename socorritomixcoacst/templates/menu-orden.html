@@ -40,34 +40,43 @@
                                 <div class="row justify-content-between">
                                     <div class="col">
                                         <div class="row mb-1">
-                                            <select class="form-select" aria-label="Default select example" name = "select-entrada" >
-                                                <option selected disabled>Entrada</option>
+                                            <div class="input-group mb-3">
+                                              <span class="input-group-text" style="width: 100px">Entrada</span>
+                                              <select class="form-select" name="select-entrada" aria-describedby="inputGroup-sizing-default">
+                                                <option selected disabled></option>
                                                 {% for platillo in platillos %}
-                                                    {% if platillo.tipo == 'EN' %}
+                                                    {% if platillo.tipo == 'EN' or platillo.tipo == 'ST'%}
                                                         <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
                                                     {% endif %}
                                                 {% endfor %}        
-                                            </select>
+                                              </select>
+                                            </div>                                           
                                         </div>
                                         <div class="row mb-1">
-                                            <select class="form-select" aria-label="Default select example" name = "select-segundo-tiempo">
-                                                <option selected disabled>Segundo Tiempo</option>
-                                                {% for platillo in platillos %}
-                                                    {% if platillo.tipo == 'ST' %}
-                                                        <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
-                                                    {% endif %}
-                                                {% endfor %}   
-                                            </select>
+                                            <div class="input-group mb-3">
+                                              <span class="input-group-text" style="width: 100px">2tiempo</span>
+                                              <select class="form-select" name="select-segundo-tiempo">
+                                                  <option selected disabled></option>
+                                                  {% for platillo in platillos %}
+                                                      {% if platillo.tipo == 'ST' or platillo.tipo == 'EN'%}
+                                                          <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
+                                                      {% endif %}
+                                                  {% endfor %}   
+                                              </select>
+                                            </div>                                           
                                         </div>
                                         <div class="row">
-                                            <select class="form-select" aria-label="Default select example" name = "select-guisado">
-                                                <option selected disabled>Guisado</option>
-                                                {% for platillo in platillos %}
-                                                    {% if platillo.tipo == 'GU' %}
-                                                        <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </select>
+                                            <div class="input-group mb-3">
+                                              <span class="input-group-text" style="width: 100px">Guisado</span>
+                                              <select class="form-select" name="select-guisado">
+                                                  <option selected disabled></option>
+                                                  {% for platillo in platillos %}
+                                                      {% if platillo.tipo == 'GU' %}
+                                                          <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
+                                                      {% endif %}
+                                                  {% endfor %}
+                                              </select>
+                                            </div>                                           
                                         </div>
                                         <div class="row mt-1">
                                             <button type="button" class="btn btn-primary btn-danger" onclick="removerMenu(this)">
@@ -606,7 +615,7 @@
                     </div>
                     <div class="col">
                         <div class="d-grid gap-2 p-1">
-                            <button type="submit" class="btn btn-warning">
+                            <button type="button" onclick="validaForm()" class="btn btn-warning">
                                 <i class="fas fa-cart-plus"></i>
                                 Añadir al carrito
                             </button>
@@ -779,5 +788,26 @@
 
         }
         
+
+        /**
+         *Método para validar que se llenan todos los campos de los menus completos 
+         *en caso de haber en la orden. 
+         */
+        function validaForm(){
+            flag = false;
+            //obtener todos los select
+            selects = document.getElementsByTagName("select");
+            //iteramos sobre totdos los selects
+            for(i=0; i < selects.length; i++){
+                if(selects[i].name.includes("menu")){
+                    if(selects[i].value == "")//si pertenece a los menus y tiene value ""
+                        flag = true;//actualizamos la bandera
+                }
+            }
+            if(flag)
+                window.alert("¡Por favor seleccione todas las entradas para los menús completos!");
+            else
+                document.getElementById("formMenu").submit();
+        }
     </script>
 {% endblock script %}
