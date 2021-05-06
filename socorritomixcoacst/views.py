@@ -609,6 +609,8 @@ def crear_nuevo_menu(request):
 
         #Mandamos una lista con todos los platillos de la BD que no están eliminados
         context["platillos"] = Platillo.objects.all().filter(esta_eliminado=False).order_by('nombre')
+        #Mandamos el historial de precios con los actuales
+        context["precios"] = HistorialPrecio.objects.filter(es_precio_actual=True)
 
         #Mandamos listas con nombres de platillos que estaban en los menús del día de ayer:
         #de todos los platillosMenu en la base de datos tales que su menú sea de ayer y del tipo correspondiente, toma los nombres de sus platillos y pasalo como una lista

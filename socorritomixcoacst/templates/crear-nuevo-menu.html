@@ -95,6 +95,7 @@
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Tipo</th>
+                                <th>Precio</th>
                                 <th>¿Incluir?</th>
                             </tr>
                         </thead>
@@ -111,6 +112,13 @@
                                     </td>
                                     <td>
                                         {{ platillo.get_tipo_display }}
+                                    </td>
+                                    <td>
+                                    	{% for precio in precios %}
+                                    		{% if platillo == precio.platillo %}
+                                    			{{ precio.precio }}
+                                    		{% endif %}
+                                    	{% endfor %}
                                     </td>
                                     <td>
                                         <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-comida" type="checkbox" class="custom-control-input check-comida">
