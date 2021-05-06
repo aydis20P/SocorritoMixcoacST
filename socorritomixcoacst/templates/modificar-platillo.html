@@ -68,7 +68,7 @@
                                                                 </div>
                                                                 <div class="col-md-8">
                                                                     <div class="form-outline mb-4">
-                                                                        <input type="number" id="modprecio" class="form-control" name="modprecio_{{p.id}}"/>
+                                                                        <input type="number" id="modprecio" class="form-control" name="modprecio_{{p.id}}" value="{{p.precio}}"/>
                                                                         <label class="form-label" for="form4Example1">Precio</label>
                                                                     </div>
                                                                 </div>
@@ -85,10 +85,14 @@
                                                             
                                                                 <div class="col-md-8">
                                                                     <div class="form-check-label">
-                                                                        <select class="form-select" aria-label="Default select example" name = "modselect-tipo_{{p.platillo.id}}">
-                                                                            <option selected disabled>Tipo de platillo</option>
+                                                                        <select class="form-select" aria-label="Default select example" name = "modselect-tipo_{{p.platillo.id}}" id="select{{p.id}}" >
+                                                                            
                                                                             {% for clave, valor in tip_platillo %}
-                                                                                <option value="{{clave}}">{{valor}}</option>
+                                                                                {% if p.platillo.get_tipo_display == valor %}
+                                                                                    <option selected id="{{p.pltillo.id}}option" value="{{clave}}">{{valor}} </option>
+                                                                                {% else %}
+                                                                                    <option id="{{p.pltillo.id}}option" value="{{clave}}">{{valor}}</option>
+                                                                                {% endif %}
                                                                             {% endfor %}
                                                                         </select>
                                                                     </div>
@@ -105,7 +109,7 @@
                                                                 </div>
                                                                 <div class="col-md-8">
                                                                     <div class="form-outline ">
-                                                                        <textarea class="form-control"  id="moddescripcion" rows="4" name="moddescripcion_{{p.platillo.id}}"></textarea>
+                                                                        <textarea class="form-control"  id="moddescripcion" rows="4" name="moddescripcion_{{p.platillo.id}}" value="{{p.platillo.descripcion}}">{{p.platillo.descripcion}}</textarea>
                                                                         <label class="form-label" for="descripcion">Descripción</label>
                                                                         
                                                                     </div>
