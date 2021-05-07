@@ -98,92 +98,52 @@
                 <!-- Input de busqueda  -->
                 <div class="form-outline">
                     <input type="text" id="input-busqueda-ordenes" class="form-control" onkeyup="actualizaTablaOrdenes()" />
-                    <label class="form-label" for="form1">Buscar platillo</label>
+                    <label class="form-label" for="form1">
+                        <i class="fas fa-search"></i>
+                        Buscar platillo
+                    </label>
+                    
                 </div><br>
     
                 <div class="table-responsive" id="tabla-ordenes-padre">
-                    <!-- El contenido de esta tabla se crea con javascript (function generaTablaOrdenes)  -->
+                    {% csrf_token %}
+                    <!-- El contenido de esta tabla se crea con javascript (function generaTablaOrdenes())  -->
                 </div>
             </div>
 
             <!-- panel 3: bebidas -->
             <div class="tab-pane fade" id="panel-bebidas" role="tabpanel" aria-labelledby="bebidas-tab">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Bebida</th>
-                            <th scope="col">Costo</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for platillo in platillos %}
-                            <tr>
-                                {% if platillo.tipo == "BE" %}
-                                    <td>{{ platillo.nombre }}</td>
-                                    <td class="precio">{{ platillo.precio }}</td>
-                                    {% csrf_token %}
-                                    <td>
-                                        <div class="d-flex justify-content-start">
-                                            <div class="form-outline">
-                                                <input readonly value="0" type="text" id="orden_bebida_de_{{ platillo.nombre }}" class="form-control" name="orden_bebida_de_{{ platillo.nombre }}"/>
-                                                <label class="form-label" for="form1">Cantidad</label>
-                                            </div>
-                                            <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
-                                                <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_bebida_de_{{ platillo.nombre }}')">
-                                                <i class="fas fa-angle-up"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_bebida_de_{{ platillo.nombre }}')">
-                                                <i class="fas fa-angle-down"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                 </table>
+                <!-- Input de busqueda  -->
+                <div class="form-outline">
+                    <input type="text" id="input-busqueda-bebidas" class="form-control" onkeyup="actualizaTablaBebidas()" />
+                    <label class="form-label" for="form1">
+                        <i class="fas fa-search"></i>
+                        Buscar bebida
+                    </label>
+                    
+                </div><br>
+    
+                <div class="table-responsive" id="tabla-bebidas-padre">
+                    {% csrf_token %}
+                    <!-- El contenido de esta tabla se crea con javascript (function generaTablaBebidas())  -->
+                </div>
             </div>
 
             <!-- panel 4: extras -->
             <div class="tab-pane fade" id="panel-extras" role="tabpanel" aria-labelledby="extras-tab">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Platillo</th>
-                            <th scope="col">Costo</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for platillo in platillos%}
-                        <tr>
-                            {% if platillo.tipo == "EX" %}
-                                <td>{{ platillo.nombre }}</td>
-                                <td class="precio">{{ platillo.precio }}</td>
-                                {% csrf_token %}
-                                <td>
-                                    <div class="d-flex justify-content-start">
-                                        <div class="form-outline">
-                                            <input readonly value="0" type="text" id="orden_extra_de_{{ platillo.nombre }}" class="form-control" name="orden_extra_de_{{ platillo.nombre }}"/>
-                                            <label class="form-label" for="form1">Cantidad</label>
-                                        </div>
-                                        <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
-                                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_extra_de_{{ platillo.nombre }}')">
-                                            <i class="fas fa-angle-up"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_extra_de_{{ platillo.nombre }}')">
-                                            <i class="fas fa-angle-down"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <!-- Input de busqueda  -->
+                <div class="form-outline">
+                    <input type="text" id="input-busqueda-extras" class="form-control" onkeyup="actualizaTablaExtras()" />
+                    <label class="form-label" for="form1">
+                        <i class="fas fa-search"></i>
+                        Buscar Extra
+                    </label>
+                </div><br>
+    
+                <div class="table-responsive" id="tabla-extras-padre">
+                    {% csrf_token %}
+                    <!-- El contenido de esta tabla se crea con javascript (function generaTablaExtras())  -->
+                </div>
             </div>
 
             <!--Panel Desayunos-->
@@ -642,36 +602,35 @@
         //Variables globales para las tabs ordenes, bebidas y extras
         var body = document.getElementsByTagName("body")[0];
         var tablaOrdenesPadre = document.getElementById("tabla-ordenes-padre");
-        //var tablaBebidasPadre = document.getElementById("tabla-bebidas-padre");
-        //var tablaExtrasPadre = document.getElementById("tabla-extras-padre");
+        var tablaBebidasPadre = document.getElementById("tabla-bebidas-padre");
+        var tablaExtrasPadre = document.getElementById("tabla-extras-padre");
         
         window.onload = function() {
             //agregamos la primera órden
             agregarMenu();
             sumarextra();
 
-            //Se genera la tabla de la tab ordenes
+            //Se generan la tablas de las tabs ordenes, bebidas y extras
             generaTablaOrdenes();
+            generaTablaBebidas();
+            generaTablaExtras();
 
             //Oculta la plantilla de spinner utilizada para construir las tablas
             spinnerPlantilla = document.getElementById("spinner");
             spinnerPlantilla.style.visibility = "hidden";
         }
 
-        function vaciarTabla(tabla){
-            while (tabla.lastElementChild) {
-                    tabla.removeChild(tabla.lastElementChild);
-                }
-        }
-
+        //Se activa onkeyup() con el buscador con id="input-busqueda-ordenes"
         function actualizaTablaOrdenes(){
             {% for platillo in historiales_precio %}
-                {% if not platillo.tipo == "EX" %}
-                    {% if not platillo.tipo == "BE" %}
+                {% if not platillo.platillo.tipo == "EX" %}
+                    {% if not platillo.platillo.tipo == "BE" %}
                         fila = document.getElementById("fila-{{ platillo.platillo.nombre }}");
                         nombreLower = String('{{ platillo.platillo.nombre }}').toLowerCase();
-                        nombreUpper = String('{{ platillo.platillo.nombre }}').toUpperCase();
-                        if(!nombreLower.includes(String(document.getElementById("input-busqueda-ordenes").value).toLowerCase()) || !nombreUpper.includes(String(document.getElementById("input-busqueda-ordenes").value).toUpperCase())){
+                        nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                        nombreBuscado = document.getElementById("input-busqueda-ordenes").value.toLowerCase();
+                        nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                        if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
                             fila.style.display = "none";
                         }else{
                             fila.style.display = "table-row";
@@ -681,8 +640,55 @@
             {% endfor %}
         }
 
-        //Genera la tabla que contiene las ordenes sueltas. Cuando el tipoTabla es 0, toma todos los platillos que se le pasan desde el views.py
-        //Cuando el tipoTabla es 1, filtra los platillos de acuerdo a la cadena que el usuario ingresa en el input-busqueda-ordenes
+        //Se activa onkeyup() con el buscador con id="input-busqueda-bebidas"
+        function actualizaTablaBebidas(){
+            {% for platillo in historiales_precio %}
+                {% if platillo.platillo.tipo == "BE" %}
+                    fila = document.getElementById("fila-{{ platillo.platillo.nombre }}");
+                    nombreLower = String('{{ platillo.platillo.nombre }}').toLowerCase();
+                    nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    nombreBuscado = document.getElementById("input-busqueda-bebidas").value.toLowerCase();
+                    nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
+                        fila.style.display = "none";
+                    }else{
+                        fila.style.display = "table-row";
+                    }
+                {% endif %}
+            {% endfor %}
+        }
+
+        //Se activa onkeyup() con el buscador con id="input-busqueda-extras"
+        function actualizaTablaExtras(){
+            {% for platillo in historiales_precio %}
+                {% if platillo.platillo.tipo == "EX" %}
+                    fila = document.getElementById("fila-{{ platillo.platillo.nombre }}");
+                    nombreLower = String('{{ platillo.platillo.nombre }}').toLowerCase();
+                    nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    nombreBuscado = document.getElementById("input-busqueda-extras").value.toLowerCase();
+                    nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
+                        fila.style.display = "none";
+                    }else{
+                        fila.style.display = "table-row";
+                    }
+                {% endif %}
+            {% endfor %}
+        }
+
+        let sinDiacriticos = (function(){
+            let de = 'ÁÃÀÄÂÉËÈÊÍÏÌÎÓÖÒÔÚÜÙÛÑÇáãàäâéëèêíïìîóöòôúüùûñç',
+            a = 'AAAAAEEEEIIIIOOOOUUUUNCaaaaaeeeeiiiioooouuuunc',
+            re = new RegExp('['+de+']' , 'ug');
+
+            return texto =>
+                texto.replace(
+                    re, 
+                    match => a.charAt(de.indexOf(match))
+                );
+        })();
+
+        //Genera la tabla que contiene las ordenes sueltas
         function generaTablaOrdenes(){
             // Crea un elemento table y un elemento tbody
             var tablaOrdenes = document.createElement("table");
@@ -718,8 +724,8 @@
             var i=0;
             //Crea cada fila para los platillos
             {% for platillo in historiales_precio %}
-                {% if not platillo.tipo == "EX" %}
-                    {% if not platillo.tipo == "BE" %}
+                {% if not platillo.platillo.tipo == "EX" %}
+                    {% if not platillo.platillo.tipo == "BE" %}
                         var fila = document.createElement("tr");
                         var celda1 = document.createElement("td");
                         var celda2 = document.createElement("td");
@@ -782,6 +788,207 @@
             //Ordena alfabeticamente la tabla
             sortTable("tabla-ordenes");
         }
+
+        //Genera la tabla que contiene las bebidas
+        function generaTablaBebidas(){
+            // Crea un elemento table y un elemento tbody
+            var tablaBebidas = document.createElement("table");
+            tablaBebidas.id = "tabla-bebidas"
+            tablaBebidas.className = "buscador-bebidas";
+            var tbodyBebidas = document.createElement("tbody");
+
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            encabezado.className = "thbuscador-bebidas";
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            e1.className = "buscador-bebidas";
+            e2.className = "buscador-bebidas";
+            e3.className = "buscador-bebidas";
+            var textoE1 = document.createTextNode("Bebida");
+            var textoE2 = document.createTextNode("Costo");
+            var textoE3 = document.createTextNode("Selector");
+            
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+
+            var i=0;
+            //Crea cada fila para los platillos
+            {% for platillo in historiales_precio %}
+                {% if platillo.platillo.tipo == "BE" %}
+                    
+                    var fila = document.createElement("tr");
+                    var celda1 = document.createElement("td");
+                    var celda2 = document.createElement("td");
+                    var celdaSpinner = document.createElement("td"); 
+                    celda1.id = "celda1-{{ platillo.platillo.nombre }}";
+                    celda2.id = "celda2-{{ platillo.platillo.nombre }}";
+                    celdaSpinner.id = "celda-spinner-{{ platillo.platillo.nombre }}";
+                    celda1.className = "buscador-bebidas";
+                    celda2.className = "buscador-bebidas";
+                    celdaSpinner.className = "buscador-bebidas";
+                    var textoCelda1 = document.createTextNode("{{ platillo.platillo.nombre }}");
+                    var textoCelda2 = document.createTextNode("{{ platillo.precio }}");
+                    celda1.appendChild(textoCelda1);
+                    celda2.appendChild(textoCelda2);
+
+                    //Esto es para crear el spinner dentro de la celda
+                    var original = document.getElementById("spinner");
+                    var nuevo = original.cloneNode(true);
+                    nuevo.style.visibility = "visible";
+                    nuevo.id = "spinner-{{ platillo.platillo.nombre }}";
+                    i += 1;
+                    hijos = nuevo.childNodes;
+                    forma = hijos[1].childNodes;
+                    botones = hijos[3].childNodes;
+                    botonUp = botones[1];
+                    botonDown = botones[3];
+                    botonUp.onclick = function() {incrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
+                    botonDown.onclick = function() {decrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
+                    forma[1].id = "orden_de_{{ platillo.platillo.nombre }}";
+                    forma[1].name = "orden_de_{{ platillo.platillo.nombre }}";
+
+                    celdaSpinner.appendChild(nuevo);
+
+                    fila.appendChild(celda1);
+                    fila.appendChild(celda2);
+                    fila.appendChild(celdaSpinner);
+                    fila.id = "fila-{{ platillo.platillo.nombre }}";
+
+                    // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                    tbodyBebidas.appendChild(fila);
+
+                {% endif %}
+            {% endfor %}
+            
+            // posiciona el tbody debajo del elemento table
+            tablaBebidas.appendChild(encabezado);
+            tablaBebidas.appendChild(tbodyBebidas);
+            
+            // appends table into body
+            body.appendChild(tablaBebidas);
+            tablaBebidas.align = "center";
+            tablaBebidas.cellPadding="10";
+            tablaBebidasPadre.appendChild(tablaBebidas);
+
+            //Modifica estilo a la tabla de ordenes
+            $(".buscador-bebidas").css("border","black 2px solid");
+            $(".thbuscador-bebidas").css("background-color","#FFE082");
+           
+            //Ordena alfabeticamente la tabla
+            sortTable("tabla-bebidas");
+        }
+
+        //Genera la tabla que contiene los extras
+        function generaTablaExtras(){
+            // Crea un elemento table y un elemento tbody
+            var tablaExtras = document.createElement("table");
+            tablaExtras.id = "tabla-extras"
+            tablaExtras.className = "buscador-extras";
+            var tbodyExtras = document.createElement("tbody");
+
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            encabezado.className = "thbuscador-extras";
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            e1.className = "buscador-extras";
+            e2.className = "buscador-extras";
+            e3.className = "buscador-extras";
+            var textoE1 = document.createTextNode("Extra");
+            var textoE2 = document.createTextNode("Costo");
+            var textoE3 = document.createTextNode("Selector");
+            
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+
+            var i=0;
+            //Crea cada fila para los platillos
+            {% for platillo in historiales_precio %}
+                {% if platillo.platillo.tipo == "EX" %}
+                    
+                    var fila = document.createElement("tr");
+                    var celda1 = document.createElement("td");
+                    var celda2 = document.createElement("td");
+                    var celdaSpinner = document.createElement("td"); 
+                    celda1.id = "celda1-{{ platillo.platillo.nombre }}";
+                    celda2.id = "celda2-{{ platillo.platillo.nombre }}";
+                    celdaSpinner.id = "celda-spinner-{{ platillo.platillo.nombre }}";
+                    celda1.className = "buscador-extras";
+                    celda2.className = "buscador-extras";
+                    celdaSpinner.className = "buscador-extras";
+                    var textoCelda1 = document.createTextNode("{{ platillo.platillo.nombre }}");
+                    var textoCelda2 = document.createTextNode("{{ platillo.precio }}");
+                    celda1.appendChild(textoCelda1);
+                    celda2.appendChild(textoCelda2);
+
+                    //Esto es para crear el spinner dentro de la celda
+                    var original = document.getElementById("spinner");
+                    var nuevo = original.cloneNode(true);
+                    nuevo.style.visibility = "visible";
+                    nuevo.id = "spinner-{{ platillo.platillo.nombre }}";
+                    i += 1;
+                    hijos = nuevo.childNodes;
+                    forma = hijos[1].childNodes;
+                    botones = hijos[3].childNodes;
+                    botonUp = botones[1];
+                    botonDown = botones[3];
+                    botonUp.onclick = function() {incrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
+                    botonDown.onclick = function() {decrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
+                    forma[1].id = "orden_de_{{ platillo.platillo.nombre }}";
+                    forma[1].name = "orden_de_{{ platillo.platillo.nombre }}";
+
+                    celdaSpinner.appendChild(nuevo);
+
+                    fila.appendChild(celda1);
+                    fila.appendChild(celda2);
+                    fila.appendChild(celdaSpinner);
+                    fila.id = "fila-{{ platillo.platillo.nombre }}";
+
+                    // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                    tbodyExtras.appendChild(fila);
+
+                {% endif %}
+            {% endfor %}
+            
+            // posiciona el tbody debajo del elemento table
+            tablaExtras.appendChild(encabezado);
+            tablaExtras.appendChild(tbodyExtras);
+            
+            // appends table into body
+            body.appendChild(tablaExtras);
+            tablaExtras.align = "center";
+            tablaExtras.cellPadding="10";
+            tablaExtrasPadre.appendChild(tablaExtras);
+
+            //Modifica estilo a la tabla de ordenes
+            $(".buscador-extras").css("border","black 2px solid");
+            $(".thbuscador-extras").css("background-color","#FFE082");
+           
+            //Ordena alfabeticamente la tabla
+            sortTable("tabla-extras");
+        }
+
 
         function incrementaSpinner(platilloNombre){
             var val = document.getElementById(platilloNombre).value;//obtenemos el valor del elemento
