@@ -122,7 +122,11 @@ def menu_orden(request):
         context = {}
         context['referer'] = pag_ant #mandarlo en el contexto
         context['platillos'] = lista_platillos #Todos los platillos de la BD
-        context['historiales_precio'] = HistorialPrecio.objects.filter(es_precio_actual=True) #Se utiliza para obtener todos los platillos con su precio actual
+        #Las siguientes tres lineas son para generar las tablas de las tabs ordenes, bebidas y extras FS-41
+        lista_hp_sin_filtrar = HistorialPrecio.objects.filter(es_precio_actual=True) #Se utiliza para obtener todos los platillos con su precio actual
+        lista_menu_del_dia = [platilloMenu.platillo for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.disponible]
+        context['historiales_precio'] = [historial_precio for historial_precio in lista_hp_sin_filtrar if historial_precio.platillo in lista_menu_del_dia]
+
         context['entradas'] = entradas
         context['segundos_tiempos'] = segundos_tiempos
         context['guisados'] = guisados
