@@ -78,6 +78,7 @@ def menu_orden(request):
         todos_ordenes = []
         todos_bebidas = []
         todos_extras = []
+        todos_sushis = []
         todos_desayunos = [] #lista de los potenciales ordenplatillo que se mandará a la vista resumen_pedido
 
         request.session['observaciones'] = request.POST.get('observaciones')
@@ -101,6 +102,10 @@ def menu_orden(request):
                 if int(valor) > 0:
                     todos_extras.append(tuple((clave.replace("orden_extra_de_", ""), valor)))
 
+            if "orden_sushi_de" in clave:
+                if int(valor) > 0:
+                    todos_sushis.append(tuple((clave.replace("orden_sushi_de_", ""), valor)))
+
             #si es un paquete de desayuno
             if "orden-desayunos" in clave:
                 todos_desayunos.append(tuple((clave.replace("orden-desayunos_", ""), valor)))
@@ -109,6 +114,7 @@ def menu_orden(request):
         request.session['todos_ordenes'] = todos_ordenes
         request.session['todos_bebidas'] = todos_bebidas
         request.session['todos_extras'] = todos_extras
+        request.session['todos_sushis'] = todos_sushis
         request.session['todos_desayunos'] = todos_desayunos
 
         #TODO request.session['todos_desayunos'] = todos_desayunos
@@ -146,8 +152,9 @@ def resumen_pedido(request):
 
     todos_menus = request.session['todos_menus']
     todos_ordenes = request.session['todos_ordenes']
-    todos_extras = request.session['todos_extras']
     todos_bebidas = request.session['todos_bebidas']
+    todos_extras = request.session['todos_extras']
+    todos_sushis = request.session['todos_sushis']
     todos_desayunos = request.session['todos_desayunos']
 
     observaciones = request.session.get('observaciones')
@@ -219,6 +226,19 @@ def resumen_pedido(request):
         pedidos_del_cliente.append(platillo_orden)
         orden.total += platillo_orden.sub_total
 
+    #agregamos las bebidas a la lista pedidos_del_cliente
+    print(todos_bebidas)
+    for i in range(len(todos_bebidas)):
+        platillo_actual = Platillo.objects.filter(nombre=todos_bebidas[i][0])[0]
+        cantidad_platillo_actual = int(todos_bebidas[i][1])
+        platillo_orden = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio * cantidad_platillo_actual),
+                                       es_completa=False,
+                                       cantidad=cantidad_platillo_actual,
+                                       orden=orden,
+                                       platillo=platillo_actual)
+        pedidos_del_cliente.append(platillo_orden)
+        orden.total += platillo_orden.sub_total
+
     #agregamos los extras a la lista pedidos_del_cliente
     for i in range(len(todos_extras)):
         platillo_actual = Platillo.objects.filter(nombre=todos_extras[i][0])[0]
@@ -231,11 +251,10 @@ def resumen_pedido(request):
         pedidos_del_cliente.append(platillo_orden)
         orden.total += platillo_orden.sub_total
 
-    #agregamos las bebidas a la lista pedidos_del_cliente
-    print(todos_bebidas)
-    for i in range(len(todos_bebidas)):
-        platillo_actual = Platillo.objects.filter(nombre=todos_bebidas[i][0])[0]
-        cantidad_platillo_actual = int(todos_bebidas[i][1])
+    #agregamos los sushis a la lista pedidos_del_cliente
+    for i in range(len(todos_sushis)):
+        platillo_actual = Platillo.objects.filter(nombre=todos_sushis[i][0])[0]
+        cantidad_platillo_actual = int(todos_sushis[i][1])
         platillo_orden = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio * cantidad_platillo_actual),
                                        es_completa=False,
                                        cantidad=cantidad_platillo_actual,
