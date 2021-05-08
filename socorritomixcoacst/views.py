@@ -521,7 +521,7 @@ def registrar_clientes(request):
     telefono_nuevocliente = request.session['telefono']
     #Pregunta si hay datos ocultos(POST)
     if request.method == "POST":
-        cliente_registro = Cliente(nombre=request.POST.get("nombre")+" "+request.POST.get("apellidos"),
+        cliente_registro = Cliente(nombre=request.POST.get("nombre"),
                             direccion=request.POST.get("direccion")+" "+request.POST.get("colonia"),
                             telefono=request.POST.get("telefono"),
                             telefono_alternativo=request.POST.get("telefonoalt"),
