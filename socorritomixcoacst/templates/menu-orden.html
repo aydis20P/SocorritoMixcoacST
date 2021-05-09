@@ -23,6 +23,9 @@
                 <a class="nav-link" id="extras-tab" data-mdb-toggle="tab" href="#panel-extras" role="tab" aria-controls="panel-extras" aria-selected="false">Extras</a>
             </li>
             <li class="nav-item" role="presentation">
+                <a class="nav-link" id="sushis-tab" data-mdb-toggle="tab" href="#panel-sushis" role="tab" aria-controls="panel-sushis" aria-selected="false">Sushis</a>
+            </li>
+            <li class="nav-item" role="presentation">
                 <a class="nav-link" id="desayunos-tab" data-mdb-toggle="tab" href="#panel-desayunos" role="tab" aria-controls="panel-desayunos" aria-selected="false">Desayunos</a>
             </li>
         </ul>
@@ -46,7 +49,7 @@
                                                     {% if platillo.tipo == 'EN' %}
                                                         <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
                                                     {% endif %}
-                                                {% endfor %}        
+                                                {% endfor %}
                                             </select>
                                         </div>
                                         <div class="row mb-1">
@@ -56,7 +59,7 @@
                                                     {% if platillo.tipo == 'ST' %}
                                                         <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
                                                     {% endif %}
-                                                {% endfor %}   
+                                                {% endfor %}
                                             </select>
                                         </div>
                                         <div class="row">
@@ -75,8 +78,8 @@
                                             </button>
                                         </div>
                                     </div>
-                               
-                                    
+
+
                                 </div>
                             </div>
                         </li>
@@ -105,25 +108,27 @@
                         <tr>
                             {% if not platillo.tipo == "EX" %}
                                 {% if not platillo.tipo == "BE" %}
-                                    <td>{{ platillo.nombre }}</td>
-                                    <td class="precio">{{ platillo.precio }}</td>
-                                    {% csrf_token %}
-                                    <td>
-                                        <div class="d-flex justify-content-start">
-                                            <div class="form-outline">
-                                                <input readonly value="0" type="text" id="orden_de_{{ platillo.nombre }}" class="form-control" name="orden_de_{{ platillo.nombre }}"/>
-                                                <label class="form-label" for="form1">Cantidad</label>
+                                    {% if not platillo.tipo == "SU" %}
+                                        <td>{{ platillo.nombre }}</td>
+                                        <td class="precio">{{ platillo.precio }}</td>
+                                        {% csrf_token %}
+                                        <td>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="form-outline">
+                                                    <input readonly value="0" type="text" id="orden_de_{{ platillo.nombre }}" class="form-control" name="orden_de_{{ platillo.nombre }}"/>
+                                                    <label class="form-label" for="form1">Cantidad</label>
+                                                </div>
+                                                <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
+                                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_de_{{ platillo.nombre }}')">
+                                                    <i class="fas fa-angle-up"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_de_{{ platillo.nombre }}')">
+                                                    <i class="fas fa-angle-down"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
-                                                <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_de_{{ platillo.nombre }}')">
-                                                <i class="fas fa-angle-up"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_de_{{ platillo.nombre }}')">
-                                                <i class="fas fa-angle-down"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
+                                        </td>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </tr>
@@ -212,7 +217,47 @@
                 </table>
             </div>
 
-            <!--Panel Desayunos-->
+            <!-- panel 5: sushis -->
+            <div class="tab-pane fade" id="panel-sushis" role="tabpanel" aria-labelledby="sushis-tab">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Platillo</th>
+                            <th scope="col">Costo</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for platillo in platillos%}
+                        <tr>
+                            {% if platillo.tipo == "SU" %}
+                                <td>{{ platillo.nombre }}</td>
+                                <td class="precio">{{ platillo.precio }}</td>
+                                {% csrf_token %}
+                                <td>
+                                    <div class="d-flex justify-content-start">
+                                        <div class="form-outline">
+                                            <input readonly value="0" type="text" id="orden_sushi_de_{{ platillo.nombre }}" class="form-control" name="orden_sushi_de_{{ platillo.nombre }}"/>
+                                            <label class="form-label" for="form1">Cantidad</label>
+                                        </div>
+                                        <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
+                                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_sushi_de_{{ platillo.nombre }}')">
+                                            <i class="fas fa-angle-up"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_sushi_de_{{ platillo.nombre }}')">
+                                            <i class="fas fa-angle-down"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- panel 6: Desayunos-->
             <div class="tab-pane fade" id="panel-desayunos" role="tabpanel" aria-labelledby="desayunos-tab">
                 <div class="container-lg">
                     <!-- Comienza la tabla que contendrá los paquetes-->
@@ -228,9 +273,9 @@
                                                 <select hidden name="select-"  id="select1"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq1 in paquete1 %}
-                                                    {% if paq1.tipo_desayuno == "D1" and paq1.esta_eliminado == False %}    
+                                                    {% if paq1.tipo_desayuno == "D1" and paq1.esta_eliminado == False %}
                                                     <option selected disabled value="{{paq1.nombre}}">{{paq1.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                                 </select>
@@ -238,14 +283,14 @@
                                                 <select name="select"  id="select2" class="form-select">
                                                     <option selected disabled>------</option>
                                                     {% for paq1 in paquete1 %}
-                                                    {% if paq1.tipo_desayuno == "D2" and paq1.esta_eliminado == False %}    
+                                                    {% if paq1.tipo_desayuno == "D2" and paq1.esta_eliminado == False %}
                                                     <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
-                                                    
+
                                                 </select>
-                                               
+
                                                 {% for  precios in desayunos%}
                                                 {%if precios.nombre == "Paquete 1"%}
                                                     <h6>Café de olla/americano/Té</h6>
@@ -257,9 +302,9 @@
                                                 <select name="select" id="select3" class="form-select">
                                                     <option selected disabled>------</option>
                                                     {% for paq1 in paquete1 %}
-                                                    {% if paq1.tipo_desayuno == "D3" and paq1.esta_eliminado == False %}    
+                                                    {% if paq1.tipo_desayuno == "D3" and paq1.esta_eliminado == False %}
                                                     <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                                 </select>
@@ -267,7 +312,7 @@
                                                 <div class="text-center">
                                                     <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="Paquete 1" onload="sumarextra(costo,extra)" onclick="agregarDesayuno(this,1,2,3)"value="Paquete 1">Añadir</button>
                                                 </div>
-                                            </div>    
+                                            </div>
                                         </div>
                                     </td>
                                     <td>
@@ -278,9 +323,9 @@
                                             <select hidden name="select" form="paquetes" id="select4"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq2 in paquete2 %}
-                                                    {% if paq2.tipo_desayuno == "D1" and paq2.esta_eliminado == False %}    
+                                                    {% if paq2.tipo_desayuno == "D1" and paq2.esta_eliminado == False %}
                                                     <option selected disabled value="{{paq2.nombre}}">{{paq2.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -288,12 +333,12 @@
                                             <select name="select" form="paquetes" id="select5" class="form-select">
                                                <option selected disabled>------</option>
                                                     {% for paq2 in paquete2 %}
-                                                    {% if paq2.tipo == "GU" and paq2.esta_eliminado == False and paq2.tipo_desayuno == "D2" %}    
+                                                    {% if paq2.tipo == "GU" and paq2.esta_eliminado == False and paq2.tipo_desayuno == "D2" %}
                                                     <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
-                                                
+
                                             </select>
                                             {% for  precios in desayunos%}
                                                 {%if precios.nombre == "Paquete 2"%}
@@ -306,9 +351,9 @@
                                             <select name="select" form="paquetes" id="select6" class="form-select">
                                                 <option selected disabled>------</option>
                                                     {% for paq2 in paquete2 %}
-                                                    {% if paq2.tipo_desayuno == "D3" and paq2.esta_eliminado == False %}    
+                                                    {% if paq2.tipo_desayuno == "D3" and paq2.esta_eliminado == False %}
                                                     <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -326,9 +371,9 @@
                                             <select hidden name="select" form="paquetes" id="select7"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq3 in paquete3 %}
-                                                    {% if paq3.tipo_desayuno == "D1" and paq3.esta_eliminado == False %}    
+                                                    {% if paq3.tipo_desayuno == "D1" and paq3.esta_eliminado == False %}
                                                     <option selected disabled value="{{paq3.nombre}}">{{paq3.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -336,12 +381,12 @@
                                             <select name="select" form="paquetes" id="select8" class="form-select">
                                                <option selected disabled>------</option>
                                                 {% for paq3 in platillos %}
-                                                    {% if paq3.tipo == "GU" and paq3.esta_eliminado == False %}    
+                                                    {% if paq3.tipo == "GU" and paq3.esta_eliminado == False %}
                                                     <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
-                                                
+
                                             </select>
                                             {% for  precios in desayunos%}
                                                 {%if precios.nombre == "Paquete 3"%}
@@ -354,9 +399,9 @@
                                             <select name="select" form="paquetes" id="select9" class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq3 in paquete3 %}
-                                                    {% if paq3.tipo_desayuno == "D3" and paq3.esta_eliminado == False %}    
+                                                    {% if paq3.tipo_desayuno == "D3" and paq3.esta_eliminado == False %}
                                                     <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -376,9 +421,9 @@
                                             <select hidden name="select" form="paquetes" id="select10"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq4 in paquete4 %}
-                                                    {% if paq4.tipo_desayuno == "D1" and paq4.esta_eliminado == False %}    
+                                                    {% if paq4.tipo_desayuno == "D1" and paq4.esta_eliminado == False %}
                                                     <option selected disabled value="{{paq4.nombre}}">{{paq4.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -386,12 +431,12 @@
                                             <select name="select" form="paquetes" id="select11" class="form-select">
                                                <option selected disabled>------</option>
                                                 {% for paq4 in paquete4 %}
-                                                    {% if paq4.tipo_desayuno != "D1" and paq4.tipo_desayuno != "D3" and paq4.esta_eliminado == False %}    
+                                                    {% if paq4.tipo_desayuno != "D1" and paq4.tipo_desayuno != "D3" and paq4.esta_eliminado == False %}
                                                     <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %} pollo</option>
-                                                
+
                                             </select>
                                             {% for  precios in desayunos%}
                                                 {%if precios.nombre == "Paquete 4"%}
@@ -404,9 +449,9 @@
                                             <select name="select" form="paquetes" id="select12" class="form-select">
                                                <option selected disabled>------</option>
                                                 {% for paq4 in paquete4 %}
-                                                    {% if paq4.tipo_desayuno == "D3" and paq4.esta_eliminado == False %}    
+                                                    {% if paq4.tipo_desayuno == "D3" and paq4.esta_eliminado == False %}
                                                     <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %} pollo</option>
                                             </select>
@@ -424,9 +469,9 @@
                                             <select hidden name="select" form="paquetes" id="select13"class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq5 in paquete5 %}
-                                                    {% if paq5.tipo_desayuno == "D1" and paq5.esta_eliminado == False %}    
+                                                    {% if paq5.tipo_desayuno == "D1" and paq5.esta_eliminado == False %}
                                                     <option selected disabled value="{{paq5.nombre}}">{{paq5.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -434,12 +479,12 @@
                                             <select name="select" form="paquetes" id="select14" class="form-select">
                                                  <option selected disabled>------</option>
                                                 {% for paq5 in paquete5 %}
-                                                    {% if paq5.tipo_desayuno != "D1" and paq5.tipo_desayuno != "D3" and paq5.esta_eliminado == False %}    
+                                                    {% if paq5.tipo_desayuno != "D1" and paq5.tipo_desayuno != "D3" and paq5.esta_eliminado == False %}
                                                     <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
-                                                
+
                                             </select>
                                             {% for  precios in desayunos%}
                                                 {%if precios.nombre == "Paquete 5"%}
@@ -452,9 +497,9 @@
                                             <select name="select" form="paquetes" id="select15" class="form-select">
                                                  <option selected disabled>------</option>
                                                 {% for paq5 in paquete5 %}
-                                                    {% if paq5.tipo_desayuno == "D3" and paq5.esta_eliminado == False %}    
+                                                    {% if paq5.tipo_desayuno == "D3" and paq5.esta_eliminado == False %}
                                                     <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -472,9 +517,9 @@
                                             <select hidden name="select" form="paquetes" id="select16"class="form-select">
                                                <option selected disabled>------</option>
                                                 {% for paq6 in paquete6 %}
-                                                    {% if paq6.tipo_desayuno == "D1" and paq6.esta_eliminado == False %}    
+                                                    {% if paq6.tipo_desayuno == "D1" and paq6.esta_eliminado == False %}
                                                     <option selected disabled value="{{paq6.nombre}}">{{paq6.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -482,12 +527,12 @@
                                             <select name="select" form="paquetes" id="select17" class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq6 in paquete6 %}
-                                                    {% if paq6.tipo_desayuno != "D1" and paq6.tipo_desayuno != "D3" and paq6.esta_eliminado == False %}    
+                                                    {% if paq6.tipo_desayuno != "D1" and paq6.tipo_desayuno != "D3" and paq6.esta_eliminado == False %}
                                                     <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
-                                                
+
                                             </select>
                                             {% for  precios in desayunos%}
                                                 {%if precios.nombre == "Paquete 6"%}
@@ -500,9 +545,9 @@
                                             <select name="select" form="paquetes" id="select18" class="form-select">
                                                 <option selected disabled>------</option>
                                                 {% for paq6 in paquete6 %}
-                                                    {% if paq6.tipo_desayuno == "D3" and paq6.esta_eliminado == False %}    
+                                                    {% if paq6.tipo_desayuno == "D3" and paq6.esta_eliminado == False %}
                                                     <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -522,9 +567,9 @@
                                             <select hidden name="select" form="paquetes" id="select19" class="form-select bg-success text-white">
                                                 <option selected disabled>------</option>
                                                 {% for paq7 in paquete7 %}
-                                                    {% if paq7.tipo_desayuno == "D1" and paq7.esta_eliminado == False %}    
+                                                    {% if paq7.tipo_desayuno == "D1" and paq7.esta_eliminado == False %}
                                                     <option selected disabled value="{{paq7.nombre}}">{{paq7.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -532,22 +577,22 @@
                                             <h6>Salchipullpos/ Croquetas de pollo</h6>
                                             {% for  precios in desayunos%}
                                                 {%if precios.nombre == "Paquete infantil"%}
-                                                    
+
                                                     <h6 id="costo6">Precio --------{{precios.precio}} </h6>
-                                                    
+
                                                 {%endif%}
                                             {%endfor%}
                                             <select name="select" form="paquetes" id="select20" class="form-select bg-success text-white">
                                                <option selected disabled>------</option>
                                                 {% for paq7 in paquete7 %}
-                                                    {% if paq7.tipo_desayuno == "D2" and paq7.esta_eliminado == False %}    
+                                                    {% if paq7.tipo_desayuno == "D2" and paq7.esta_eliminado == False %}
                                                     <option value="{{paq7.nombre}}">{{paq7.nombre}}</option>
-                                                    
+
                                                     {% endif %}
                                                 {% endfor %}
-                                                
+
                                             </select>
-                                            
+
                                             <br></br>
                                             <div class="text-center">
                                                 <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="Paquete infantil" onclick="agregarDesayuno(this,19,20,null)">Añadir</button>
@@ -572,7 +617,7 @@
                                 </tr>
                             </thead>
                             <tbody id="ordenes-desayunos">
-                               
+
                             </tbody>
                         </table>
                     </div>
@@ -580,10 +625,10 @@
 
 
 
-                       
-                   
-                                                   
-                       
+
+
+
+
                 </div>
             </div>
 
@@ -615,7 +660,7 @@
                 </div>
             </div>
         </div>
-        
+
     </form>
     {% else %}
         <div class="container">
@@ -660,7 +705,7 @@
             var val = document.getElementById(platilloNombre).value;//obtenemos el valor del elemento
             console.log(val);
             val = parseInt(val) + 1;//lo parseamos a int e incrementamos en 1
-            
+
             if(!isNaN(val)){//validación Is Not a Number
                 if(val<100)
                     document.getElementById(platilloNombre).value = val;//actualizamos el valor
@@ -676,15 +721,15 @@
             }
         }
 
-        
-        var numeroMenus = 0; 
+
+        var numeroMenus = 0;
 
         function agregarMenu(){
             //creamos un elemeno de tipo ítem de lista (<li>),
             //le asignamos las clases list-group-item y menu-completo,
             //y le damos un identificador del siguente lugar en la lista
             var nuevoMenu = document.createElement("li")
-            nuevoMenu.className = "list-group-item menu-completo" 
+            nuevoMenu.className = "list-group-item menu-completo"
             nuevoMenu.id = "menu-" + numeroMenus
             numeroMenus++;
 
@@ -704,7 +749,7 @@
 
         }
 
-        
+
 
         function removerMenu(boton){
             //ya que el botón se pasa a si mismo como parámetro, lo usamos de referencia para obtener su contenedor,
@@ -725,8 +770,8 @@
 
         var indice = 1;
         function agregarDesayuno(bot_env,a,b,c){
-            //Primero vamos a obtener las ordenes 
-            
+            //Primero vamos a obtener las ordenes
+
             paquete = bot_env.value;
            //Obtenemos el valor del primer select
             var combo = document.getElementById("select"+a);
@@ -738,25 +783,25 @@
             document.ready = document.getElementById("select"+b).value = '0';
            //Obtenemos el valor del tercer select
             if(c == null){
-               
+
                 var limpia = ""
                 var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><td>'+limpia+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
-            }   
+            }
             else{
                 var combo3 = document.getElementById("select"+c);
                 var select3 = combo3.options[combo3.selectedIndex].text;
                 document.ready = document.getElementById("select"+c).value = '0';
                 var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="orden-desayunos_'+indice+'_3" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
-              
+
             }
 
-           
+
             if ((select !== "------" && select2 !== "------" && select3 !== "------")){
                 var orden = document.createElement("TR");
                 orden.innerHTML=fila;
                 document.getElementById("ordenes-desayunos").appendChild(orden);
                 indice++;
-            }    
+            }
         }
         function eliminarFila(eliminar,index) {
             var btn = eliminar.value;
@@ -771,13 +816,13 @@
                 var contenido = parseInt(operacion.replace("Precio --------", ""));
                 contenido = contenido + 10;
                 console.log(contenido);
-                
+
                 //console.log(elem2);
                 var nuevo = document.getElementById("extra"+i).innerHTML = "Precio ------- "+contenido;
-            }  
+            }
 
 
         }
-        
+
     </script>
 {% endblock script %}
