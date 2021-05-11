@@ -69,8 +69,6 @@ def menu_orden(request):
     paquete6=Platillo.objects.filter(desayuno__nombre = "Paquete 6")
     paquete7=Platillo.objects.filter(desayuno__nombre = "Paquete infantil")
     Desayunos = Desayuno.objects.all()
-    print("Aquí comienza:----------------------------------------------------------------------------------------------------")
-    print (Desayunos)
 
     if request.method == "POST":
 
@@ -130,6 +128,11 @@ def menu_orden(request):
         context = {}
         context['referer'] = pag_ant #mandarlo en el contexto
         context['platillos'] = lista_platillos #Todos los platillos de la BD
+        #Las siguientes tres lineas son para generar las tablas de las tabs ordenes, bebidas y extras FS-41
+        lista_hp_sin_filtrar = HistorialPrecio.objects.filter(es_precio_actual=True) #Se utiliza para obtener todos los platillos con su precio actual
+        lista_menu_del_dia = [platilloMenu.platillo for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.disponible]
+        context['historiales_precio'] = [historial_precio for historial_precio in lista_hp_sin_filtrar if historial_precio.platillo in lista_menu_del_dia]
+
         context['entradas'] = entradas
         context['segundos_tiempos'] = segundos_tiempos
         context['guisados'] = guisados
@@ -277,25 +280,16 @@ def resumen_pedido(request):
             #agregar los platillos de los paquetes a la lista platillos con la clave correspondiente a su paquete
             platillos.append((numero_menu - 1, v))
 
-    print("\nTRACEBACK desayunos ordenados")
-    for c, v in desayunos:
-        print("clave: " + str(c) + " valor: " + v)
-    for c, v in platillos:
-        print("clave: " + str(c) + " valor: " + v)
-
     for clave, desayuno in desayunos:
         #obtener sus platillos
         platillos_desayuno = [platillo for c, platillo in platillos if c == clave]
-        print("\nTRACEBACK"+ str(platillos_desayuno))
 
         #obterner su precio
         precio = Desayuno.objects.filter(nombre=desayuno)[0].precio
-        print("precio original: "+ str(precio))
         #verificar si el precio es aumentado
         for platillo in platillos_desayuno:
             if "Leche Caliente" in platillo or "chino" in platillo or "late" in platillo or "Café con leche" in platillo:
                 precio = precio +10
-        print("precio nuevo: "+ str(precio) + " termina TRACEBACK\n")
 
         #obtener el numero_completa
         numero_completa = clave
@@ -315,7 +309,6 @@ def resumen_pedido(request):
                                             platillo=Platillo.objects.filter(nombre=platillos_desayuno[i])[0])
             pedidos_del_cliente.append(orden_platillo)
 
-    print("\nTRACEBACK pedidos_del_cliente: ")
     for op in pedidos_del_cliente:
         print(op)
     print("termina TRACEBACK\n")
@@ -429,7 +422,7 @@ class PerfilCliente(DetailView):
         context['referer'] = nueva_url
 
         #Se obtienen todos los pedidos realizados por el cliente y se guardan en una lista
-        lista_pedidos = Orden.objects.filter(cliente=self.object)
+        lista_pedidos = Orden.objects.filter(cliente=self.object).order_by('-fecha')
         context['pedidos'] = lista_pedidos
         #Se obtienen todas las ordenesPlatillo asociadas a los pedidos del cliente
         context['ordenes_platillo'] = [orden_platillo for orden_platillo in OrdenPlatillo.objects.all() if orden_platillo.orden.cliente==self.object]
@@ -458,9 +451,7 @@ class PerfilCliente(DetailView):
             ordensita_platillos = OrdenPlatillo.objects.filter(orden=ordensita)
             context={}
             context['orden'] = ordensita
-            print("la ordenswita es = " +str(ordensita))
             context['pedidos_del_cliente'] = ordensita_platillos
-            print("la otra es "+str(ordensita_platillos))
             return render(request, "impresion-ticket.html", context)
         else:
             if nombre:
