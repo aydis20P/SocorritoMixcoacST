@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+ 
+ <head>
+    <!-- Algunas importaciones para instalar MDB (Bootstrap) -->
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css"
+    rel="stylesheet"
+    />
+    <!-- MDB JS -->
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"
+    ></script>
+    <title>Reproductor de Playlists de YouTube</title>
+
+ </head>
+ 
+ <!-- CSS -->
+ <style>
+ .dark-mode {
+    background-color: #262626;
+    color: white;
+    }
+
+  p {
+    color: white;
+    margin: 35px;
+  }
+
+
+  html, body, div, iframe { 
+    margin:0; 
+    padding:0; 
+    height:100%; 
+  }
+  
+  iframe { 
+    display:block; 
+    width:100%; 
+    border:none; 
+  }
+
+
+ </style>
+
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=function"></script>
+    <script>
+
+    // Modo oscuro
+    var element = document.body;
+    element.classList.toggle("dark-mode");
+
+    $(document).ready(function(){
+      
+       // URL del API de youtube      
+       var URL="https://content.googleapis.com/youtube/v3/playlistItems";
+ 
+       // ID del playlist
+       var playlistID = "PLC3A5E11175C29533";
+       
+       // Llave obtenida de google
+       var APIKey = "AIzaSyC3Q4eRs3Mc5dYmH2ewrVmFs3AwMwUVVsE";
+ 
+       // Invocación AJAX
+       $.get(URL,"playlistId="+playlistID+"&maxResults=50&part=id,snippet&key="+APIKey,cargaPlaylist);
+
+       // Callback. Playlist es un objeto que contiene otros objetos que son las entradas de la lista
+       function cargaPlaylist(playlist)
+       {
+          // Este mensaje aparece en la consola de desarrollo de JavaScript en el navegador
+          console.log("Encontré lista con "+playlist.items.length+" elementos");
+
+          //Pone en el frame el primer elemento de la lista de reproduccion y lo reproduce
+          document.getElementById("frame").innerHTML = "<iframe src='https://www.youtube.com/embed/"+playlist.items[0].snippet.resourceId.videoId+"?&autoplay=1&mute=1&loop=0'></iframe>";
+
+          // Recorre los objetos de la playlist y genera la lista
+          var i;
+          var sources = [];
+          for (i=0;i<playlist.items.length-2;i++) {
+    	     var element = playlist.items[i];
+             //Verifico que el video esté disponible a través de la imagen en miniatura (de lo contrario habrán errores)
+             if(typeof(element.snippet.thumbnails.default)!='undefined'){
+              //Acomoda el titulo y la imagen de cada video en una tabla; cada video se representa en una table row
+              $("#tabla-videos").append($("<tr id="+element.snippet.resourceId.videoId+"></tr>"));
+              $("#"+element.snippet.resourceId.videoId).append($("<td><p>"+element.snippet.title+"</p></td>"));
+              console.log(element.snippet);
+              $("#"+element.snippet.resourceId.videoId).append($("<td><img src="+element.snippet.thumbnails.default.url+"></td>"));
+              document.getElementById(element.snippet.resourceId.videoId).classList.toggle("dark-mode")
+              $("#"+element.snippet.resourceId.videoId).click(function(){
+                //Reinicia todas las tr a su background color original
+                $("tr").css("background-color","#262626");
+                //Coloca en la frame el respectivo video que se seleccionó
+                id = $(this).attr('id');
+                document.getElementById("frame").innerHTML = "<iframe src='https://www.youtube.com/embed/"+id+"?&autoplay=1&mute=1&loop=0&playlist="+id+"'></iframe>";
+                //Cambia el background color de la tr seleccionada a modo de "focus"
+                $(this).css("background-color","#424242");
+              });
+             }
+          }
+          //Cambia el background color del primer elemento de la tabla a modo de "focus"
+          $("#"+$("#"+playlist.items[0].snippet.resourceId.videoId).attr('id')).css("background-color","#424242");
+          //
+          
+       }
+   });
+
+
+  var player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('frame', {
+    height: '360',
+    width: '640',
+    videoId: 'M7lc1UVf-VE',
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+
+
+
+
+   //Esta función es una copia de la funcion $(document).ready(function(); lo unico que cambia es que el ID de la playlist se toma del input field que llena el usuario
+   function actualizaPlaylist(){
+    // URL del API de youtube      
+    var URL="https://content.googleapis.com/youtube/v3/playlistItems";
+ 
+    // ID del playlist
+    var playlistID = document.getElementById("btn-busqueda").value;
+ 
+    // Llave obtenida de google
+    var APIKey = "AIzaSyC3Q4eRs3Mc5dYmH2ewrVmFs3AwMwUVVsE";
+
+    //Invocación AJAX
+    $.get(URL,"playlistId="+playlistID+"&maxResults=50&part=id,snippet&key="+APIKey,cargaPlaylist);
+
+    console.log(document.getElementById("btn-busqueda").value);
+
+    function cargaPlaylist(playlist)
+       {
+          // Este mensaje aparece en la consola de desarrollo de JavaScript en el navegador
+          console.log("Encontré lista con "+playlist.items.length+" elementos");
+ 
+          // Crea una lista
+          $("#contenido").append($("<ul>"));
+        
+          // Recorre los objetos de la playlist y genera la lista
+          var i;
+          var sources = [];
+          for (i=0;i<playlist.items.length;i++) {
+    	     var element = playlist.items[i];
+
+             $("#contenido").append($("<li id="+element.snippet.resourceId.videoId+">"+element.snippet.title+"</li>"));
+             $("#"+element.snippet.resourceId.videoId).click(function(){
+              id = $(this).attr('id');
+              document.getElementById("frame").innerHTML = "<iframe width='420' height='315' src='https://www.youtube.com/embed/"+id+"'></iframe>";
+             });
+          }
+          $("#contenido").append($("</ul>"));
+       }
+   };
+   </script>
+
+  <tr id="+element.snippet.resourceId.videoId+"></tr>
+   <!-- Nav Bar -->
+   <nav class="navbar navbar-light" style="background:#F44336;">
+    <div class="container-fluid ">
+      <!-- Input de búsqueda -->
+      <form class="d-flex input-group w-auto">
+        <input
+          id="btn-busqueda"
+          type="search"
+          class="form-control"
+          placeholder="ID del playlist"
+          aria-label="Search"
+        />
+        <button
+          class="btn btn-outline-light"
+          type="button"
+          data-mdb-ripple-color="dark"
+          onclick="actualizaPlaylist()"
+        >
+          Cargar
+        </button>
+      </form>
+    </div>
+   </nav>
+   <div class="container-xl">
+    <div class="d-flex justify-content-between flex-row mb-3">
+      <div class="p-2" id="contenido">
+        <div class="table-responsive">
+          <table class="table" id="tabla-videos">
+
+          </table>
+        </div>
+      </div>
+      <div id="frame" class="p-2 flex-grow-1">
+      
+      </div>
+  </div>
+   </div>
+    
+
+ </body>
+ 
+</html>
