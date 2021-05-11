@@ -69,8 +69,6 @@ def menu_orden(request):
     paquete6=Platillo.objects.filter(desayuno__nombre = "Paquete 6")
     paquete7=Platillo.objects.filter(desayuno__nombre = "Paquete infantil")
     Desayunos = Desayuno.objects.all()
-    print("Aquí comienza:----------------------------------------------------------------------------------------------------")
-    print (Desayunos)
 
     if request.method == "POST":
 
@@ -78,6 +76,7 @@ def menu_orden(request):
         todos_ordenes = []
         todos_bebidas = []
         todos_extras = []
+        todos_sushis = []
         todos_desayunos = [] #lista de los potenciales ordenplatillo que se mandará a la vista resumen_pedido
 
         request.session['observaciones'] = request.POST.get('observaciones')
@@ -101,6 +100,10 @@ def menu_orden(request):
                 if int(valor) > 0:
                     todos_extras.append(tuple((clave.replace("orden_extra_de_", ""), valor)))
 
+            if "orden_sushi_de" in clave:
+                if int(valor) > 0:
+                    todos_sushis.append(tuple((clave.replace("orden_sushi_de_", ""), valor)))
+
             #si es un paquete de desayuno
             if "orden-desayunos" in clave:
                 todos_desayunos.append(tuple((clave.replace("orden-desayunos_", ""), valor)))
@@ -109,6 +112,7 @@ def menu_orden(request):
         request.session['todos_ordenes'] = todos_ordenes
         request.session['todos_bebidas'] = todos_bebidas
         request.session['todos_extras'] = todos_extras
+        request.session['todos_sushis'] = todos_sushis
         request.session['todos_desayunos'] = todos_desayunos
 
         #TODO request.session['todos_desayunos'] = todos_desayunos
@@ -124,6 +128,11 @@ def menu_orden(request):
         context = {}
         context['referer'] = pag_ant #mandarlo en el contexto
         context['platillos'] = lista_platillos #Todos los platillos de la BD
+        #Las siguientes tres lineas son para generar las tablas de las tabs ordenes, bebidas y extras FS-41
+        lista_hp_sin_filtrar = HistorialPrecio.objects.filter(es_precio_actual=True) #Se utiliza para obtener todos los platillos con su precio actual
+        lista_menu_del_dia = [platilloMenu.platillo for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.disponible]
+        context['historiales_precio'] = [historial_precio for historial_precio in lista_hp_sin_filtrar if historial_precio.platillo in lista_menu_del_dia]
+
         context['entradas'] = entradas
         context['segundos_tiempos'] = segundos_tiempos
         context['guisados'] = guisados
@@ -146,8 +155,9 @@ def resumen_pedido(request):
 
     todos_menus = request.session['todos_menus']
     todos_ordenes = request.session['todos_ordenes']
-    todos_extras = request.session['todos_extras']
     todos_bebidas = request.session['todos_bebidas']
+    todos_extras = request.session['todos_extras']
+    todos_sushis = request.session['todos_sushis']
     todos_desayunos = request.session['todos_desayunos']
 
     observaciones = request.session.get('observaciones')
@@ -219,6 +229,19 @@ def resumen_pedido(request):
         pedidos_del_cliente.append(platillo_orden)
         orden.total += platillo_orden.sub_total
 
+    #agregamos las bebidas a la lista pedidos_del_cliente
+    print(todos_bebidas)
+    for i in range(len(todos_bebidas)):
+        platillo_actual = Platillo.objects.filter(nombre=todos_bebidas[i][0])[0]
+        cantidad_platillo_actual = int(todos_bebidas[i][1])
+        platillo_orden = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio * cantidad_platillo_actual),
+                                       es_completa=False,
+                                       cantidad=cantidad_platillo_actual,
+                                       orden=orden,
+                                       platillo=platillo_actual)
+        pedidos_del_cliente.append(platillo_orden)
+        orden.total += platillo_orden.sub_total
+
     #agregamos los extras a la lista pedidos_del_cliente
     for i in range(len(todos_extras)):
         platillo_actual = Platillo.objects.filter(nombre=todos_extras[i][0])[0]
@@ -231,11 +254,10 @@ def resumen_pedido(request):
         pedidos_del_cliente.append(platillo_orden)
         orden.total += platillo_orden.sub_total
 
-    #agregamos las bebidas a la lista pedidos_del_cliente
-    print(todos_bebidas)
-    for i in range(len(todos_bebidas)):
-        platillo_actual = Platillo.objects.filter(nombre=todos_bebidas[i][0])[0]
-        cantidad_platillo_actual = int(todos_bebidas[i][1])
+    #agregamos los sushis a la lista pedidos_del_cliente
+    for i in range(len(todos_sushis)):
+        platillo_actual = Platillo.objects.filter(nombre=todos_sushis[i][0])[0]
+        cantidad_platillo_actual = int(todos_sushis[i][1])
         platillo_orden = OrdenPlatillo(sub_total=(HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio * cantidad_platillo_actual),
                                        es_completa=False,
                                        cantidad=cantidad_platillo_actual,
@@ -258,25 +280,16 @@ def resumen_pedido(request):
             #agregar los platillos de los paquetes a la lista platillos con la clave correspondiente a su paquete
             platillos.append((numero_menu - 1, v))
 
-    print("\nTRACEBACK desayunos ordenados")
-    for c, v in desayunos:
-        print("clave: " + str(c) + " valor: " + v)
-    for c, v in platillos:
-        print("clave: " + str(c) + " valor: " + v)
-
     for clave, desayuno in desayunos:
         #obtener sus platillos
         platillos_desayuno = [platillo for c, platillo in platillos if c == clave]
-        print("\nTRACEBACK"+ str(platillos_desayuno))
 
         #obterner su precio
         precio = Desayuno.objects.filter(nombre=desayuno)[0].precio
-        print("precio original: "+ str(precio))
         #verificar si el precio es aumentado
         for platillo in platillos_desayuno:
             if "Leche Caliente" in platillo or "chino" in platillo or "late" in platillo or "Café con leche" in platillo:
                 precio = precio +10
-        print("precio nuevo: "+ str(precio) + " termina TRACEBACK\n")
 
         #obtener el numero_completa
         numero_completa = clave
@@ -296,7 +309,6 @@ def resumen_pedido(request):
                                             platillo=Platillo.objects.filter(nombre=platillos_desayuno[i])[0])
             pedidos_del_cliente.append(orden_platillo)
 
-    print("\nTRACEBACK pedidos_del_cliente: ")
     for op in pedidos_del_cliente:
         print(op)
     print("termina TRACEBACK\n")
@@ -410,7 +422,7 @@ class PerfilCliente(DetailView):
         context['referer'] = nueva_url
 
         #Se obtienen todos los pedidos realizados por el cliente y se guardan en una lista
-        lista_pedidos = Orden.objects.filter(cliente=self.object)
+        lista_pedidos = Orden.objects.filter(cliente=self.object).order_by('-fecha')
         context['pedidos'] = lista_pedidos
         #Se obtienen todas las ordenesPlatillo asociadas a los pedidos del cliente
         context['ordenes_platillo'] = [orden_platillo for orden_platillo in OrdenPlatillo.objects.all() if orden_platillo.orden.cliente==self.object]
@@ -439,9 +451,7 @@ class PerfilCliente(DetailView):
             ordensita_platillos = OrdenPlatillo.objects.filter(orden=ordensita)
             context={}
             context['orden'] = ordensita
-            print("la ordenswita es = " +str(ordensita))
             context['pedidos_del_cliente'] = ordensita_platillos
-            print("la otra es "+str(ordensita_platillos))
             return render(request, "impresion-ticket.html", context)
         else:
             if nombre:
@@ -621,64 +631,34 @@ def crear_nuevo_menu(request):
         return render(request, "crear-nuevo-menu.html", context)
 
 def editar_menus(request):
-    #creamos listas con los nombres de los platillos del menú del día de hoy, muy similar a crear-nuevo-menu con los platillos de ayer:
-    #de todos los platillosMenu en la base de datos tales que su menú sea de hoy y del tipo correspondiente, toma los nombres de sus platillos, y forma con ellos una lista
-    desayuno_hoy = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.menu.tipo == "DE"]
-    comida_hoy = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.menu.tipo == "CO"]
-    cena_hoy = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now()) and platilloMenu.menu.tipo == "CE"]
-
-    #extraemos de la BD todos los platillos que no estén eliminados
-    platillos = Platillo.objects.all().filter(esta_eliminado=False).order_by('nombre')
+    #extraemos de la BD todos los platillos que no estén eliminados, ordenados por nombre de platillo
+    platillos = Platillo.objects.filter(esta_eliminado=False).order_by('nombre')
+    #recuperamos el último menú
+    menu_hoy = Menu.objects.last()
+    #Creamos una lista con los nombres de los platillos del menú de hoy
+    platillos_hoy =  [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.filter(menu=menu_hoy)]
 
     if request.method == "GET":
+        #Pasamos como variables de contexto los platillos para generar la tabla,
+        #Y los platillos de hoy para marcarlos automáticamente en la tabla
         context = {}
-
         context["platillos"] = platillos
-
-        context["desayuno_hoy"] = desayuno_hoy
-        context["comida_hoy"] = comida_hoy
-        context["cena_hoy"] = cena_hoy
-
+        context["platillos_hoy"] = platillos_hoy
         return render(request, "editar-menus.html", context)
 
     if request.method == "POST":
-        #recuperamos los 3 menus del día de hoy
-        desayuno = Menu.objects.filter(dia=dt.now(), tipo="DE")[0]
-        comida = Menu.objects.filter(dia=dt.now(), tipo="CO")[0]
-        cena = Menu.objects.filter(dia=dt.now(), tipo="CE")[0]
-
         #actualizamos los platilloMenu acorde a lo ingresado en la vista para cada tipo de menú:
-        # Si el platillo no está incluido en el menú pero el checkbox correspondiente está marcado, creamos y guardamos un nuevo PlatilloMenu.
-        # Si el platillo está incluido en el menú pero el checkbox correspondiente está desmarcado, borramos el PlatilloMenu correspondiente.
         for platillo in platillos:
-            if request.POST.get(platillo.nombre + "-desayuno") == "on" and not platillo.nombre in desayuno_hoy:
+            # Si el platillo no está incluido en el menú pero el checkbox correspondiente está marcado, creamos y guardamos un nuevo PlatilloMenu.
+            if request.POST.get(platillo.nombre) == "on" and not platillo.nombre in platillos_hoy:
                 nuevoPlatilloMenu = PlatilloMenu(disponible=True,
                                                  platillo=Platillo.objects.filter(nombre=platillo.nombre)[0],
-                                                 menu=desayuno)
+                                                 menu=menu_hoy)
                 nuevoPlatilloMenu.save()
-            if request.POST.get(platillo.nombre + "-desayuno") == None and platillo.nombre in desayuno_hoy:
+            # Si el platillo está incluido en el menú pero el checkbox correspondiente está desmarcado, borramos el PlatilloMenu correspondiente.
+            if request.POST.get(platillo.nombre) == None and platillo.nombre in platillos_hoy:
                 platilloMenuBorrado = PlatilloMenu.objects.filter(platillo=platillo,
-                                                                  menu=desayuno)[0]
-                platilloMenuBorrado.delete()
-
-            if request.POST.get(platillo.nombre + "-comida") == "on" and not platillo.nombre in comida_hoy:
-                nuevoPlatilloMenu = PlatilloMenu(disponible=True,
-                                                 platillo=Platillo.objects.filter(nombre=platillo.nombre)[0],
-                                                 menu=comida)
-                nuevoPlatilloMenu.save()
-            if request.POST.get(platillo.nombre + "-comida") == None and platillo.nombre in comida_hoy:
-                platilloMenuBorrado = PlatilloMenu.objects.filter(platillo=platillo,
-                                                                  menu=comida)[0]
-                platilloMenuBorrado.delete()
-
-            if request.POST.get(platillo.nombre + "-cena") == "on" and not platillo.nombre in cena_hoy:
-                nuevoPlatilloMenu = PlatilloMenu(disponible=True,
-                                                 platillo=Platillo.objects.filter(nombre=platillo.nombre)[0],
-                                                 menu=cena)
-                nuevoPlatilloMenu.save()
-            if request.POST.get(platillo.nombre + "-cena") == None and platillo.nombre in cena_hoy:
-                platilloMenuBorrado = PlatilloMenu.objects.filter(platillo=platillo,
-                                                                  menu=cena)[0]
+                                                                  menu=menu_hoy)[0]
                 platilloMenuBorrado.delete()
 
         return redirect("menus-del-dia")
@@ -815,6 +795,7 @@ def eliminar_platillo(request):
         context['platillos'] = precios_de_platillos
         context["tip_platillo"] = TIPO_PLATILLO
         return render(request, "eliminar-platillo.html", context)
+
 def aux(request):
     context = {}
     return render(request, "aux.html", context)

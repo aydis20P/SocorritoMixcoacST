@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
-TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'))
+TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('SU', 'sushi'), ('BE', 'bebida'))
 TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CE','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 METODO_PAGO = (('EF','efectivo'),('TE','terminál'),('PA','pagado'))
@@ -57,7 +57,7 @@ class Platillo(models.Model):
     tipo_desayuno = models.CharField(choices=TIPO_DESAYUNO, max_length=2, null=True, blank=True)
 
     def __str__(self):
-        cadena_frontend = ("ID:" +str(self.id) + " Nombre: " + self.nombre + " Tipo: "+ self.tipo + " Es complemento: " + str(self.es_complemento) + 
+        cadena_frontend = ("ID:" +str(self.id) + " Nombre: " + self.nombre + " Tipo: "+ self.tipo + " Es complemento: " + str(self.es_complemento) +
                             " Es constante: " + str(self.es_constante))
 
         if self.tipo_desayuno:
