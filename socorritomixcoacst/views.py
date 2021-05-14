@@ -546,8 +546,8 @@ def registrar_clientes(request):
     telefono_nuevocliente = request.session['telefono']
     #Pregunta si hay datos ocultos(POST)
     if request.method == "POST":
-        cliente_registro = Cliente(nombre=request.POST.get("nombre")+" "+request.POST.get("apellidos"),
-                            direccion=request.POST.get("direccion"),
+        cliente_registro = Cliente(nombre=request.POST.get("nombre"),
+                            direccion=request.POST.get("direccion")+" "+request.POST.get("colonia"),
                             telefono=request.POST.get("telefono"),
                             telefono_alternativo=request.POST.get("telefonoalt"),
                             referencias=request.POST.get("obs"),
@@ -748,7 +748,7 @@ def agregar_platillo(request):
 
 def modificar_platillo(request):
     platillos = Platillo.objects.all()
-    precios_de_platillos = HistorialPrecio.objects.filter(es_precio_actual=True)
+    precios_de_platillos = HistorialPrecio.objects.filter(es_precio_actual=True).order_by('platillo__nombre')
     if request.method =="POST":
         #colocar en una tupla la clave y elvalor del POST
         for clave, valor in request.POST.items():
@@ -794,7 +794,7 @@ def modificar_platillo(request):
 
 def eliminar_platillo(request):
     platillos = Platillo.objects.all()
-    precios_de_platillos = HistorialPrecio.objects.filter(es_precio_actual=True)
+    precios_de_platillos = HistorialPrecio.objects.filter(es_precio_actual=True).order_by('platillo__nombre')
     if request.method =="POST":
         for clave, valor in request.POST.items():
             print("Clave: %s" % (clave))
@@ -833,3 +833,4 @@ def modificar_precios_desayuno(request):
         context = {}
         context['desayunos'] = desayunos
         return render(request,"modificar-precios-desayuno.html", context)
+
