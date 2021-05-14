@@ -73,6 +73,7 @@ def menu_orden(request):
     if request.method == "POST":
 
         todos_menus = []
+        todos_observaciones_individuales = []
         todos_ordenes = []
         todos_bebidas = []
         todos_extras = []
@@ -87,6 +88,12 @@ def menu_orden(request):
 
             if "menu-" in clave:
                 todos_menus.append(tuple((clave, valor)))
+
+            if "observaciones-individuales-" in clave:
+                if valor:
+                    todos_observaciones_individuales.append(tuple((clave, valor)))
+                else:
+                    todos_observaciones_individuales.append(tuple((clave, "")))
 
             if "orden_de_" in clave:
                 if int(valor) > 0:
@@ -109,6 +116,7 @@ def menu_orden(request):
                 todos_desayunos.append(tuple((clave.replace("orden-desayunos_", ""), valor)))
 
         request.session['todos_menus'] = todos_menus
+        request.session['todos_observaciones_individuales'] = todos_observaciones_individuales
         request.session['todos_ordenes'] = todos_ordenes
         request.session['todos_bebidas'] = todos_bebidas
         request.session['todos_extras'] = todos_extras
@@ -154,6 +162,7 @@ def resumen_pedido(request):
     numero_menu = 1
 
     todos_menus = request.session['todos_menus']
+    todos_observaciones_individuales = request.session['todos_observaciones_individuales']
     todos_ordenes = request.session['todos_ordenes']
     todos_bebidas = request.session['todos_bebidas']
     todos_extras = request.session['todos_extras']
@@ -176,6 +185,11 @@ def resumen_pedido(request):
     numero_menu = 1
     for i in range(len(todos_menus)):
         platillo_actual = Platillo.objects.filter(nombre=todos_menus[i][1])[0]
+        #Esta variable contiene la observación individual de la comida completa; solo se agrega en la OrdenPlatillo del guisado
+        if(todos_observaciones_individuales[numero_menu-1][1]):
+            observacion_actual = todos_observaciones_individuales[numero_menu-1][1]
+        else:
+            observacion_actual = ""
 
         if i % 3 == 0: #Entradas
             platillo_menu_1 = OrdenPlatillo(sub_total=0,
@@ -212,7 +226,8 @@ def resumen_pedido(request):
                                             numero_completa=numero_menu,
                                             cantidad=1,
                                             orden=orden,
-                                            platillo=platillo_actual)
+                                            platillo=platillo_actual,
+                                            observaciones_completa=observacion_actual)
             pedidos_del_cliente.append(platillo_menu_3)
             numero_menu += 1
             orden.total += platillo_menu_3.sub_total

@@ -60,6 +60,14 @@
         					<td>{{ pedido.cantidad }}</td>
         					<td>${{ pedido.sub_total }}</td>
         				<tr>
+						{% if pedido.observaciones_completa %}
+							<tr>
+								<td></td>
+								<td class="td-observaciones" id="obs-M{{ pedido.numero_completa }}">{{ pedido.observaciones_completa }}</td>
+								<td></td>
+								<td></td>
+							</tr>
+						{% endif %}
         			{% endfor %}
         			<tr>
         				<td></td>
@@ -114,6 +122,20 @@
     </body>
 
     <script>
+		window.onload = function(){
+			var todasObservaciones = document.getElementsByClassName("td-observaciones");
+			for(var i=0; i<todasObservaciones.length; i++){
+				var cadena = String(todasObservaciones[i].innerText);
+				var id = String(todasObservaciones[i].id).substring(4, String(todasObservaciones[i].id).length);
+				var aux = "<Strong>Observaciones "+id+":</Strong><br>";
+				for(var j=0; j<cadena.length; j++){
+					aux += cadena[j];
+					if(j!=0 && j%14 == 0)
+					aux += "<br>";
+				}
+				todasObservaciones[i].innerHTML = aux;
+			}
+		}
 
         function printDiv(divName) {
             var printContents = document.getElementById(divName).innerHTML;

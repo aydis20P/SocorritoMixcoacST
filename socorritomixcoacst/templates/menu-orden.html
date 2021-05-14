@@ -84,6 +84,13 @@
                                               </select>
                                             </div>                                           
                                         </div>
+                                        <!-- El input para las observaciones individuales de cada orden completa -->
+                                        <div class="row">
+                                            <div class="form-outline">
+                                                <input type="text" class="form-control" />
+                                            </div>
+                                            <p> </p>
+                                        </div>
                                         <div class="row mt-1">
                                             <button type="button" class="btn btn-primary btn-danger" onclick="removerMenu(this)">
                                                 <i class="far fa-trash-alt fa-lg">&Tab;Eliminar</i>
@@ -148,7 +155,7 @@
                     <input type="text" id="input-busqueda-extras" class="form-control" onkeyup="actualizaTablaExtras()" />
                     <label class="form-label" for="form1">
                         <i class="fas fa-search"></i>
-                        Buscar Extra
+                        Buscar extra
                     </label>
                 </div><br>
     
@@ -160,42 +167,19 @@
 
             <!-- panel 5: sushis -->
             <div class="tab-pane fade" id="panel-sushis" role="tabpanel" aria-labelledby="sushis-tab">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Platillo</th>
-                            <th scope="col">Costo</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for platillo in platillos%}
-                        <tr>
-                            {% if platillo.tipo == "SU" %}
-                                <td>{{ platillo.nombre }}</td>
-                                <td class="precio">{{ platillo.precio }}</td>
-                                {% csrf_token %}
-                                <td>
-                                    <div class="d-flex justify-content-start">
-                                        <div class="form-outline">
-                                            <input readonly value="0" type="text" id="orden_sushi_de_{{ platillo.nombre }}" class="form-control" name="orden_sushi_de_{{ platillo.nombre }}"/>
-                                            <label class="form-label" for="form1">Cantidad</label>
-                                        </div>
-                                        <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
-                                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_sushi_de_{{ platillo.nombre }}')">
-                                            <i class="fas fa-angle-up"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_sushi_de_{{ platillo.nombre }}')">
-                                            <i class="fas fa-angle-down"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <!-- Input de busqueda  -->
+                <div class="form-outline">
+                    <input type="text" id="input-busqueda-sushis" class="form-control" onkeyup="actualizaTablaSushis()" />
+                    <label class="form-label" for="form1">
+                        <i class="fas fa-search"></i>
+                        Buscar sushi
+                    </label>
+                </div><br>
+
+                <div class="table-responsive" id="tabla-sushis-padre">
+                    {% csrf_token %}
+                    <!-- El contenido de esta tabla se crea con javascript (function generaTablaSushis())  -->
+                </div> 
             </div>
 
             <!-- panel 6: Desayunos-->
@@ -604,7 +588,8 @@
 
     </form>
 
-    <div class="d-flex justify-content-start" id="spinner">
+    <!-- El siguiente div es la plantilla de los spinner que ocupan las tabs ordenes, bebidas, extras y sushis-->
+    <div class="d-flex justify-content-start" id="spinner" style="visibility: hidden;">
         <div class="form-outline">
             <input readonly value="0" type="text" class="form-control"/>
             <label class="form-label" for="form1">Cantidad</label>
@@ -656,6 +641,7 @@
         var tablaOrdenesPadre = document.getElementById("tabla-ordenes-padre");
         var tablaBebidasPadre = document.getElementById("tabla-bebidas-padre");
         var tablaExtrasPadre = document.getElementById("tabla-extras-padre");
+        var tablaSushisPadre = document.getElementById("tabla-sushis-padre");
         
         window.onload = function() {
             //agregamos la primera órden
@@ -666,10 +652,8 @@
             generaTablaOrdenes();
             generaTablaBebidas();
             generaTablaExtras();
+            generaTablaSushis();
 
-            //Oculta la plantilla de spinner utilizada para construir las tablas
-            spinnerPlantilla = document.getElementById("spinner");
-            spinnerPlantilla.style.visibility = "hidden";
         }
 
         //Se activa onkeyup() con el buscador con id="input-busqueda-ordenes"
@@ -677,16 +661,18 @@
             {% for platillo in historiales_precio %}
                 {% if not platillo.platillo.tipo == "EX" %}
                     {% if not platillo.platillo.tipo == "BE" %}
-                        fila = document.getElementById("fila-{{ platillo.platillo.nombre }}");
-                        nombreLower = String('{{ platillo.platillo.nombre }}').toLowerCase();
-                        nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                        nombreBuscado = document.getElementById("input-busqueda-ordenes").value.toLowerCase();
-                        nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                        if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
-                            fila.style.display = "none";
-                        }else{
-                            fila.style.display = "table-row";
-                        }
+                        {% if not platillo.platillo.tipo == "SU" %}
+                            fila = document.getElementById("fila-{{ platillo.platillo.nombre }}");
+                            nombreLower = String('{{ platillo.platillo.nombre }}').toLowerCase();
+                            nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                            nombreBuscado = document.getElementById("input-busqueda-ordenes").value.toLowerCase();
+                            nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                            if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
+                                fila.style.display = "none";
+                            }else{
+                                fila.style.display = "table-row";
+                            }
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             {% endfor %}
@@ -718,6 +704,24 @@
                     nombreLower = String('{{ platillo.platillo.nombre }}').toLowerCase();
                     nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                     nombreBuscado = document.getElementById("input-busqueda-extras").value.toLowerCase();
+                    nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
+                        fila.style.display = "none";
+                    }else{
+                        fila.style.display = "table-row";
+                    }
+                {% endif %}
+            {% endfor %}
+        }
+
+        //Se activa onkeyup() con el buscador con id="input-busqueda-sushis"
+        function actualizaTablaSushis(){
+            {% for platillo in historiales_precio %}
+                {% if platillo.platillo.tipo == "SU" %}
+                    fila = document.getElementById("fila-{{ platillo.platillo.nombre }}");
+                    nombreLower = String('{{ platillo.platillo.nombre }}').toLowerCase();
+                    nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    nombreBuscado = document.getElementById("input-busqueda-sushis").value.toLowerCase();
                     nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                     if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
                         fila.style.display = "none";
@@ -778,7 +782,7 @@
             {% for platillo in historiales_precio %}
                 {% if not platillo.platillo.tipo == "EX" %}
                     {% if not platillo.platillo.tipo == "BE" %}
-                        {% if not platillo.tipo == "SU" %}
+                        {% if not platillo.platillo.tipo == "SU" %}
                             var fila = document.createElement("tr");
                             var celda1 = document.createElement("td");
                             var celda2 = document.createElement("td");
@@ -909,7 +913,7 @@
                     botonUp.onclick = function() {incrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
                     botonDown.onclick = function() {decrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
                     forma[1].id = "orden_de_{{ platillo.platillo.nombre }}";
-                    forma[1].name = "orden_de_{{ platillo.platillo.nombre }}";
+                    forma[1].name = "orden_bebida_de_{{ platillo.platillo.nombre }}";
 
                     celdaSpinner.appendChild(nuevo);
 
@@ -1009,7 +1013,7 @@
                     botonUp.onclick = function() {incrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
                     botonDown.onclick = function() {decrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
                     forma[1].id = "orden_de_{{ platillo.platillo.nombre }}";
-                    forma[1].name = "orden_de_{{ platillo.platillo.nombre }}";
+                    forma[1].name = "orden_extra_de_{{ platillo.platillo.nombre }}";
 
                     celdaSpinner.appendChild(nuevo);
 
@@ -1042,6 +1046,106 @@
             sortTable("tabla-extras");
         }
 
+        //Genera la tabla que contiene los sushis
+        function generaTablaSushis(){
+            // Crea un elemento table y un elemento tbody
+            var tablaSushis = document.createElement("table");
+            tablaSushis.id = "tabla-sushis"
+            tablaSushis.className = "buscador-sushis";
+            var tbodySushis = document.createElement("tbody");
+
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            encabezado.className = "thbuscador-sushis";
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            e1.className = "buscador-sushis";
+            e2.className = "buscador-sushis";
+            e3.className = "buscador-sushis";
+            var textoE1 = document.createTextNode("Sushi");
+            var textoE2 = document.createTextNode("Costo");
+            var textoE3 = document.createTextNode("Selector");
+            
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            encabezado.appendChild(filaEncabezado);
+
+            var i=0;
+            //Crea cada fila para los platillos
+            {% for platillo in historiales_precio %}
+                {% if platillo.platillo.tipo == "SU" %}
+                    
+                    var fila = document.createElement("tr");
+                    var celda1 = document.createElement("td");
+                    var celda2 = document.createElement("td");
+                    var celdaSpinner = document.createElement("td"); 
+                    celda1.id = "celda1-{{ platillo.platillo.nombre }}";
+                    celda2.id = "celda2-{{ platillo.platillo.nombre }}";
+                    celdaSpinner.id = "celda-spinner-{{ platillo.platillo.nombre }}";
+                    celda1.className = "buscador-sushis";
+                    celda2.className = "buscador-sushis";
+                    celdaSpinner.className = "buscador-sushis";
+                    var textoCelda1 = document.createTextNode("{{ platillo.platillo.nombre }}");
+                    var textoCelda2 = document.createTextNode("$ {{ platillo.precio }}");
+                    celda1.appendChild(textoCelda1);
+                    celda2.appendChild(textoCelda2);
+
+                    //Esto es para crear el spinner dentro de la celda
+                    var original = document.getElementById("spinner");
+                    var nuevo = original.cloneNode(true);
+                    nuevo.style.visibility = "visible";
+                    nuevo.id = "spinner-{{ platillo.platillo.nombre }}";
+                    i += 1;
+                    hijos = nuevo.childNodes;
+                    forma = hijos[1].childNodes;
+                    botones = hijos[3].childNodes;
+                    botonUp = botones[1];
+                    botonDown = botones[3];
+                    botonUp.onclick = function() {incrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
+                    botonDown.onclick = function() {decrementaSpinner('orden_de_{{ platillo.platillo.nombre }}')};
+                    forma[1].id = "orden_de_{{ platillo.platillo.nombre }}";
+                    forma[1].name = "orden_sushi_de_{{ platillo.platillo.nombre }}";
+
+                    celdaSpinner.appendChild(nuevo);
+
+                    fila.appendChild(celda1);
+                    fila.appendChild(celda2);
+                    fila.appendChild(celdaSpinner);
+                    fila.id = "fila-{{ platillo.platillo.nombre }}";
+
+                    // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                    tbodySushis.appendChild(fila);
+
+                {% endif %}
+            {% endfor %}
+            
+            // posiciona el tbody debajo del elemento table
+            tablaSushis.appendChild(encabezado);
+            tablaSushis.appendChild(tbodySushis);
+            
+            // appends table into body
+            body.appendChild(tablaSushis);
+            tablaSushis.align = "center";
+            tablaSushis.cellPadding="10";
+            tablaSushisPadre.appendChild(tablaSushis);
+
+            //Modifica estilo a la tabla de ordenes
+            $(".buscador-sushis").css("border","black 2px solid");
+            $(".thbuscador-sushis").css("background-color","#FFE082");
+           
+            //Ordena alfabeticamente la tabla
+            sortTable("tabla-sushis");
+        }
+
 
         function incrementaSpinner(platilloNombre){
             var val = document.getElementById(platilloNombre).value;//obtenemos el valor del elemento
@@ -1069,9 +1173,9 @@
             //creamos un elemeno de tipo ítem de lista (<li>),
             //le asignamos las clases list-group-item y menu-completo,
             //y le damos un identificador del siguente lugar en la lista
-            var nuevoMenu = document.createElement("li")
-            nuevoMenu.className = "list-group-item menu-completo"
-            nuevoMenu.id = "menu-" + numeroMenus
+            var nuevoMenu = document.createElement("li");
+            nuevoMenu.className = "list-group-item menu-completo";
+            nuevoMenu.id = "menu-" + numeroMenus;
             numeroMenus++;
 
             //buscamos en el documento el elemento con id "plantilla-menu", extraemos su código HTML,
@@ -1079,13 +1183,26 @@
             //para luego buscar el elemento "lista-menus" y agregrle el menú que acabamos de crear.
             //luego buscamos dentro del elemento buscamos el texto y le ponemos su número de menú
             //por último incrementamos el contador de cuantos menús hay en la vista
-            nuevoMenu.innerHTML = document.getElementById("plantilla-menu").innerHTML
-            var selecciones = nuevoMenu.getElementsByClassName("form-select")
+            nuevoMenu.innerHTML = document.getElementById("plantilla-menu").innerHTML;
+            var selecciones = nuevoMenu.getElementsByClassName("form-select");
             for(i = 0; i<selecciones.length; i++){
-                selecciones[i].name = "menu-" + numeroMenus + "-" + i
+                selecciones[i].name = "menu-" + numeroMenus + "-" + i;
             }
+            
+            //Las siguientes lineas son para el input de observaciones individuales del menu completo
+            var divObservaciones = nuevoMenu.getElementsByClassName("form-outline");
+            var observacionesMenu = nuevoMenu.getElementsByClassName("form-control");
+            observacionesMenu[0].id = "observaciones-individuales-" + numeroMenus;
+            //Se crea la etiqueta form-label que va dentro del input
+            var etiquetaObservaciones = document.createElement("label");
+            etiquetaObservaciones.className = "form-label";
+            etiquetaObservaciones.innerHTML = "Observaciones individuales de este menu completo";
+            etiquetaObservaciones.htmlFor = observacionesMenu[0].id;
+            divObservaciones[0].appendChild(etiquetaObservaciones);
+            observacionesMenu[0].name = "observaciones-individuales-" + numeroMenus;
+            
 
-            document.getElementById("lista-menus").appendChild(nuevoMenu)
+            document.getElementById("lista-menus").appendChild(nuevoMenu);
 
 
         }

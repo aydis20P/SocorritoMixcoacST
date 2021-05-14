@@ -72,6 +72,7 @@ class OrdenPlatillo(models.Model):
     sub_total = models.FloatField(max_length=5, null=False)
     es_completa = models.BooleanField(null=False)
     numero_completa = models.IntegerField(null=True)
+    observaciones_completa = models.CharField(max_length=256, null=True, blank=True)
     cantidad = models.IntegerField(null=False)
     orden = models.ForeignKey(Orden, on_delete=models.PROTECT)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
