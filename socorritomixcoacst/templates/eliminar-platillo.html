@@ -7,6 +7,14 @@
 
 {% block content %}
     <div class="container"> 
+        <!-- Input de busqueda  -->
+        <div class="form-outline">
+            <input type="text" id="busqueda-eliminar-platillos" class="form-control" onkeyup="buscar_platillo()" />
+            <label class="form-label" for="form1">
+                <i class="fas fa-search"></i>
+                Busca Platillo
+            </label>
+        </div><br>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
@@ -23,7 +31,7 @@
                 <form id = "eliminar" method = "POST">
                 {% csrf_token %}
                     <!--En donde se va mostrar el contenido de la tabla-->
-                    <tbody>
+                    <tbody id="cuerpo-tabla">
                        
                         {% for p in platillos %}
                             {% if p.platillo.esta_eliminado == False%}
@@ -95,7 +103,31 @@
             document.getElementById("elimim-platillo").submit();
             console.log(document.getElementById("elimim-platillo"));
         }
+        
+        function buscar_platillo(){
+            let campoBusqueda = document.getElementById("busqueda-eliminar-platillos").value;
+            console.log(campoBusqueda.toLowerCase());//muestra lo que adquirió del input **es para pruebas**
+            var filtro = campoBusqueda.toLowerCase();
+            var tabla = document.getElementById("cuerpo-tabla");
+            var renglones = tabla.getElementsByTagName("tr");
+            var columnas, txtValue;
+            for (var i = 0; i < renglones.length; i++) {
+                
+                columnas = renglones[i].getElementsByTagName("td")[0];
+                console.log("hay n "+i+" platillos");
+               
+                txtValue = columnas.textContent || columnas.innerText;
+                console.log(txtValue);
+                if (txtValue.toLowerCase().indexOf(filtro) > -1) {
+                    console.log("Se encontró casualidad");
+                    renglones[i].style.display = "";
+                } else {
+                    console.log("No se encontró casualidad");
+                    renglones[i].style.display = "none";
+                }
+                }
 
+        }
     </script>
 
 
