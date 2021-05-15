@@ -65,10 +65,12 @@
             <button id="boton-actualizar-platillos" type="submit" class="btn btn-lg btn-warning m-3">
                 <i class="fas fa-check-square fa-lg">&Tab;Actualizar platillos agotados</i>
             </button>
+            <!-- si hay menú, poner un botón para editarlo -->
             {% if menus_hoy %}
                 <a id="boton-editar-menu" class="btn btn-lg btn-warning m-3" href="/editar-menus">
                     <i class="fas fa-edit fa-lg">&Tab;Editar el Menú del día</i>
                 </a>
+            <!-- si no, poner un botón para crear uno nuevo -->
             {% else %}
                 <a id="boton-nuevo-menu" class="btn btn-lg btn-warning m-3" href="/crear-nuevo-menu">
                     <i class="fas fa-file-alt fa-lg">&Tab;Nuevo Menú del día</i>

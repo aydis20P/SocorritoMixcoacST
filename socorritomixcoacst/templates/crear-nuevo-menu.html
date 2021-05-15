@@ -16,17 +16,17 @@
         {% csrf_token %}
 
         <div id="botones-menú" class="d-flex justify-content-end flex-wrap">
-            <button id="btn-selec-bebidas" type="button" class="btn btn-warning mx-3" onclick="">
+            <button id="btn-selec-bebidas" type="button" class="btn btn-warning mx-3" onclick="seleccionar('BE')">
                 <i class="fas fa-coffee fa-lg">
                     Seleccionar todas las bebidas
                 </i>
             </button>
-            <button id="btn-selec-extras" type="button" class="btn btn-warning mx-3" onclick="">
+            <button id="btn-selec-extras" type="button" class="btn btn-warning mx-3" onclick="seleccionar('EX')">
                 <i class="fas fa-utensils fa-lg">
                     Seleccionar todos los extras
                 </i>
             </button>
-            <button id="btn-copiar-comidas" type="button" class="btn btn-warning mx-3" onclick="copiar({{ comida_anterior }})">
+            <button id="btn-copiar-comidas" type="button" class="btn btn-warning mx-3" onclick="copiar({{ menu_anterior }})">
                 <i class="fas fa-copy fa-lg">
                     Copiar el menú anterior
                 </i>
@@ -66,7 +66,7 @@
                                 {% endfor %}
                             </td>
                             <td>
-                                <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}" type="checkbox" class="custom-control-input checkbox">
+                                <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}" type="checkbox" class="custom-control-input checkbox check-{{ platillo.tipo }}">
                             </td>
                         </tr>
                     {% endfor %}
@@ -91,7 +91,7 @@
 {% block script %}
 <script>
     //función para copiar los platillos de un menu anterior al que se está editando:
-    //recibimos tanto la lista de platillos de es menú, como la clase de checkboxes que vamos a manejar (de desayuno, comida o cena).checked
+    //recibimos la lista de platillos de un menú
     //recorremos todos los checkboxes dados por clase_checkbox, y si su ID corresponde a uno de los platillos en el menú, marcalo.
     function copiar(menu){
         checkboxes = document.getElementsByClassName("checkbox");
@@ -104,6 +104,13 @@
         }
     }
 
-    function copiar()
+    //función para seleccionar todos los platillos de un tipo:
+    //recibimos el tipo de platillos, buscamos los checkboxes de su clase, y los marcamos
+    function seleccionar(tipo){
+        checkboxes = document.getElementsByClassName("check-" + tipo);
+        for (i=0; i<checkboxes.length; i++){
+            checkboxes[i].checked = true;
+        }
+    }
 </script>
 {% endblock script %}
