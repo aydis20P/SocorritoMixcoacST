@@ -600,31 +600,16 @@ def menus_del_dia(request):
 def crear_nuevo_menu(request):
     if request.method == "POST": #cuando mandemos la opcion "Agregar nuevo menú del día"
 
-        #creamos los menú del día, con solo la fecha actual y el tipo de menú
-        #nuevaDesayuno = Menu(dia=dt.now(), tipo="DE")
+        #Creamos el menú del día, con solo la fecha actual y el tipo de menú (TODO quitar los tipos de menú)
         nuevaComida = Menu(dia=dt.now(), tipo="CO")
-        #nuevaCena = Menu(dia=dt.now(), tipo="CE")
-        #nuevaDesayuno.save()
         nuevaComida.save()
-        #nuevaCena.save()
 
         #Capturemos los platillos que fueron marcados en la lista, acorde a si son desayuno, comida o cena
         for clave, valor in request.POST.items():
                 if valor == "on":
-                    platilloMenu = PlatilloMenu(disponible=True)
-
-                    if "desayuno" in clave:
-                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-desayuno", ""))[0]
-                        platilloMenu.menu = nuevaDesayuno
-
-                    if "comida" in clave:
-                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-comida", ""))[0]
-                        platilloMenu.menu = nuevaComida
-
-                    if "cena" in clave:
-                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-cena", ""))[0]
-                        platilloMenu.menu = nuevaCena
-
+                    platilloMenu = PlatilloMenu(disponible = True,
+                                                platillo = Platillo.objects.filter(nombre=clave)[0],
+                                                menu = nuevaComida)
                     platilloMenu.save()
 
         return redirect("menus-del-dia")

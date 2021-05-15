@@ -77,6 +77,6 @@
     }
 
     //hacemos que los platillos actualmente en el menú se seleccionen solos
-    copiar({{ platillos_hoy|safe }})
+    document.onLoad(copiar({{ platillos_hoy|safe }}))
 </script>
 {% endblock script %}
