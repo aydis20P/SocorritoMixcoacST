@@ -600,31 +600,16 @@ def menus_del_dia(request):
 def crear_nuevo_menu(request):
     if request.method == "POST": #cuando mandemos la opcion "Agregar nuevo menú del día"
 
-        #creamos los menú del día, con solo la fecha actual y el tipo de menú
-        #nuevaDesayuno = Menu(dia=dt.now(), tipo="DE")
+        #Creamos el menú del día, con solo la fecha actual y el tipo de menú (TODO quitar los tipos de menú)
         nuevaComida = Menu(dia=dt.now(), tipo="CO")
-        #nuevaCena = Menu(dia=dt.now(), tipo="CE")
-        #nuevaDesayuno.save()
         nuevaComida.save()
-        #nuevaCena.save()
 
         #Capturemos los platillos que fueron marcados en la lista, acorde a si son desayuno, comida o cena
         for clave, valor in request.POST.items():
                 if valor == "on":
-                    platilloMenu = PlatilloMenu(disponible=True)
-
-                    if "desayuno" in clave:
-                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-desayuno", ""))[0]
-                        platilloMenu.menu = nuevaDesayuno
-
-                    if "comida" in clave:
-                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-comida", ""))[0]
-                        platilloMenu.menu = nuevaComida
-
-                    if "cena" in clave:
-                        platilloMenu.platillo = Platillo.objects.filter(nombre=clave.replace("-cena", ""))[0]
-                        platilloMenu.menu = nuevaCena
-
+                    platilloMenu = PlatilloMenu(disponible = True,
+                                                platillo = Platillo.objects.filter(nombre=clave)[0],
+                                                menu = nuevaComida)
                     platilloMenu.save()
 
         return redirect("menus-del-dia")
@@ -636,12 +621,9 @@ def crear_nuevo_menu(request):
         context["platillos"] = Platillo.objects.all().filter(esta_eliminado=False).order_by('nombre')
         #Mandamos el historial de precios con los actuales
         context["precios"] = HistorialPrecio.objects.filter(es_precio_actual=True)
-
-        #Mandamos listas con nombres de platillos que estaban en los menús del día de ayer:
+        #Mandamos listas con nombres de platillos que estaban en el menú anteriror en la BD:
         #de todos los platillosMenu en la base de datos tales que su menú sea de ayer y del tipo correspondiente, toma los nombres de sus platillos y pasalo como una lista
-        #context["desayuno_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "DE"]
-        context["comida_anterior"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu == Menu.objects.last() and platilloMenu.menu.tipo == "CO"]
-        #context["cena_ayer"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu in Menu.objects.filter(dia=dt.now() - timedelta(days=1)) and platilloMenu.menu.tipo == "CE"]
+        context["menu_anterior"] = [platilloMenu.platillo.nombre for platilloMenu in PlatilloMenu.objects.all() if platilloMenu.menu == Menu.objects.last() and platilloMenu.menu.tipo == "CO"]
 
         return render(request, "crear-nuevo-menu.html", context)
 
