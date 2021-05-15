@@ -165,16 +165,17 @@
         function buscar_platillo(){
             let campoBusqueda = document.getElementById("busqueda-modificar-platillos").value;
             console.log(campoBusqueda.toLowerCase());//muestra lo que adquirió del input **es para pruebas**
-            var filtro = campoBusqueda.toLowerCase();
+            var filtro = removeAccentos(campoBusqueda.toLowerCase());
             var tabla = document.getElementById("cuerpo-tabla");
             var renglones = tabla.getElementsByTagName("tr");
-            var columnas, txtValue;
+            var columnas, txtValue, txtValueaux;
             for (var i = 0; i < renglones.length; i++) {
                 
                 columnas = renglones[i].getElementsByTagName("td")[0];
                 console.log("hay n "+i+" platillos");
                 //console.log(renglones);
-                txtValue = columnas.textContent || columnas.innerText;
+                txtValueaux = columnas.textContent || columnas.innerText;
+                txtValue = removeAccentos(txtValueaux);
                 console.log(txtValue);
                 if (txtValue.toLowerCase().indexOf(filtro) > -1) {
                     console.log("Se encontro casualidad");
@@ -185,6 +186,10 @@
                 }
                 }
 
+        }
+
+         const removeAccentos = (str) => {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
     </script>
 
