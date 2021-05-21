@@ -235,7 +235,7 @@
                                                 </select>
                                                 <br></br>
                                                 <div class="text-center">
-                                                    <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="Paquete 1" onload="sumarextra(costo,extra)" onclick="agregarDesayuno(this,1,2,3)"value="Paquete 1">Añadir</button>
+                                                    <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="Paquete 1" onload="sumarextra(costo,extra)" onclick="agregarDesayuno(this,2,3)"value="Paquete 1">Añadir</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -284,7 +284,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 2" onclick="agregarDesayuno(this,4,5,6)">Añadir</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 2" onclick="agregarDesayuno(this,5,6)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -332,7 +332,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 3" onclick="agregarDesayuno(this,7,8,9)">Añadir</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 3" onclick="agregarDesayuno(this,8,9)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -382,7 +382,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 4" onclick="agregarDesayuno(this,10,11,12)">Añadir</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 4" onclick="agregarDesayuno(this,11,12)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -430,7 +430,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 5" onclick="agregarDesayuno(this,13,14,15)">Añadir</button>
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 5" onclick="agregarDesayuno(this,14,15)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -478,7 +478,7 @@
                                             </select>
                                             <br></br>
                                             <div class="text-center">
-                                               <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 6" onclick="agregarDesayuno(this,16,17,18)">Añadir</button>
+                                               <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 6" onclick="agregarDesayuno(this,17,18)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -520,7 +520,7 @@
 
                                             <br></br>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="Paquete infantil" onclick="agregarDesayuno(this,19,20,null)">Añadir</button>
+                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="Paquete infantil" onclick="agregarDesayuno(this,20,null)">Añadir</button>
                                             </div>
                                         </div>
                                     </td>
@@ -1227,14 +1227,14 @@
         }
 
         var indice = 1;
-        function agregarDesayuno(bot_env,a,b,c){
+        function agregarDesayuno(bot_env,b,c){
             //Primero vamos a obtener las ordenes
 
             paquete = bot_env.value;
            //Obtenemos el valor del primer select
-            var combo = document.getElementById("select"+a);
+            /*var combo = document.getElementById("select"+a);
             var select = combo.options[combo.selectedIndex].text;
-            document.ready = document.getElementById("select"+a).value = '0';
+            document.ready = document.getElementById("select"+a).value = '0';*/
             //Obtenemos el valor del segundo select
             var combo2 = document.getElementById("select"+b);
             var select2 = combo2.options[combo2.selectedIndex].text;
@@ -1243,18 +1243,18 @@
             if(c == null){
 
                 var limpia = ""
-                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><td>'+limpia+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="Jugo y Fruta"></input><td>Jugo y Fruta</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><td>'+limpia+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
             }
             else{
                 var combo3 = document.getElementById("select"+c);
                 var select3 = combo3.options[combo3.selectedIndex].text;
                 document.ready = document.getElementById("select"+c).value = '0';
-                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="orden-desayunos_'+indice+'_3" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="Jugo y Fruta"></input><td>Jugo y Fruta</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="orden-desayunos_'+indice+'_3" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
 
             }
 
 
-            if ((select !== "------" && select2 !== "------" && select3 !== "------")){
+            if ((select2 !== "------" && select3 !== "------")){
                 var orden = document.createElement("TR");
                 orden.innerHTML=fila;
                 document.getElementById("ordenes-desayunos").appendChild(orden);
