@@ -33,8 +33,7 @@
                     </tr>
                 </thead>
             
-                <form id = "modificar" method = "POST">
-                {% csrf_token %}
+               
                     <!--En donde se va mostrar el contenido de la tabla-->
                     <tbody id="cuerpo-tabla">
                        
@@ -58,6 +57,8 @@
                                         <div class="modal fade" id="modificarModal_{{p.platillo.id}}" tabindex="-1" aria-labelledby="modificarModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
+                                                <form id="form_{{p.platillo.id}}" method="POST">
+                                                {% csrf_token %}
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="modificarModalLabel">Modificar Platillo</h5>
                                                         <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
@@ -142,9 +143,9 @@
                                                                 <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
                                                                     Cancelar
                                                                 </button>
-                                                                <button type="submit" class="btn bg-warning ">Guardar</button>
+                                                                <button type="button" class="btn bg-warning " onclick="enviaformulario('form_{{p.platillo.id}}')">Guardar</button>
                                                     </div>
-                                                
+                                                </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -154,7 +155,7 @@
                             {% endif %}     
                         {% endfor %}   
                     </tbody>
-                </form>
+                
             </table>
         </div>
     </div>
@@ -162,6 +163,13 @@
 {% endblock content%}
 {% block script %}
     <script>
+        function enviaformulario(formenvid){
+            var formulario = document.getElementById(formenvid);
+
+            console.log(formulario);
+            formulario.submit();
+
+        }
         function buscar_platillo(){
             let campoBusqueda = document.getElementById("busqueda-modificar-platillos").value;
             console.log(campoBusqueda.toLowerCase());//muestra lo que adquirió del input **es para pruebas**
