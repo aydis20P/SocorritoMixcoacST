@@ -212,7 +212,7 @@ def resumen_pedido(request):
         if i % 3 == 2: #Guisado
             sub_total = HistorialPrecio.objects.filter(platillo=platillo_actual, es_precio_actual=True)[0].precio
             if sub_total > 65:
-                if platillo_actual.nombre == "Salmón a la plancha":
+                if platillo_actual.nombre == "Salmón a la plancha" or platillo_actual.nombre == "Ribeye" or platillo_actual.nombre == "New york":
                     sub_total += 20
                 else:
                     sub_total += 15

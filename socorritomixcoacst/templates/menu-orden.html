@@ -54,9 +54,9 @@
                                                     {% if platillo.tipo == 'EN' or platillo.tipo == 'ST'%}
                                                         <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
                                                     {% endif %}
-                                                {% endfor %}        
+                                                {% endfor %}
                                               </select>
-                                            </div>                                           
+                                            </div>
                                         </div>
                                         <div class="row mb-1">
                                             <div class="input-group mb-3">
@@ -67,9 +67,9 @@
                                                       {% if platillo.tipo == 'ST' or platillo.tipo == 'EN'%}
                                                           <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
                                                       {% endif %}
-                                                  {% endfor %}   
+                                                  {% endfor %}
                                               </select>
-                                            </div>                                           
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-group mb-3">
@@ -82,7 +82,7 @@
                                                       {% endif %}
                                                   {% endfor %}
                                               </select>
-                                            </div>                                           
+                                            </div>
                                         </div>
                                         <!-- El input para las observaciones individuales de cada orden completa -->
                                         <div class="row">
@@ -121,9 +121,9 @@
                         <i class="fas fa-search"></i>
                         Buscar platillo
                     </label>
-                    
+
                 </div><br>
-    
+
                 <div class="table-responsive" id="tabla-ordenes-padre">
                     {% csrf_token %}
                     <!-- El contenido de esta tabla se crea con javascript (function generaTablaOrdenes())  -->
@@ -139,9 +139,9 @@
                         <i class="fas fa-search"></i>
                         Buscar bebida
                     </label>
-                    
+
                 </div><br>
-    
+
                 <div class="table-responsive" id="tabla-bebidas-padre">
                     {% csrf_token %}
                     <!-- El contenido de esta tabla se crea con javascript (function generaTablaBebidas())  -->
@@ -158,7 +158,7 @@
                         Buscar extra
                     </label>
                 </div><br>
-    
+
                 <div class="table-responsive" id="tabla-extras-padre">
                     {% csrf_token %}
                     <!-- El contenido de esta tabla se crea con javascript (function generaTablaExtras())  -->
@@ -179,7 +179,7 @@
                 <div class="table-responsive" id="tabla-sushis-padre">
                     {% csrf_token %}
                     <!-- El contenido de esta tabla se crea con javascript (function generaTablaSushis())  -->
-                </div> 
+                </div>
             </div>
 
             <!-- panel 6: Desayunos-->
@@ -642,10 +642,10 @@
         var tablaBebidasPadre = document.getElementById("tabla-bebidas-padre");
         var tablaExtrasPadre = document.getElementById("tabla-extras-padre");
         var tablaSushisPadre = document.getElementById("tabla-sushis-padre");
-        
+
         window.onload = function() {
             //agregamos la primera órden
-            agregarMenu();
+            //agregarMenu();
             sumarextra();
 
             //Se generan la tablas de las tabs ordenes, bebidas y extras
@@ -739,7 +739,7 @@
 
             return texto =>
                 texto.replace(
-                    re, 
+                    re,
                     match => a.charAt(de.indexOf(match))
                 );
         })();
@@ -768,7 +768,7 @@
             var textoE1 = document.createTextNode("Platillo");
             var textoE2 = document.createTextNode("Costo");
             var textoE3 = document.createTextNode("Selector");
-            
+
             e1.appendChild(textoE1);
             e2.appendChild(textoE2);
             e3.appendChild(textoE3);
@@ -786,7 +786,7 @@
                             var fila = document.createElement("tr");
                             var celda1 = document.createElement("td");
                             var celda2 = document.createElement("td");
-                            var celdaSpinner = document.createElement("td"); 
+                            var celdaSpinner = document.createElement("td");
                             celda1.id = "celda1-{{ platillo.platillo.nombre }}";
                             celda2.id = "celda2-{{ platillo.platillo.nombre }}";
                             celdaSpinner.id = "celda-spinner-{{ platillo.platillo.nombre }}";
@@ -827,11 +827,11 @@
                     {% endif %}
                 {% endif %}
             {% endfor %}
-            
+
             // posiciona el tbody debajo del elemento table
             tablaOrdenes.appendChild(encabezado);
             tablaOrdenes.appendChild(tbodyOrdenes);
-            
+
             // appends table into body
             body.appendChild(tablaOrdenes);
             tablaOrdenes.align = "center";
@@ -841,7 +841,7 @@
             //Modifica estilo a la tabla de ordenes
             $(".buscador-ordenes").css("border","black 2px solid");
             $(".thbuscador-ordenes").css("background-color","#FFE082");
-           
+
             //Ordena alfabeticamente la tabla
             sortTable("tabla-ordenes");
         }
@@ -870,7 +870,7 @@
             var textoE1 = document.createTextNode("Bebida");
             var textoE2 = document.createTextNode("Costo");
             var textoE3 = document.createTextNode("Selector");
-            
+
             e1.appendChild(textoE1);
             e2.appendChild(textoE2);
             e3.appendChild(textoE3);
@@ -883,11 +883,11 @@
             //Crea cada fila para los platillos
             {% for platillo in historiales_precio %}
                 {% if platillo.platillo.tipo == "BE" %}
-                    
+
                     var fila = document.createElement("tr");
                     var celda1 = document.createElement("td");
                     var celda2 = document.createElement("td");
-                    var celdaSpinner = document.createElement("td"); 
+                    var celdaSpinner = document.createElement("td");
                     celda1.id = "celda1-{{ platillo.platillo.nombre }}";
                     celda2.id = "celda2-{{ platillo.platillo.nombre }}";
                     celdaSpinner.id = "celda-spinner-{{ platillo.platillo.nombre }}";
@@ -927,11 +927,11 @@
 
                 {% endif %}
             {% endfor %}
-            
+
             // posiciona el tbody debajo del elemento table
             tablaBebidas.appendChild(encabezado);
             tablaBebidas.appendChild(tbodyBebidas);
-            
+
             // appends table into body
             body.appendChild(tablaBebidas);
             tablaBebidas.align = "center";
@@ -941,7 +941,7 @@
             //Modifica estilo a la tabla de ordenes
             $(".buscador-bebidas").css("border","black 2px solid");
             $(".thbuscador-bebidas").css("background-color","#FFE082");
-           
+
             //Ordena alfabeticamente la tabla
             sortTable("tabla-bebidas");
         }
@@ -970,7 +970,7 @@
             var textoE1 = document.createTextNode("Extra");
             var textoE2 = document.createTextNode("Costo");
             var textoE3 = document.createTextNode("Selector");
-            
+
             e1.appendChild(textoE1);
             e2.appendChild(textoE2);
             e3.appendChild(textoE3);
@@ -983,11 +983,11 @@
             //Crea cada fila para los platillos
             {% for platillo in historiales_precio %}
                 {% if platillo.platillo.tipo == "EX" %}
-                    
+
                     var fila = document.createElement("tr");
                     var celda1 = document.createElement("td");
                     var celda2 = document.createElement("td");
-                    var celdaSpinner = document.createElement("td"); 
+                    var celdaSpinner = document.createElement("td");
                     celda1.id = "celda1-{{ platillo.platillo.nombre }}";
                     celda2.id = "celda2-{{ platillo.platillo.nombre }}";
                     celdaSpinner.id = "celda-spinner-{{ platillo.platillo.nombre }}";
@@ -1027,11 +1027,11 @@
 
                 {% endif %}
             {% endfor %}
-            
+
             // posiciona el tbody debajo del elemento table
             tablaExtras.appendChild(encabezado);
             tablaExtras.appendChild(tbodyExtras);
-            
+
             // appends table into body
             body.appendChild(tablaExtras);
             tablaExtras.align = "center";
@@ -1041,7 +1041,7 @@
             //Modifica estilo a la tabla de ordenes
             $(".buscador-extras").css("border","black 2px solid");
             $(".thbuscador-extras").css("background-color","#FFE082");
-           
+
             //Ordena alfabeticamente la tabla
             sortTable("tabla-extras");
         }
@@ -1070,7 +1070,7 @@
             var textoE1 = document.createTextNode("Sushi");
             var textoE2 = document.createTextNode("Costo");
             var textoE3 = document.createTextNode("Selector");
-            
+
             e1.appendChild(textoE1);
             e2.appendChild(textoE2);
             e3.appendChild(textoE3);
@@ -1083,11 +1083,11 @@
             //Crea cada fila para los platillos
             {% for platillo in historiales_precio %}
                 {% if platillo.platillo.tipo == "SU" %}
-                    
+
                     var fila = document.createElement("tr");
                     var celda1 = document.createElement("td");
                     var celda2 = document.createElement("td");
-                    var celdaSpinner = document.createElement("td"); 
+                    var celdaSpinner = document.createElement("td");
                     celda1.id = "celda1-{{ platillo.platillo.nombre }}";
                     celda2.id = "celda2-{{ platillo.platillo.nombre }}";
                     celdaSpinner.id = "celda-spinner-{{ platillo.platillo.nombre }}";
@@ -1127,11 +1127,11 @@
 
                 {% endif %}
             {% endfor %}
-            
+
             // posiciona el tbody debajo del elemento table
             tablaSushis.appendChild(encabezado);
             tablaSushis.appendChild(tbodySushis);
-            
+
             // appends table into body
             body.appendChild(tablaSushis);
             tablaSushis.align = "center";
@@ -1141,7 +1141,7 @@
             //Modifica estilo a la tabla de ordenes
             $(".buscador-sushis").css("border","black 2px solid");
             $(".thbuscador-sushis").css("background-color","#FFE082");
-           
+
             //Ordena alfabeticamente la tabla
             sortTable("tabla-sushis");
         }
@@ -1188,7 +1188,7 @@
             for(i = 0; i<selecciones.length; i++){
                 selecciones[i].name = "menu-" + numeroMenus + "-" + i;
             }
-            
+
             //Las siguientes lineas son para el input de observaciones individuales del menu completo
             var divObservaciones = nuevoMenu.getElementsByClassName("form-outline");
             var observacionesMenu = nuevoMenu.getElementsByClassName("form-control");
@@ -1200,7 +1200,7 @@
             etiquetaObservaciones.htmlFor = observacionesMenu[0].id;
             divObservaciones[0].appendChild(etiquetaObservaciones);
             observacionesMenu[0].name = "observaciones-individuales-" + numeroMenus;
-            
+
 
             document.getElementById("lista-menus").appendChild(nuevoMenu);
 
@@ -1281,11 +1281,11 @@
 
 
         }
-        
+
 
         /**
-         *Método para validar que se llenan todos los campos de los menus completos 
-         *en caso de haber en la orden. 
+         *Método para validar que se llenan todos los campos de los menus completos
+         *en caso de haber en la orden.
          */
         function validaForm(){
             flag = false;
