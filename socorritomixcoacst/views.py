@@ -739,12 +739,15 @@ def modificar_platillo(request):
 
             #busca el elemento a cambiar con nombre modprecio_ recibido en clave
             if "modprecio_" in clave and valor:
+                print ("Entre a modificar precio")
                 nuevoPrecio = float(valor)
                 idModificar = clave.replace("modprecio_","")
 
 
                 idPlatillo = HistorialPrecio.objects.filter(pk = int(idModificar))
                 modificacion_platillo = HistorialPrecio.objects.filter(pk=int(idModificar))
+
+                #print (modificacion_platillo)
                 modificacion_platillo.update(es_precio_actual = False )
 
                 platillo = modificacion_platillo[0].platillo
