@@ -117,7 +117,7 @@
                 <!-- Input de busqueda  -->
                 <div class="form-outline">
                     <input type="text" id="input-busqueda-ordenes" class="form-control" onkeyup="actualizaTablaOrdenes()" />
-                    <label class="form-label" for="form1">
+                    <label class="form-label">
                         <i class="fas fa-search"></i>
                         Buscar platillo
                     </label>
@@ -135,7 +135,7 @@
                 <!-- Input de busqueda  -->
                 <div class="form-outline">
                     <input type="text" id="input-busqueda-bebidas" class="form-control" onkeyup="actualizaTablaBebidas()" />
-                    <label class="form-label" for="form1">
+                    <label class="form-label">
                         <i class="fas fa-search"></i>
                         Buscar bebida
                     </label>
@@ -153,7 +153,7 @@
                 <!-- Input de busqueda  -->
                 <div class="form-outline">
                     <input type="text" id="input-busqueda-extras" class="form-control" onkeyup="actualizaTablaExtras()" />
-                    <label class="form-label" for="form1">
+                    <label class="form-label">
                         <i class="fas fa-search"></i>
                         Buscar extra
                     </label>
@@ -170,7 +170,7 @@
                 <!-- Input de busqueda  -->
                 <div class="form-outline">
                     <input type="text" id="input-busqueda-sushis" class="form-control" onkeyup="actualizaTablaSushis()" />
-                    <label class="form-label" for="form1">
+                    <label class="form-label">
                         <i class="fas fa-search"></i>
                         Buscar sushi
                     </label>
@@ -592,7 +592,7 @@
     <div class="d-flex justify-content-start" id="spinner" style="visibility: hidden;">
         <div class="form-outline">
             <input readonly value="0" type="text" class="form-control"/>
-            <label class="form-label" for="form1">Cantidad</label>
+            <label class="form-label">Cantidad</label>
         </div>
         <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
             <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark">
@@ -1303,6 +1303,7 @@
             else
                 document.getElementById("formMenu").submit();
         }
+
         function sortTable(tableID) {
             var table, rows, switching, i, x, y, shouldSwitch;
             table = document.getElementById(tableID);
