@@ -18,10 +18,11 @@
         <option value="Top ingresos generados">Top ingresos generados</option>
         <option value="Top ingresos generados del mes">Top ingresos generados del mes</option>
         <option value="Ultimas compras">Ultimas compras</option>
+        <option value="Cambio devuelto">Cambio devuelto por el repartidor</option>
         <option value="Topper devuelto">Topper devuelto</option>
     </select>
 
-    <form id="FormTopper" method="POST">
+    <form id="form-principal" method="POST">
         {% csrf_token %}
         <div class="table-responsive " id="principal">        
         </div>
@@ -66,8 +67,10 @@
                 generaTabla7();
             }else if(selectFiltros.value == "Ultimas compras"){
                 generaTabla8();
-            }else if(selectFiltros.value == "Topper devuelto"){
+            }else if(selectFiltros.value == "Cambio devuelto"){
                 generaTabla9();
+            }else if(selectFiltros.value == "Topper devuelto"){
+                generaTabla10();
             }
         }
 
@@ -544,8 +547,95 @@
             padre.appendChild(tabla);  
         }
 
-        // Generar tabla de las ordenes que deben topper
+        // Generar tabla de las ordenes cuyo cambio no ha sido devuelto a caja por el repartidor
         function generaTabla9() {
+            // Obtener la referencia del elemento body
+            var body = document.getElementsByTagName("body")[0];
+            // Crea un elemento table y un elemento tbody
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            
+            // Crea el encabezado de la tabla
+            var encabezado = document.createElement("thead");
+            var filaEncabezado = document.createElement("tr");
+            var e1 = document.createElement("th");
+            e1.scope = "col";
+            var e2 = document.createElement("th");
+            e2.scope = "col";
+            var e3 = document.createElement("th");
+            e3.scope = "col";
+            var e4 = document.createElement("th");
+            e4.scope = "col";
+            var e5 = document.createElement("th");
+            e5.scope = "col";
+            var textoE1 = document.createTextNode("Nombre del cliente");
+            var textoE2 = document.createTextNode("Fecha de compra");
+            var textoE3 = document.createTextNode("Total");
+            var textoE4 = document.createTextNode("Perfil del cliente");
+            var textoE5 = document.createTextNode("Cambio fue devuelto por el repartidor");
+            e1.appendChild(textoE1);
+            e2.appendChild(textoE2);
+            e3.appendChild(textoE3);
+            e4.appendChild(textoE4);
+            e5.appendChild(textoE5);
+            filaEncabezado.appendChild(e1);
+            filaEncabezado.appendChild(e2);
+            filaEncabezado.appendChild(e3);
+            filaEncabezado.appendChild(e4);
+            filaEncabezado.appendChild(e5);
+            encabezado.appendChild(filaEncabezado);
+            // Crea las celdas
+            {% for orden in order_by_deben_cambio %}
+                // Crea las hileras de la tabla
+                var fila = document.createElement("tr");
+                var celda1 = document.createElement("td");
+                var celda2 = document.createElement("td");
+                var celda3 = document.createElement("td");
+                var botonPerfil = document.createElement("a"); 
+                var celda5 = document.createElement("td");
+                botonPerfil.classList.add("btn", "btn-info");
+                botonPerfil.setAttribute("href", "/cliente/{{orden.cliente.id}}/perfil-cliente/");
+                botonPerfil.innerText = "Ver Perfil";
+                var textoCelda1 = document.createTextNode("{{orden.cliente.nombre}}");
+                var textoCelda2 = document.createTextNode("{{orden.fecha}}");
+                var textoCelda3 = "";
+                checkboxString = "<div class='form-check'><input class='form-check-input' name='checkbox-cambio-{{orden.id}}' type='checkbox' /><label class='form-check-label' for='flexCheckDefault'></label></div>";
+                celda5.innerHTML = checkboxString
+                {% if orden.promocion %}
+                    textoCelda3 = document.createTextNode("${{orden.total_descuento}}");
+                {% else %}
+                    textoCelda3 = document.createTextNode("${{orden.total}}");
+                {% endif %}
+                celda1.appendChild(textoCelda1);
+                celda2.appendChild(textoCelda2);
+                celda3.appendChild(textoCelda3);
+                fila.appendChild(celda1);
+                fila.appendChild(celda2);
+                fila.appendChild(celda3);
+                fila.appendChild(botonPerfil);
+                fila.appendChild(celda5);
+                // agrega la hilera al final de la tabla (al final del elemento tblbody)
+                tblBody.appendChild(fila);
+            {% endfor %}
+
+            //Agregamos el boton de guardar cambios dentro de una nueva tr
+            var filaBoton = document.createElement("tr");
+                stringBoton = "<button class='btn btn-warning mb-3' type='submit'><i class='fas fa-user-plus'></i>Guardar Cambios</button>";
+                filaBoton.innerHTML = stringBoton;
+                tblBody.appendChild(filaBoton);
+
+            // posiciona el tbody debajo del elemento table
+            tabla.appendChild(encabezado);
+            tabla.appendChild(tblBody);
+            // appends table into body
+            body.appendChild(tabla);
+            tabla.align = "center";
+            tabla.cellPadding="10";
+            padre.appendChild(tabla);  
+        }
+
+        // Generar tabla de las ordenes que deben topper
+        function generaTabla10() {
             // Obtener la referencia del elemento body
             var body = document.getElementsByTagName("body")[0];
             // Crea un elemento table y un elemento tbody
@@ -596,7 +686,7 @@
                 var textoCelda1 = document.createTextNode("{{orden.cliente.nombre}}");
                 var textoCelda2 = document.createTextNode("{{orden.fecha}}");
                 var textoCelda3 = "";
-                checkboxString = "<div class='form-check'><input class='form-check-input' name='checkbox-{{orden.id}}' type='checkbox' id='flexCheckDefault'/><label class='form-check-label' for='flexCheckDefault'></label></div>";
+                checkboxString = "<div class='form-check'><input class='form-check-input' name='checkbox-topper-{{orden.id}}' type='checkbox' /><label class='form-check-label' for='flexCheckDefault'></label></div>";
                 celda5.innerHTML = checkboxString
                 {% if orden.promocion %}
                     textoCelda3 = document.createTextNode("${{orden.total_descuento}}");

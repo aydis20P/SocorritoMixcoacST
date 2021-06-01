@@ -42,6 +42,7 @@ class Orden(models.Model):
     paga_con = models.FloatField(max_length=5, null=False)
     observaciones = models.CharField(max_length=256, null=True, blank=True)
     cambio = models.FloatField(max_length=5, null=False)
+    cambio_devuelto = models.BooleanField(null=False, default=False)
 
     def __str__(self):
         return "ID: " + str(self.id) + ", Fecha: " + str(self.fecha) + ", Monto: $"+ str(self.total_descuento) + ", Cliente: " + self.cliente.nombre
