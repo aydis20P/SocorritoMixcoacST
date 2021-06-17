@@ -529,6 +529,7 @@ class AdminCliente(ListView):
         context['order_by_compras_realizadas'] = Cliente.objects.order_by('-compras_realizadas')
         context['order_by_compras_realizadas_mes'] = self.clientes_orderby_frecuencia
         context['order_by_ingresos_mes'] = self.clientes_orderby_ingresos_mes
+        context['order_by_deben_cambio'] = Orden.objects.filter(cambio_devuelto=False)
         context['order_by_deben_topper'] = Orden.objects.filter(lleva_topper=True)
         return context
 
@@ -537,8 +538,12 @@ class AdminCliente(ListView):
         for k, v in request.POST.items():
             print("\nclave: "+k+" valor: "+v+"\n")
             if v == "on":
-                orden_id=k.replace("checkbox-","")
-                Orden.objects.filter(pk=int(orden_id)).update(lleva_topper=False)
+                if "checkbox-topper-" in k:
+                    orden_id=k.replace("checkbox-topper-","")
+                    Orden.objects.filter(pk=int(orden_id)).update(lleva_topper=False)
+                if "checkbox-cambio-" in k:
+                    orden_id=k.replace("checkbox-cambio-","")
+                    Orden.objects.filter(pk=int(orden_id)).update(cambio_devuelto=True)
 
         return HttpResponseRedirect(request.path_info)
 
