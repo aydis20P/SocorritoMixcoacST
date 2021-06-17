@@ -85,19 +85,22 @@
 
 {% block script %}
 <script>
-    //generaremos la fecha del día de hoy para mostrarla cuando no hay menús en el momento en que l ventana deje de cargar
+    //generaremos la fecha del día de hoy para mostrarla cuando no hay menús en el momento en que la ventana deje de cargar
     window.onload = function(){
-        const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
-        const diasSemana = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado"]
+        var aviso = document.getElementById("aviso");
+        if (aviso != null){
+            const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+            const diasSemana = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado"]
 
-        var fecha = new Date();
-        var semana = diasSemana[fecha.getDay()];
-        var dia = fecha.getDate();
-        var mes = meses[fecha.getMonth()];
-        var año = fecha.getFullYear();
+            var fecha = new Date();
+            var semana = diasSemana[fecha.getDay()];
+            var dia = fecha.getDate();
+            var mes = meses[fecha.getMonth()];
+            var año = fecha.getFullYear();
 
-        var aviso = "No hay menús para el día de hoy (" + semana + " " + dia + " de " + mes + " del " + año + ")";
-        document.getElementById("aviso").innerText = aviso;
+            var mensaje = "No hay menús para el día de hoy (" + semana + " " + dia + " de " + mes + " del " + año + ")";
+            aviso.innerText = mensaje;
+        }
     };
 </script>
 {% endblock script %}

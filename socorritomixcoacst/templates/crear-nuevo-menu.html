@@ -15,7 +15,7 @@
 
         {% csrf_token %}
 
-        <div id="botones-menú" class="d-flex justify-content-end flex-wrap">
+        <div id="botones-menú" class="d-flex justify-content-end flex-wrap py-2">
             <button id="btn-selec-bebidas" type="button" class="btn btn-warning mx-3" onclick="seleccionar('BE')">
                 <i class="fas fa-coffee fa-lg">
                     Seleccionar todas las bebidas
@@ -38,46 +38,16 @@
             </button>
         </div>
 
-        <div class="table-responsive-xl">
-            <table id="tabla-comida" class="table table-sm">
-
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Tipo</th>
-                        <th>Precio</th>
-                        <th>¿Incluir?</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for platillo in platillos %}
-                        <tr>
-                            <td>
-                                {{ platillo.nombre }}
-                            </td>
-                            <td>
-                                {{ platillo.descripcion }}
-                            </td>
-                            <td>
-                                {{ platillo.get_tipo_display }}
-                            </td>
-                            <td>
-                                {% for precio in precios %}
-                                    {% if platillo == precio.platillo %}
-                                        {{ precio.precio }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}" type="checkbox" class="custom-control-input checkbox check-{{ platillo.tipo }}">
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-
-            </table>
+        <div id="contenedor-tabla" class="table-responsive-xl py-2">
+            <div class="form-outline">
+                <input type="text" id="input-busqueda" class="form-control" onkeyup="actualizaTabla()"/>
+                <label class="form-label">
+                    <i class="fas fa-search"></i>
+                    Buscar platillo
+                </label>
+            </div>
+            <br>
+            <!-- El contenido de esta tabla se crea con javascript (function generaTabla())  -->
         </div>
 
         <div id="contenedor-botones" class="d-flex justify-content-end py-3">
@@ -95,6 +65,11 @@
 
 {% block script %}
 <script>
+    //generar la tabla en cuanto la página cargue.
+    window.onload = function() {
+        generaTabla();
+    }
+
     //función para copiar los platillos de un menu anterior al que se está editando:
     //recibimos la lista de platillos de un menú
     //recorremos todos los checkboxes dados por clase_checkbox, y si su ID corresponde a uno de los platillos en el menú, marcalo.
@@ -116,6 +91,123 @@
         for (i=0; i<checkboxes.length; i++){
             checkboxes[i].checked = true;
         }
+    }
+
+    //función para sustituir letras con diacríticos por su versión sin diacríticos
+    function sinDiacriticos(texto){
+            let de = 'ÁÃÀÄÂÉËÈÊÍÏÌÎÓÖÒÔÚÜÙÛÑÇáãàäâéëèêíïìîóöòôúüùûñç',
+                 a = 'AAAAAEEEEIIIIOOOOUUUUNCaaaaaeeeeiiiioooouuuunc',
+                re = new RegExp('['+de+']' , 'ug');
+
+            return texto.replace(re, match => a.charAt(de.indexOf(match)));
+    }
+
+    //función para ordenar una tabla (con burbuja)
+    function ordenaTabla(tablaID, columna) {
+        var tabla, filas, cambiando, i, x, y, debeCambiar;
+        tabla = document.getElementById(tablaID);
+        cambiando = true;
+        //hacemos un bucle mientras no se haya hecho un cambio
+        while (cambiando) {
+            //empecemos indicando que no se ha hecho un cambio
+            cambiando = false;
+            filas = tabla.rows;
+            //recorrer todas las filas excepto por la primera, que es el encabezado
+            for (i = 1; i < (filas.length - 1); i++) {
+                //empecemos diciendo que no deberíamos cambiar
+                debeCambiar = false;
+                //obtener dos elementos a comparar: uno de la fila actual y otro de la siguiente
+                x = filas[i].getElementsByTagName("TD")[columna];
+                y = filas[i + 1].getElementsByTagName("TD")[columna];
+                //checar si las dos filas deberían cambiar
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    //si es así, marcar que hay que cambiar y salir del ciclo
+                    debeCambiar = true;
+                    break;
+                }
+            }
+            if (debeCambiar) {
+                //si se ha marcado que debemos cambiar, haz el cambio y marca que se ha cambiado
+                filas[i].parentNode.insertBefore(filas[i + 1], filas[i]);
+                cambiando = true;
+            }
+        }
+    }
+
+    //función para generar la tabla de platillos en la vista
+    function generaTabla(){
+        // Crea la tabla con sus atributos
+        var tabla = document.createElement("table");
+        tabla.id = "tabla-platillos";
+        tabla.classList.add("table", "table-sm");
+
+        // Crea el encabezado de la tabla y lo agrega a la tabla
+        var encabezado = document.createElement("thead");
+        encabezado.innerHTML = `<tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Tipo</th>
+                                    <th>Precio</th>
+                                    <th>¿Incluir?</th>
+                                </tr>`;
+        tabla.appendChild(encabezado);
+
+        // Crea el elemento de cuerpo de la tabla
+        var tbody = document.createElement("tbody");
+
+        //Crea cada fila para los platillos
+        {% for platillo in platillos %}
+            var fila = document.createElement("tr");
+            fila.id = "fila-{{ platillo.nombre }}";
+
+            fila.innerHTML =`<td>
+                                {{ platillo.nombre }}
+                            </td>
+                            <td>
+                                {{ platillo.descripcion }}
+                            </td>
+                            <td>
+                                {{ platillo.get_tipo_display }}
+                            </td>
+                            <td>
+                                {% for precio in precios %}
+                                    {% if platillo == precio.platillo %}
+                                        {{ precio.precio }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}" type="checkbox" class="custom-control-input checkbox check-{{ platillo.tipo }}">
+                            </td>`
+
+            // agrega la hilera al final de la tabla (al final del elemento tblbody)
+            tbody.appendChild(fila);
+        {% endfor %}
+
+        // agrega el cuerpo de la tabla a la tabla
+        tabla.appendChild(tbody);
+
+        // agrega la tabla a la página dentro de su contenedor
+        document.getElementById("contenedor-tabla").appendChild(tabla);
+
+        //Ordena alfabeticamente la tabla
+        ordenaTabla(tabla.id, 0);
+    }
+
+    //Se activa con onkeyup() con el buscador con id="input-busqueda"
+    function actualizaTabla(){
+        {% for platillo in platillos %}
+            fila = document.getElementById("fila-{{ platillo.nombre }}");
+            nombreLower = String('{{ platillo.nombre }}').toLowerCase();
+            nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            nombreBuscado = document.getElementById("input-busqueda").value.toLowerCase();
+            nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
+                fila.style.display = "none";
+            }else{
+                fila.style.display = "table-row";
+            }
+        {% endfor %}
     }
 </script>
 {% endblock script %}
