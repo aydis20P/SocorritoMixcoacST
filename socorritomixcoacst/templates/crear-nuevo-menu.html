@@ -12,180 +12,43 @@
     <h3>Crear nuevo menú del día</h3>
 
     <form if="form-menu-nuevo" method="POST">
-        
+
         {% csrf_token %}
 
-        <ul id="lista-menus" class="list-group">
+        <div id="botones-menú" class="d-flex justify-content-end flex-wrap py-2">
+            <button id="btn-selec-bebidas" type="button" class="btn btn-warning mx-3" onclick="seleccionar('BE')">
+                <i class="fas fa-coffee fa-lg">
+                    Seleccionar todas las bebidas
+                </i>
+            </button>
+            <button id="btn-selec-extras" type="button" class="btn btn-warning mx-3" onclick="seleccionar('EX')">
+                <i class="fas fa-utensils fa-lg">
+                    Seleccionar todos los extras
+                </i>
+            </button>
+            <button id="btn-selec-sushis" type="button" class="btn btn-warning mx-3" onclick="seleccionar('SU')">
+                <i class="fas fa-utensils fa-lg">
+                    Seleccionar todos los sushis
+                </i>
+            </button>
+            <button id="btn-copiar-comidas" type="button" class="btn btn-warning mx-3" onclick="copiar({{ menu_anterior }})">
+                <i class="fas fa-copy fa-lg">
+                    Copiar el menú anterior
+                </i>
+            </button>
+        </div>
 
-<!--            <li id="menu-desayuno" class="list-group-item p-3">
-
-                <div id="cabecera-desayuno" class="d-flex justify-content-between flex-wrap">
-                    <h5>Desayuno</h5>
-                    <button id="btn-copiar-desayunos" type="button" class="btn btn-warning" onclick="copiar({{ desayuno_ayer }}, 'check-desayuno')">
-                        <i class="far fa-copy fa-lg">
-                            Copiar el menú de ayer
-                        </i>
-                    </button>
-                    <button id="btn-desplegar-desayunos" type="button" class="btn btn-warning btn-floating" onclick="desplegarDesayunos()">
-                        <i class="fas fa-angle-right"></i>
-                    </button>
-                    <button id="btn-ocultar-desayunos" type="button" class="btn btn-warning btn-floating" onclick="ocultarDesayunos()">
-                        <i class="fas fa-angle-up"></i>
-                    </button>
-                </div>
-
-                <div class="table-responsive-xl">
-                    <table id="tabla-desayuno" class="table table-sm">
-
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Tipo</th>
-                                <th>¿Incluir?</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {% for platillo in platillos %}
-                                <tr>
-                                    <td>
-                                        {{ platillo.nombre }}
-                                    </td>
-                                    <td>
-                                        {{ platillo.descripcion }}
-                                    </td>
-                                    <td>
-                                        {{ platillo.get_tipo_display }}
-                                    </td>
-                                    <td>
-                                        <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-desayuno" type="checkbox" class="custom-control-input check-desayuno">
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-
-                    </table>
-                </div>
-
-            </li>-->
-
-            <li id="menu-comida" class="list-group-item p-3">
-
-                <div id="cabecera-comida" class="d-flex justify-content-between flex-wrap">
-                    <h5>Comida</h5>
-                    <button id="btn-copiar-comidas" type="button" class="btn btn-warning" onclick="copiar({{ comida_anterior }}, 'check-comida')">
-                        <i class="far fa-copy fa-lg">
-                            Copiar el menú anterior
-                        </i>
-                    </button>
-<!--                    <button id="btn-desplegar-comidas" type="button" class="btn btn-warning btn-floating" onclick="desplegarComidas()">
-                        <i class="fas fa-angle-right"></i>
-                    </button>
-                    <button id="btn-ocultar-comidas" type="button" class="btn btn-warning btn-floating" onclick="ocultarComidas()">
-                        <i class="fas fa-angle-up"></i>
-                    </button>-->
-                </div>
-
-                <div class="table-responsive-xl">
-                    <table id="tabla-comida" class="table table-sm">
-
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Tipo</th>
-                                <th>Precio</th>
-                                <th>¿Incluir?</th>
-                            </tr>
-                        </thead>
-
-                        
-                        <tbody>
-                            {% for platillo in platillos %}
-                                <tr>
-                                    <td>
-                                        {{ platillo.nombre }}
-                                    </td>
-                                    <td>
-                                        {{ platillo.descripcion }}
-                                    </td>
-                                    <td>
-                                        {{ platillo.get_tipo_display }}
-                                    </td>
-                                    <td>
-                                    	{% for precio in precios %}
-                                    		{% if platillo == precio.platillo %}
-                                    			{{ precio.precio }}
-                                    		{% endif %}
-                                    	{% endfor %}
-                                    </td>
-                                    <td>
-                                        <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-comida" type="checkbox" class="custom-control-input check-comida">
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-
-                    </table>
-                </div>
-
-            </li>
-
-<!--            <li id="menu-cena" class="list-group-item p-3">
-
-                <div id="cabecera-cena" class="d-flex justify-content-between flex-wrap">
-                    <h5>Cena</h5>
-                    <button id="btn-copiar-cenas" type="button" class="btn btn-warning" onclick="copiar({{ cena_ayer }}, 'check-cena')">
-                        <i class="far fa-copy fa-lg">
-                            Copiar el menú de ayer
-                        </i>
-                    </button>
-                    <button id="btn-desplegar-cenas" type="button" class="btn btn-warning btn-floating" onclick="desplegarCenas()">
-                        <i class="fas fa-angle-right"></i>
-                    </button>
-                    <button id="btn-ocultar-cenas" type="button" class="btn btn-warning btn-floating" onclick="ocultarCenas()">
-                        <i class="fas fa-angle-up"></i>
-                    </button>
-                </div>
-
-                <div class="table-responsive-xl">
-                    <table id="tabla-cena" class="table table-sm">
-
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Tipo</th>
-                                <th>¿Incluir?</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {% for platillo in platillos %}
-                                <tr>
-                                    <td>
-                                        {{ platillo.nombre }}
-                                    </td>
-                                    <td>
-                                        {{ platillo.descripcion }}
-                                    </td>
-                                    <td>
-                                        {{ platillo.get_tipo_display }}
-                                    </td>
-                                    <td>
-                                        <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}-cena" type="checkbox" class="custom-control-input check-cena">
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-
-                    </table>
-                </div>
-
-            </li>-->
-
-        </ul>
+        <div id="contenedor-tabla" class="table-responsive-xl py-2">
+            <div class="form-outline">
+                <input type="text" id="input-busqueda" class="form-control" onkeyup="actualizaTabla()"/>
+                <label class="form-label">
+                    <i class="fas fa-search"></i>
+                    Buscar platillo
+                </label>
+            </div>
+            <br>
+            <!-- El contenido de esta tabla se crea con javascript (function generaTabla())  -->
+        </div>
 
         <div id="contenedor-botones" class="d-flex justify-content-end py-3">
             <button id="boton-nuevo-menu" type="submit" class="btn btn-primary btn-lg btn-warning">
@@ -194,7 +57,7 @@
                 </i>
             </button>
         </div>
-        
+
     </form>
 
 </div>
@@ -202,24 +65,16 @@
 
 {% block script %}
 <script>
-    /*
+    //generar la tabla en cuanto la página cargue.
     window.onload = function() {
-        document.getElementById("tabla-desayuno").style.display = "none";
-        document.getElementById("tabla-comida").style.display = "none";
-        document.getElementById("tabla-cena").style.display = "none";
-        document.getElementById("btn-ocultar-desayunos").style.display = "none";
-        document.getElementById("btn-ocultar-comidas").style.display = "none";
-        document.getElementById("btn-ocultar-cenas").style.display = "none";
-        document.getElementById("btn-copiar-desayunos").style.display = "none";
-        document.getElementById("btn-copiar-comidas").style.display = "none";
-        document.getElementById("btn-copiar-cenas").style.display = "none";
+        generaTabla();
     }
-    */
+
     //función para copiar los platillos de un menu anterior al que se está editando:
-    //recibimos tanto la lista de platillos de es menú, como la clase de checkboxes que vamos a manejar (de desayuno, comida o cena).checked
+    //recibimos la lista de platillos de un menú
     //recorremos todos los checkboxes dados por clase_checkbox, y si su ID corresponde a uno de los platillos en el menú, marcalo.
-    function copiar(menu, clase_checkbox){
-        checkboxes = document.getElementsByClassName(clase_checkbox);
+    function copiar(menu){
+        checkboxes = document.getElementsByClassName("checkbox");
         for (i=0; i<checkboxes.length; i++){
             for (j=0; j<menu.length; j++){
                 if (checkboxes[i].id == menu[j]){
@@ -228,44 +83,131 @@
             }
         }
     }
-    /*
-    function desplegarDesayunos(){
-        document.getElementById("tabla-desayuno").style.display = "table";
-        document.getElementById("btn-desplegar-desayunos").style.display = "none";
-        document.getElementById("btn-ocultar-desayunos").style.display = "initial";
-        document.getElementById("btn-copiar-desayunos").style.display = "initial";
-    }
-    function ocultarDesayunos(){
-        document.getElementById("tabla-desayuno").style.display = "none";
-        document.getElementById("btn-desplegar-desayunos").style.display = "initial";
-        document.getElementById("btn-ocultar-desayunos").style.display = "none";
-        document.getElementById("btn-copiar-desayunos").style.display = "none";
-    }
-    function desplegarComidas(){
-        document.getElementById("tabla-comida").style.display = "table";
-        document.getElementById("btn-desplegar-comidas").style.display = "none";
-        document.getElementById("btn-ocultar-comidas").style.display = "initial";
-        document.getElementById("btn-copiar-comidas").style.display = "initial";
-    }
-    function ocultarComidas(){
-        document.getElementById("tabla-comida").style.display = "none";
-        document.getElementById("btn-desplegar-comidas").style.display = "initial";
-        document.getElementById("btn-ocultar-comidas").style.display = "none";
-        document.getElementById("btn-copiar-comidas").style.display = "none";
-    }
-    function desplegarCenas(){
-        document.getElementById("tabla-cena").style.display = "table";
-        document.getElementById("btn-desplegar-cenas").style.display = "none";
-        document.getElementById("btn-ocultar-cenas").style.display = "initial";
-        document.getElementById("btn-copiar-cenas").style.display = "initial";
-    }
-    function ocultarCenas(){
-        document.getElementById("tabla-cena").style.display = "none";
-        document.getElementById("btn-desplegar-cenas").style.display = "initial";
-        document.getElementById("btn-ocultar-cenas").style.display = "none";
-        document.getElementById("btn-copiar-cenas").style.display = "none";
-    }
-    */
 
+    //función para seleccionar todos los platillos de un tipo:
+    //recibimos el tipo de platillos, buscamos los checkboxes de su clase, y los marcamos
+    function seleccionar(tipo){
+        checkboxes = document.getElementsByClassName("check-" + tipo);
+        for (i=0; i<checkboxes.length; i++){
+            checkboxes[i].checked = true;
+        }
+    }
+
+    //función para sustituir letras con diacríticos por su versión sin diacríticos
+    function sinDiacriticos(texto){
+            let de = 'ÁÃÀÄÂÉËÈÊÍÏÌÎÓÖÒÔÚÜÙÛÑÇáãàäâéëèêíïìîóöòôúüùûñç',
+                 a = 'AAAAAEEEEIIIIOOOOUUUUNCaaaaaeeeeiiiioooouuuunc',
+                re = new RegExp('['+de+']' , 'ug');
+
+            return texto.replace(re, match => a.charAt(de.indexOf(match)));
+    }
+
+    //función para ordenar una tabla (con burbuja)
+    function ordenaTabla(tablaID, columna) {
+        var tabla, filas, cambiando, i, x, y, debeCambiar;
+        tabla = document.getElementById(tablaID);
+        cambiando = true;
+        //hacemos un bucle mientras no se haya hecho un cambio
+        while (cambiando) {
+            //empecemos indicando que no se ha hecho un cambio
+            cambiando = false;
+            filas = tabla.rows;
+            //recorrer todas las filas excepto por la primera, que es el encabezado
+            for (i = 1; i < (filas.length - 1); i++) {
+                //empecemos diciendo que no deberíamos cambiar
+                debeCambiar = false;
+                //obtener dos elementos a comparar: uno de la fila actual y otro de la siguiente
+                x = filas[i].getElementsByTagName("TD")[columna];
+                y = filas[i + 1].getElementsByTagName("TD")[columna];
+                //checar si las dos filas deberían cambiar
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    //si es así, marcar que hay que cambiar y salir del ciclo
+                    debeCambiar = true;
+                    break;
+                }
+            }
+            if (debeCambiar) {
+                //si se ha marcado que debemos cambiar, haz el cambio y marca que se ha cambiado
+                filas[i].parentNode.insertBefore(filas[i + 1], filas[i]);
+                cambiando = true;
+            }
+        }
+    }
+
+    //función para generar la tabla de platillos en la vista
+    function generaTabla(){
+        // Crea la tabla con sus atributos
+        var tabla = document.createElement("table");
+        tabla.id = "tabla-platillos";
+        tabla.classList.add("table", "table-sm");
+
+        // Crea el encabezado de la tabla y lo agrega a la tabla
+        var encabezado = document.createElement("thead");
+        encabezado.innerHTML = `<tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Tipo</th>
+                                    <th>Precio</th>
+                                    <th>¿Incluir?</th>
+                                </tr>`;
+        tabla.appendChild(encabezado);
+
+        // Crea el elemento de cuerpo de la tabla
+        var tbody = document.createElement("tbody");
+
+        //Crea cada fila para los platillos
+        {% for platillo in platillos %}
+            var fila = document.createElement("tr");
+            fila.id = "fila-{{ platillo.nombre }}";
+
+            fila.innerHTML =`<td>
+                                {{ platillo.nombre }}
+                            </td>
+                            <td>
+                                {{ platillo.descripcion }}
+                            </td>
+                            <td>
+                                {{ platillo.get_tipo_display }}
+                            </td>
+                            <td>
+                                {% for precio in precios %}
+                                    {% if platillo == precio.platillo %}
+                                        {{ precio.precio }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <input id="{{ platillo.nombre }}" name="{{ platillo.nombre }}" type="checkbox" class="custom-control-input checkbox check-{{ platillo.tipo }}">
+                            </td>`
+
+            // agrega la hilera al final de la tabla (al final del elemento tblbody)
+            tbody.appendChild(fila);
+        {% endfor %}
+
+        // agrega el cuerpo de la tabla a la tabla
+        tabla.appendChild(tbody);
+
+        // agrega la tabla a la página dentro de su contenedor
+        document.getElementById("contenedor-tabla").appendChild(tabla);
+
+        //Ordena alfabeticamente la tabla
+        ordenaTabla(tabla.id, 0);
+    }
+
+    //Se activa con onkeyup() con el buscador con id="input-busqueda"
+    function actualizaTabla(){
+        {% for platillo in platillos %}
+            fila = document.getElementById("fila-{{ platillo.nombre }}");
+            nombreLower = String('{{ platillo.nombre }}').toLowerCase();
+            nombreLower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            nombreBuscado = document.getElementById("input-busqueda").value.toLowerCase();
+            nombreBuscado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if( !sinDiacriticos(nombreLower).includes(sinDiacriticos(nombreBuscado)) ){
+                fila.style.display = "none";
+            }else{
+                fila.style.display = "table-row";
+            }
+        {% endfor %}
+    }
 </script>
 {% endblock script %}
