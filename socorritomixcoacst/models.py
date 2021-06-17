@@ -130,3 +130,6 @@ class HistorialPrecio(models.Model):
     fecha = models.DateTimeField(null=False, auto_now_add=True)
     es_precio_actual = models.BooleanField(null=False, default=True)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return "Platillo: " + self.platillo.nombre + ", precio: " + str(self.precio) + ", fecha: " + str(self.fecha) + ", es actual: " + str(self.es_precio_actual)
