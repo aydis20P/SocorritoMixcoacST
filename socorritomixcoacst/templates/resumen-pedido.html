@@ -58,6 +58,14 @@
 							<td>{{ pedido.cantidad }}</td>
 							<td>{{ pedido.sub_total }}</td>
 						<tr>
+						{% if pedido.observaciones_completa %}
+						<tr>
+							<td class="td-observaciones-ind"><strong>Observaciones del Menu completo {{ pedido.numero_completa }}:</strong>  {{ pedido.observaciones_completa }}</td>
+							<td class="td-observaciones-ind"></td>
+							<td class="td-observaciones-ind"></td>
+							<td class="td-observaciones-ind"></td>
+						</tr>
+						{% endif %}
 					{% endfor %}
 					<tr class="table-dark">
 						<td colspan="2"></td>
@@ -153,7 +161,7 @@
 					</div>
 					<div class="col">
 						<div class="form-outline">
-							<input type="number" step="0.00001" id="pagC" class="form-control" name="pagC" value="{{ orden_del_cliente.total }}" onkeyup="calculaCambio()" onchange="calculaCambio()" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
+							<input type="number" step="0.00001" id="pagC" class="form-control" name="pagC" value="{{ orden_del_cliente.total }}" onkeyup="calculaCambio()" onchange="calculaCambio()" onclick="vaciaCampo(this)" autocomplete="off" min="{{ orden_del_cliente.total }}"/>
 							<label class="form-label" for="pagC">Pago con</label>
 						</div>	
 					</div>
@@ -202,6 +210,10 @@
 
 {% block script %}
 <script>
+
+	window.onload = function(){
+		$(".td-observaciones-ind").css("background-color","#FFF9C4");
+	}
 
 	function calculaCambio(){
 		var total = parseFloat({{ orden_del_cliente.total }});
@@ -287,5 +299,8 @@
 		}
 	}
 
+  function vaciaCampo(input){
+    input.value = "";
+  }
 </script>
 {% endblock script %}

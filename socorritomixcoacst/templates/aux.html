@@ -1,273 +1,785 @@
-<!DOCTYPE html>
-<html>
-<title>W3.CSS Template</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
-th, td {border: 1px solid black;
- border-collapse: collapse;
- padding-top: 5px;
- padding-bottom: 5px;
- padding-left: 5px;
- padding-right: 5px;
+{% extends 'base.html' %}
+{% load static %}
 
-}
-</style>
-<body class="w3-theme-l5">
+{% block head %}
+<title>Menu: Venta telefónica</title>
+{% endblock head %}
 
-<!-- Navbar -->
-<div class="w3-top">
- <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
-  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Inicio</a>
-  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
-  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-shopping-cart"></i></a>
-  <div class="w3-dropdown-hover w3-hide-small">
-    <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-green">3</span></button>     
-    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px">
-      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
-      <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
-      <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
-    </div>
-  </div>
-  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
-    
-  </a>
- </div>
-</div>
+{% block content %}
+    {% if platillos %}
+    <form id="formMenu" method="POST">
+        <!-- definimos las pestañas (vía una lista no ordenada) -->
+        <ul class="nav nav-tabs nav-fill p-3" id="paneles" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="menu-tab" data-mdb-toggle="tab" href="#panel-menu" role="tab" aria-controls="panel-menu" aria-selected="true">Menús completos</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="ordenes-tab" data-mdb-toggle="tab" href="#panel-ordenes" role="tab" aria-controls="panel-ordenes" aria-selected="false">Órdenes</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="bebidas-tab" data-mdb-toggle="tab" href="#panel-bebidas" role="tab" aria-controls="panel-bebidas" aria-selected="false">Bebidas</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="extras-tab" data-mdb-toggle="tab" href="#panel-extras" role="tab" aria-controls="panel-extras" aria-selected="false">Extras</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="desayunos-tab" data-mdb-toggle="tab" href="#panel-desayunos" role="tab" aria-controls="panel-desayunos" aria-selected="false">Desayunos</a>
+            </li>
+        </ul>
 
-<!-- Navbar on small screens -->
-<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
-</div>
+        <!-- Definimos los elementos de la tabla como divisiónes de la clase "tab-pane" -->
+        <div class="tab-content p-3" id="contenido-paneles">
 
-<!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
-  <!-- The Grid -->
-  <div class="w3-row">
-    <!-- Left Column -->
-    <div class="w3-col m3">
-      <!-- Profile -->
-      <div class="w3-card w3-round w3-white">
-        <div class="w3-container">
-         <h4 class="w3-center">Perfil del cliente</h4>
-         <p class="w3-center"><i class="fa fa-user fa-5x" aria-hidden="true"></i></p>
-         <hr>
-         <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> Editar Foto</p>
-         <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> Calle #3, Colonia Pegaso, Del Iztapalapa</p>
-         <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> April 1, 1988</p>
+            <!-- panel 1: menús -->
+            <div class="tab-pane fade show active" id="panel-menu" role="tabpanel" aria-labelledby="menu-tab">
+                <div class="d-flex flex-column px-3" id="contenedor-lista">
+                    <ul class="list-group flex-fill" id="lista-menus">
+                        <!--este elemento estará oculto, pero se usará de referencia para generar las entradas de la lista de menús completos-->
+                        <li class="list-group-item" id="plantilla-menu" hidden>
+                            <div class="container">
+                                <div class="row justify-content-between">
+                                    <div class="col">
+                                        <div class="row mb-1">
+                                            <select class="form-select" aria-label="Default select example" name = "select-entrada" >
+                                                <option selected disabled>Entrada</option>
+                                                {% for platillo in platillos %}
+                                                    {% if platillo.tipo == 'EN' %}
+                                                        <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
+                                                    {% endif %}
+                                                {% endfor %}        
+                                            </select>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <select class="form-select" aria-label="Default select example" name = "select-segundo-tiempo">
+                                                <option selected disabled>Segundo Tiempo</option>
+                                                {% for platillo in platillos %}
+                                                    {% if platillo.tipo == 'ST' %}
+                                                        <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
+                                                    {% endif %}
+                                                {% endfor %}   
+                                            </select>
+                                        </div>
+                                        <div class="row">
+                                            <select class="form-select" aria-label="Default select example" name = "select-guisado">
+                                                <option selected disabled>Guisado</option>
+                                                {% for platillo in platillos %}
+                                                    {% if platillo.tipo == 'GU' %}
+                                                        <option value="{{platillo.nombre}}">{{platillo.nombre}}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="row mt-1">
+                                            <button type="button" class="btn btn-primary btn-danger" onclick="removerMenu(this)">
+                                                <i class="far fa-trash-alt fa-lg">&Tab;Eliminar</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                               
+                                    
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- Botón para agregar un nuevo menú completo -->
+                    <div class="d-flex justify-content-end py-3">
+                        <button type="button" class="btn btn-primary btn-md btn-warning" onclick="agregarMenu()">
+                            <i class="fas fa-plus fa-lg">&Tab;agregar otro menú</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- panel 2: órdenes  -->
+            <div class="tab-pane fade" id="panel-ordenes" role="tabpanel" aria-labelledby="ordenes-tab">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Platillo</th>
+                                <th scope="col">Costo</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for platillo in platillos%}
+                            <tr>
+                                {% if not platillo.tipo == "EX" %}
+                                    {% if not platillo.tipo == "BE" %}
+                                        <td>{{ platillo.nombre }}</td>
+                                        <td class="precio">{{ platillo.precio }}</td>
+                                        {% csrf_token %}
+                                        <td>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="form-outline">
+                                                    <input readonly value="0" type="text" id="orden_de_{{ platillo.nombre }}" class="form-control" name="orden_de_{{ platillo.nombre }}"/>
+                                                    <label class="form-label" for="form1">Cantidad</label>
+                                                </div>
+                                                <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
+                                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_de_{{ platillo.nombre }}')">
+                                                    <i class="fas fa-angle-up"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_de_{{ platillo.nombre }}')">
+                                                    <i class="fas fa-angle-down"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    {% endif %}
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- panel 3: bebidas -->
+            <div class="tab-pane fade" id="panel-bebidas" role="tabpanel" aria-labelledby="bebidas-tab">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Bebida</th>
+                            <th scope="col">Costo</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for platillo in platillos %}
+                            <tr>
+                                {% if platillo.tipo == "BE" %}
+                                    <td>{{ platillo.nombre }}</td>
+                                    <td class="precio">{{ platillo.precio }}</td>
+                                    {% csrf_token %}
+                                    <td>
+                                        <div class="d-flex justify-content-start">
+                                            <div class="form-outline">
+                                                <input readonly value="0" type="text" id="orden_bebida_de_{{ platillo.nombre }}" class="form-control" name="orden_bebida_de_{{ platillo.nombre }}"/>
+                                                <label class="form-label" for="form1">Cantidad</label>
+                                            </div>
+                                            <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
+                                                <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_bebida_de_{{ platillo.nombre }}')">
+                                                <i class="fas fa-angle-up"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_bebida_de_{{ platillo.nombre }}')">
+                                                <i class="fas fa-angle-down"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                 </table>
+            </div>
+
+            <!-- panel 4: extras -->
+            <div class="tab-pane fade" id="panel-extras" role="tabpanel" aria-labelledby="extras-tab">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Platillo</th>
+                            <th scope="col">Costo</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for platillo in platillos%}
+                        <tr>
+                            {% if platillo.tipo == "EX" %}
+                                <td>{{ platillo.nombre }}</td>
+                                <td class="precio">{{ platillo.precio }}</td>
+                                {% csrf_token %}
+                                <td>
+                                    <div class="d-flex justify-content-start">
+                                        <div class="form-outline">
+                                            <input readonly value="0" type="text" id="orden_extra_de_{{ platillo.nombre }}" class="form-control" name="orden_extra_de_{{ platillo.nombre }}"/>
+                                            <label class="form-label" for="form1">Cantidad</label>
+                                        </div>
+                                        <div class="btn-group-vertical d-inline btn-group-sm" role="group" aria-label="Vertical button group">
+                                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="incrementaSpinner('orden_extra_de_{{ platillo.nombre }}')">
+                                            <i class="fas fa-angle-up"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" onclick="decrementaSpinner('orden_extra_de_{{ platillo.nombre }}')">
+                                            <i class="fas fa-angle-down"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!--Panel Desayunos-->
+            <div class="tab-pane fade" id="panel-desayunos" role="tabpanel" aria-labelledby="desayunos-tab">
+                <div class="container-lg">
+                    <!-- Comienza la tabla que contendrá los paquetes-->
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="card border border-primary mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 1</div>
+                                            <div class="card-body text-dark">
+                                                <h6>Jugo y fruta</h6>
+                                                <select hidden name="select-"  id="select1"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D1" and paq1.esta_eliminado == False %}    
+                                                    <option selected disabled value="{{paq1.nombre}}">{{paq1.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </select>
+                                                <h6>Hot cakes/molletes/sopes con pollo:</h6>
+                                                <select name="select"  id="select2" class="form-select">
+                                                    <option selected disabled>------</option>
+                                                    {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D2" and paq1.esta_eliminado == False %}    
+                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                    
+                                                </select>
+                                               
+                                                {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 1"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo1">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra1"></h6>
+                                                {%endif%}
+                                                {%endfor%}
+                                                <select name="select" id="select3" class="form-select">
+                                                    <option selected disabled>------</option>
+                                                    {% for paq1 in paquete1 %}
+                                                    {% if paq1.tipo_desayuno == "D3" and paq1.esta_eliminado == False %}    
+                                                    <option value="{{paq1.nombre}}">{{paq1.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </select>
+                                                <br></br>
+                                                <div class="text-center">
+                                                    <button type="button" class="btn btn-warning btn-rounded" id="paquete" name="Paquete 1" onload="sumarextra(costo,extra)" onclick="agregarDesayuno(this,1,2,3)"value="Paquete 1">Añadir</button>
+                                                </div>
+                                            </div>    
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 2</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select4"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo_desayuno == "D1" and paq2.esta_eliminado == False %}    
+                                                    <option selected disabled value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Omelet del día o Huevos Rancheros o con jamón o al albañil o con longaniza/ Chilaquiles:</h6>
+                                            <select name="select" form="paquetes" id="select5" class="form-select">
+                                               <option selected disabled>------</option>
+                                                    {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo == "GU" and paq2.esta_eliminado == False and paq2.tipo_desayuno == "D2" %}    
+                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 2"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo2">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra2"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select6" class="form-select">
+                                                <option selected disabled>------</option>
+                                                    {% for paq2 in paquete2 %}
+                                                    {% if paq2.tipo_desayuno == "D3" and paq2.esta_eliminado == False %}    
+                                                    <option value="{{paq2.nombre}}">{{paq2.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 2" onclick="agregarDesayuno(this,4,5,6)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="card border border-primary mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 3</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select7"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq3 in paquete3 %}
+                                                    {% if paq3.tipo_desayuno == "D1" and paq3.esta_eliminado == False %}    
+                                                    <option selected disabled value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Guisado o sugerencia del día:</h6>
+                                            <select name="select" form="paquetes" id="select8" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq3 in platillos %}
+                                                    {% if paq3.tipo == "GU" and paq3.esta_eliminado == False %}    
+                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 3"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo3">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra3"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select9" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq3 in paquete3 %}
+                                                    {% if paq3.tipo_desayuno == "D3" and paq3.esta_eliminado == False %}    
+                                                    <option value="{{paq3.nombre}}">{{paq3.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 3" onclick="agregarDesayuno(this,7,8,9)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 4</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select10"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno == "D1" and paq4.esta_eliminado == False %}    
+                                                    <option selected disabled value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Costilla con Chilaquiles o con sopes(2)</h6>
+                                            <select name="select" form="paquetes" id="select11" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno != "D1" and paq4.tipo_desayuno != "D3" and paq4.esta_eliminado == False %}    
+                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %} pollo</option>
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 4"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo4">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra4"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select12" class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq4 in paquete4 %}
+                                                    {% if paq4.tipo_desayuno == "D3" and paq4.esta_eliminado == False %}    
+                                                    <option value="{{paq4.nombre}}">{{paq4.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %} pollo</option>
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 4" onclick="agregarDesayuno(this,10,11,12)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="card border border-primary mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 5</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select13"class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno == "D1" and paq5.esta_eliminado == False %}    
+                                                    <option selected disabled value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Milanesa o Pechuga asada, empanizada o Cecina:</h6>
+                                            <select name="select" form="paquetes" id="select14" class="form-select">
+                                                 <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno != "D1" and paq5.tipo_desayuno != "D3" and paq5.esta_eliminado == False %}    
+                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 5"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo5">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra5"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select15" class="form-select">
+                                                 <option selected disabled>------</option>
+                                                {% for paq5 in paquete5 %}
+                                                    {% if paq5.tipo_desayuno == "D3" and paq5.esta_eliminado == False %}    
+                                                    <option value="{{paq5.nombre}}">{{paq5.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 5" onclick="agregarDesayuno(this,13,14,15)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="card border border-dark mb-3" style="max-width: 18rem">
+                                            <div class="card-header">Paquete 6</div>
+                                            <div class="card-body text-dark">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select16"class="form-select">
+                                               <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno == "D1" and paq6.esta_eliminado == False %}    
+                                                    <option selected disabled value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Pancita:</h6>
+                                            <select name="select" form="paquetes" id="select17" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno != "D1" and paq6.tipo_desayuno != "D3" and paq6.esta_eliminado == False %}    
+                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete 6"%}
+                                                    <h6>Café de olla/americano/Té</h6>
+                                                    <h6 id="costo6">Precio --------{{precios.precio}} </h6>
+                                                    <h6>Café con leche/ leche caliente/Chocolate/Capuchino</h6>
+                                                    <h6 id="extra6"></h6>
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select18" class="form-select">
+                                                <option selected disabled>------</option>
+                                                {% for paq6 in paquete6 %}
+                                                    {% if paq6.tipo_desayuno == "D3" and paq6.esta_eliminado == False %}    
+                                                    <option value="{{paq6.nombre}}">{{paq6.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <br></br>
+                                            <div class="text-center">
+                                               <button type="button" class="btn btn-warning btn-rounded" id="paquete" value="Paquete 6" onclick="agregarDesayuno(this,16,17,18)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="card text-white bg-success mb-3" style="max-width: 18rem">
+                                            <div class="card-header" style="color:white; background:#FFEA00;">Paquete infantil</div>
+                                            <div class="card-body text-white">
+                                            <h6>Jugo y fruta</h6>
+                                            <select hidden name="select" form="paquetes" id="select19" class="form-select bg-success text-white">
+                                                <option selected disabled>------</option>
+                                                {% for paq7 in paquete7 %}
+                                                    {% if paq7.tipo_desayuno == "D1" and paq7.esta_eliminado == False %}    
+                                                    <option selected disabled value="{{paq7.nombre}}">{{paq7.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <h6>Cereal con leche/Hot Cakes/Huevos con jamón o con salchica</h6>
+                                            <h6>Salchipullpos/ Croquetas de pollo</h6>
+                                            {% for  precios in desayunos%}
+                                                {%if precios.nombre == "Paquete infantil"%}
+                                                    
+                                                    <h6 id="costo6">Precio --------{{precios.precio}} </h6>
+                                                    
+                                                {%endif%}
+                                            {%endfor%}
+                                            <select name="select" form="paquetes" id="select20" class="form-select bg-success text-white">
+                                               <option selected disabled>------</option>
+                                                {% for paq7 in paquete7 %}
+                                                    {% if paq7.tipo_desayuno == "D2" and paq7.esta_eliminado == False %}    
+                                                    <option value="{{paq7.nombre}}">{{paq7.nombre}}</option>
+                                                    
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            
+                                            <br></br>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-primary btn-rounded" id="paquete" value="Paquete infantil" onclick="agregarDesayuno(this,19,20,null)">Añadir</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!--Tabla de ordenes-->
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead class="table-dark">
+                                <tr >
+                                    <th scope="col">Paquete</th>
+                                    <th scope="col">Jugo o fruta</th>
+                                    <th scope="col">Desayuno</th>
+                                    <th scope="col">Bebidas</th>
+                                    <th scope="col">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordenes-desayunos">
+                               
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+                       
+                   
+                                                   
+                       
+                </div>
+            </div>
+
         </div>
-      </div>
-      <br>
 
-      <div class="w3-card w3-round w3-white">
-        <div class="w3-container">
-         <h4 class="w3-center">Estadisticas</h4>
-         <p class="w3-center"><i class="fa fa-bar-chart fa-5x"  aria-hidden="true"></i></p>
-         <hr>
-         <p>Compras realizadas (historico): 48</p>
-         <p>Compras realizadas (del mes): 8</p>
-         <p>Ingresos generados (historico): $7641.0</p>
-         <p>Ingresos generados (del mes): $1350.0</p>
-         <p>Fecha de registro: 9 de noviembre de 2020</p>
-         <p>Fecha de ultima compra: 29 de abril de 2021</p>
+        <div class="card">
+            <div class="card-body">
+                <div class="form-outline">
+                    <textarea class="form-control" id="textAreaExample" rows="4" name="observaciones"></textarea>
+                    <label class="form-label" for="textAreaExample">Observaciones del pedido</label>
+                </div>
+                <div class="row g-0 gy-0 mt-2">
+                    <div class="col">
+                        <div class="d-grid gap-2 p-1">
+                            <a href="{{ referer }}" class="btn btn-warning">
+                                <i class="fas fa-arrow-left"></i>
+                                Regresar
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="d-grid gap-2 p-1">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-cart-plus"></i>
+                                Añadir al carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <br>
-    
-    <!-- End Left Column -->
-    </div>
-    
-    <!-- Middle Column -->
-    <div class="w3-col m7">
-    
-      
-      
-      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-        <span class="w3-right w3-opacity">1 min</span>
-        <h1>Pedidos del cliente</h1><br>
-        <hr class="w3-clear">
-        <div class="table-responsive">
-            <table style="width:100%">
-                <tr>
-                  <th>Fecha de compra</th>
-                  <th>Monto total</th> 
-                  <th>Metodo de pago</th>
-                  <th>Ver detalle de orden</th>
-                </tr>
-                <tr>
-                  <td>29 de abril de 2021</td>
-                  <td>$150</td>
-                  <td>Efectivo</td>
-                  <td><button type="button">Ver detalle</button></td>
-                </tr>
-                <tr>
-                  <td>28 de abril de 2021</td>
-                  <td>$310</td>
-                  <td>Efectivo</td>
-                  <td><button type="button">Ver detalle</button></td>
-                </tr>
-                <tr>
-                  <td>26 de abril de 2021</td>
-                  <td>$75</td>
-                  <td>Efectivo</td>
-                  <td><button type="button">Ver detalle</button></td>
-                </tr>
-                <tr>
-                    <td>24 de abril de 2021</td>
-                    <td>$150</td>
-                    <td>Pago con tarjeta</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>20 de abril de 2021</td>
-                    <td>$503</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>14 de abril de 2021</td>
-                    <td>$110</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>10 de abril de 2021</td>
-                    <td>$150</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>3 de abril de 2021</td>
-                    <td>$299</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>26 de marzo de 2021</td>
-                    <td>$75</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>25 de marzo 2021</td>
-                    <td>$299</td>
-                    <td>Pago con tarjeta</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>24 de marzo de 2021</td>
-                    <td>$75</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>20 de marzo 2021</td>
-                    <td>$299</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>19 de marzo de 2021</td>
-                    <td>$75</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>10 de marzo de 2021</td>
-                    <td>$299</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>6 de marzo de 2021</td>
-                    <td>$75</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>4 de marzo de 2021</td>
-                    <td>$100</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-                  <tr>
-                    <td>1 de marzo de 2021</td>
-                    <td>$80</td>
-                    <td>Efectivo</td>
-                    <td><button type="button">Ver detalle</button></td>
-                  </tr>
-              </table>
+        
+    </form>
+    {% else %}
+        <div class="container">
+            <div class="row">
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-body">
+                    <p class="card-text">
+                        ¡No hay platillos registrados en la base de datos!
+                    </p>
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="card shadow-0 mb-3">
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <a href="{{ referer }}" class="btn btn-warning">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Regresar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}
+
+{% block script %}
+    <script>
+        window.onload = function() {
+            //agregamos la primera órden
+            agregarMenu();
+            sumarextra();
+        }
+        function incrementaSpinner(platilloNombre){
+            console.log(platilloNombre);
+            var val = document.getElementById(platilloNombre).value;//obtenemos el valor del elemento
+            console.log(val);
+            val = parseInt(val) + 1;//lo parseamos a int e incrementamos en 1
+            
+            if(!isNaN(val)){//validación Is Not a Number
+                if(val<100)
+                    document.getElementById(platilloNombre).value = val;//actualizamos el valor
+            }
+        }
+
+        function decrementaSpinner(platilloNombre){
+            var val = document.getElementById(platilloNombre).value;
+            val = parseInt(val) - 1;
+            if(!isNaN(val)){
+                if(val>=0)
+                    document.getElementById(platilloNombre).value = val;
+            }
+        }
+
+        
+        var numeroMenus = 0; 
+
+        function agregarMenu(){
+            //creamos un elemeno de tipo ítem de lista (<li>),
+            //le asignamos las clases list-group-item y menu-completo,
+            //y le damos un identificador del siguente lugar en la lista
+            var nuevoMenu = document.createElement("li")
+            nuevoMenu.className = "list-group-item menu-completo" 
+            nuevoMenu.id = "menu-" + numeroMenus
+            numeroMenus++;
+
+            //buscamos en el documento el elemento con id "plantilla-menu", extraemos su código HTML,
+            //y se lo insertamos al menú que acabamos de crear,
+            //para luego buscar el elemento "lista-menus" y agregrle el menú que acabamos de crear.
+            //luego buscamos dentro del elemento buscamos el texto y le ponemos su número de menú
+            //por último incrementamos el contador de cuantos menús hay en la vista
+            nuevoMenu.innerHTML = document.getElementById("plantilla-menu").innerHTML
+            var selecciones = nuevoMenu.getElementsByClassName("form-select")
+            for(i = 0; i<selecciones.length; i++){
+                selecciones[i].name = "menu-" + numeroMenus + "-" + i
+            }
+
+            document.getElementById("lista-menus").appendChild(nuevoMenu)
+
+
+        }
+
+        
+
+        function removerMenu(boton){
+            //ya que el botón se pasa a si mismo como parámetro, lo usamos de referencia para obtener su contenedor,
+            //en este caso su "abuelo" (padre del padre).
+            //ya que tenemos ese elemento, lo borramos,
+            //y decrementamos el contador de menús en la vista
+            menu = boton.parentElement.parentElement.parentElement.parentElement.parentElement
+            menu.remove()
+            numeroMenus--;
+
+            //ahora obtenemos todos los menús en el documento,
+            //y a cada uno le reasignamos su ID y texto para mantener la secuencia de estos
+            menus = document.getElementsByClassName("list-group-item menu-completo")
+            for (var i=0; i<menus.length; i++){
+                menus[i].id = "menu-" + i
+            }
+        }
+
+        var indice = 1;
+        function agregarDesayuno(bot_env,a,b,c){
+            //Primero vamos a obtener las ordenes 
+            
+            paquete = bot_env.value;
+           //Obtenemos el valor del primer select
+            var combo = document.getElementById("select"+a);
+            var select = combo.options[combo.selectedIndex].text;
+            document.ready = document.getElementById("select"+a).value = '0';
+            //Obtenemos el valor del segundo select
+            var combo2 = document.getElementById("select"+b);
+            var select2 = combo2.options[combo2.selectedIndex].text;
+            document.ready = document.getElementById("select"+b).value = '0';
+           //Obtenemos el valor del tercer select
+            if(c == null){
+               
+                var limpia = ""
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><td>'+limpia+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
+            }   
+            else{
+                var combo3 = document.getElementById("select"+c);
+                var select3 = combo3.options[combo3.selectedIndex].text;
+                document.ready = document.getElementById("select"+c).value = '0';
+                var fila='<tr id="fila'+indice+'"><input hidden name="orden-desayunos_'+indice+'" value="'+paquete+'"></input><td>'+paquete+'</td><input hidden name="orden-desayunos_'+indice+'_1" value="'+select+'"></input><td>'+select+'</td><input hidden name="orden-desayunos_'+indice+'_2" value="'+select2+'"></input><td>'+select2 +'</td><input hidden name="orden-desayunos_'+indice+'_3" value="'+select3+'"></input><td>'+select3+'</td><td><button  type="button" class="btn btn-primary btn-floating mx-1" id="btn_'+indice+'" onclick="eliminarFila(this,'+indice+')"> <i class="far fa-trash-alt"></i> </button></td></tr>';
               
-        </div>
-          
-        </div>
-      </div>
-      
-      
-      
-    <!-- End Middle Column -->
-    </div>
-    
-    <!-- Right Column -->
+            }
 
-      <div class="w3-card w3-round w3-white w3-padding-16 w3-center">
-        <p>ADS</p>
-      </div>
-      <br>
-      
-    <!-- End Right Column -->
-    </div>
-    
-  <!-- End Grid -->
-  </div>
-  
-<!-- End Page Container -->
-</div>
-<br>
+           
+            if ((select !== "------" && select2 !== "------" && select3 !== "------")){
+                var orden = document.createElement("TR");
+                orden.innerHTML=fila;
+                document.getElementById("ordenes-desayunos").appendChild(orden);
+                indice++;
+            }    
+        }
+        function eliminarFila(eliminar,index) {
+            var btn = eliminar.value;
+            var borrar = eliminar.parentElement.parentElement;
+            borrar.remove();
 
-<!-- Footer -->
-<footer class="w3-container w3-theme-d3 w3-padding-16">
-  <h5>Footer</h5>
-</footer>
+        }
 
-<footer class="w3-container w3-theme-d5">
-  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
-</footer>
- 
-<script>
-// Accordion
-function myFunction(id) {
-  var x = document.getElementById(id);
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-    x.previousElementSibling.className += " w3-theme-d1";
-  } else { 
-    x.className = x.className.replace("w3-show", "");
-    x.previousElementSibling.className = 
-    x.previousElementSibling.className.replace(" w3-theme-d1", "");
-  }
-}
+        function sumarextra(){
+            for (i=1; i<7; i++){
+                var operacion = document.getElementById("costo"+i).textContent;
+                var contenido = parseInt(operacion.replace("Precio --------", ""));
+                contenido = contenido + 10;
+                console.log(contenido);
+                
+                //console.log(elem2);
+                var nuevo = document.getElementById("extra"+i).innerHTML = "Precio ------- "+contenido;
+            }  
 
-// Used to toggle the menu on smaller screens when clicking on the menu button
-function openNav() {
-  var x = document.getElementById("navDemo");
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else { 
-    x.className = x.className.replace(" w3-show", "");
-  }
-}
-</script>
 
-</body>
-</html> 
-
+        }
+        
+    </script>
+{% endblock script %}

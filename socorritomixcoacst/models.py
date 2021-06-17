@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 TIPO_CLIENTE = (('NU', 'nuevo'), ('FR', 'frecuente'), ('ES', 'esporádico'), ('FA', 'favorito'))
-TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('BE', 'bebida'))
+TIPO_PLATILLO = (('EN', 'entrada'), ('ST', 'segundo tiempo'), ('GU', 'guisado'), ('EX', 'extra'), ('SU', 'sushi'), ('BE', 'bebida'))
 TIPO_MENU = (('DE', 'desayunos'),('CO','comidas'),('CE','cenas'))
 TIPO_USUARIO = (('AD', 'administrador'),('EM','empleado'))
 METODO_PAGO = (('EF','efectivo'),('TE','terminál'),('PA','pagado'))
@@ -42,6 +42,7 @@ class Orden(models.Model):
     paga_con = models.FloatField(max_length=5, null=False)
     observaciones = models.CharField(max_length=256, null=True, blank=True)
     cambio = models.FloatField(max_length=5, null=False)
+    cambio_devuelto = models.BooleanField(null=False, default=False)
 
     def __str__(self):
         return "ID: " + str(self.id) + ", Fecha: " + str(self.fecha) + ", Monto: $"+ str(self.total_descuento) + ", Cliente: " + self.cliente.nombre
@@ -57,7 +58,7 @@ class Platillo(models.Model):
     tipo_desayuno = models.CharField(choices=TIPO_DESAYUNO, max_length=2, null=True, blank=True)
 
     def __str__(self):
-        cadena_frontend = ("ID:" +str(self.id) + " Nombre: " + self.nombre + " Tipo: "+ self.tipo + " Es complemento: " + str(self.es_complemento) + 
+        cadena_frontend = ("ID:" +str(self.id) + " Nombre: " + self.nombre + " Tipo: "+ self.tipo + " Es complemento: " + str(self.es_complemento) +
                             " Es constante: " + str(self.es_constante))
 
         if self.tipo_desayuno:
@@ -72,6 +73,7 @@ class OrdenPlatillo(models.Model):
     sub_total = models.FloatField(max_length=5, null=False)
     es_completa = models.BooleanField(null=False)
     numero_completa = models.IntegerField(null=True)
+    observaciones_completa = models.CharField(max_length=256, null=True, blank=True)
     cantidad = models.IntegerField(null=False)
     orden = models.ForeignKey(Orden, on_delete=models.PROTECT)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
@@ -128,3 +130,6 @@ class HistorialPrecio(models.Model):
     fecha = models.DateTimeField(null=False, auto_now_add=True)
     es_precio_actual = models.BooleanField(null=False, default=True)
     platillo = models.ForeignKey(Platillo, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return "Platillo: " + self.platillo.nombre + ", precio: " + str(self.precio) + ", fecha: " + str(self.fecha) + ", es actual: " + str(self.es_precio_actual)

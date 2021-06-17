@@ -9,133 +9,49 @@
 <div id="contenedor-general" class="d-flex flex-column mx-4">
 
     <form id="form-platillos" method="POST">
-    
+
         {% csrf_token %}
 
         <h3>Menú del día</h3>
         <!-- primero checamos si hay menús del día registrados, para asi generar la lista de estos -->
         {% if menus_hoy %}
 
-            <!-- creamos una lista de tablas donde mostramos cada menú -->
-            <ul id="lista-menus" class="list-group">
+            <div class="table-responsive-xl">
+                <table id="tabla-comida" class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Platillo</th>
+                            <th>Descripción</th>
+                            <th>Tipo</th>
+                            <th>¿Agotado?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for platillo_menu in menu_comida %}
+                            <tr>
+                                <td>
+                                    {{ platillo_menu.platillo.nombre }}
+                                </td>
+                                <td>
+                                    {{ platillo_menu.platillo.descripcion }}
+                                </td>
+                                <td>
+                                    {{ platillo_menu.platillo.get_tipo_display }}
+                                </td>
+                                <td>
+                                    {% if platillo_menu.disponible %}
+                                        <input name="{{ platillo_menu.platillo.nombre }}" type="checkbox" class="custom-control-input">
+                                    {% else %}
+                                        <i class="far fa-check-square fa-lg"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-<!--                <li id="menu-desayuno" class="list-group-item p-3">
-                    <h5>Menú: Desayuno</h5>
-                    <div class="table-responsive-xl">
-                        <table id="tabla-desayuno" class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Platillo</th>
-                                    <th>Descripción</th>
-                                    <th>Tipo</th>
-                                    <th>¿Agotado?</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for platillo_menu in menu_desayuno %}
-                                    <tr>
-                                        <td>
-                                            {{ platillo_menu.platillo.nombre }}
-                                        </td>
-                                        <td>
-                                            {{ platillo_menu.platillo.descripcion }}
-                                        </td>
-                                        <td>
-                                            {{ platillo_menu.platillo.get_tipo_display }}
-                                        </td>
-                                        <td>
-                                            {% if platillo_menu.disponible %}
-                                                <input name="{{ platillo_menu.platillo.nombre }}" type="checkbox" class="custom-control-input">
-                                            {% else %}
-                                                <i class="far fa-check-square fa-lg"></i>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </li>-->
-
-                <li id="menu-comida" class="list-group-item p-3">
-                    <h5>Menú: Comida</h5>
-                    <div class="table-responsive-xl">
-                        <table id="tabla-comida" class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Platillo</th>
-                                    <th>Descripción</th>
-                                    <th>Tipo</th>
-                                    <th>¿Agotado?</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for platillo_menu in menu_comida %}
-                                    <tr>
-                                        <td>
-                                            {{ platillo_menu.platillo.nombre }}
-                                        </td>
-                                        <td>
-                                            {{ platillo_menu.platillo.descripcion }}
-                                        </td>
-                                        <td>
-                                            {{ platillo_menu.platillo.get_tipo_display }}
-                                        </td>
-                                        <td>
-                                            {% if platillo_menu.disponible %}
-                                                <input name="{{ platillo_menu.platillo.nombre }}" type="checkbox" class="custom-control-input">
-                                            {% else %}
-                                                <i class="far fa-check-square fa-lg"></i>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </li>
-
-<!--                <li id="menu-cena" class="list-group-item p-3">
-                    <h5>Menú: Cena</h5>
-                    <div class="table-responsive-xl">
-                        <table id="tabla-cena" class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Platillo</th>
-                                    <th>Descripción</th>
-                                    <th>Tipo</th>
-                                    <th>¿Agotado?</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for platillo_menu in menu_cena %}
-                                    <tr>
-                                        <td>
-                                            {{ platillo_menu.platillo.nombre }}
-                                        </td>
-                                        <td>
-                                            {{ platillo_menu.platillo.descripcion }}
-                                        </td>
-                                        <td>
-                                            {{ platillo_menu.platillo.get_tipo_display }}
-                                        </td>
-                                        <td>
-                                            {% if platillo_menu.disponible %}
-                                                <input name="{{ platillo_menu.platillo.nombre }}" type="checkbox" class="custom-control-input">
-                                            {% else %}
-                                                <i class="far fa-check-square fa-lg"></i>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </li>-->
-
-            </ul>
-
-        <!-- si no hay menús, no haremos ninguna tabla, en su lugar pondremos un aviso de que no hay menús con la fecha del día -->
+        <!-- si no hay menús, no haremos ninguna tabla, en su lugar pondremos un aviso con JS de que no hay menús con la fecha del día -->
         {% else %}
 
             <div id="tarjeta-aviso" class="card p-2">
@@ -149,10 +65,12 @@
             <button id="boton-actualizar-platillos" type="submit" class="btn btn-lg btn-warning m-3">
                 <i class="fas fa-check-square fa-lg">&Tab;Actualizar platillos agotados</i>
             </button>
+            <!-- si hay menú, poner un botón para editarlo -->
             {% if menus_hoy %}
                 <a id="boton-editar-menu" class="btn btn-lg btn-warning m-3" href="/editar-menus">
                     <i class="fas fa-edit fa-lg">&Tab;Editar el Menú del día</i>
                 </a>
+            <!-- si no, poner un botón para crear uno nuevo -->
             {% else %}
                 <a id="boton-nuevo-menu" class="btn btn-lg btn-warning m-3" href="/crear-nuevo-menu">
                     <i class="fas fa-file-alt fa-lg">&Tab;Nuevo Menú del día</i>
@@ -167,18 +85,22 @@
 
 {% block script %}
 <script>
-    //generaremos la fecha del día de hoy para mostrarla cuando no hay menús
-    const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
-    const diasSemana = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado"]
+    //generaremos la fecha del día de hoy para mostrarla cuando no hay menús en el momento en que la ventana deje de cargar
+    window.onload = function(){
+        var aviso = document.getElementById("aviso");
+        if (aviso != null){
+            const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+            const diasSemana = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado"]
 
-    var fecha = new Date();
-    var semana = diasSemana[fecha.getDay()];
-    var dia = fecha.getDate();
-    var mes = meses[fecha.getMonth()];
-    var año = fecha.getFullYear();
-    
-    var aviso = "No hay menús para el día de hoy (" + semana + " " + dia + " de " + mes + " del " + año + ")";
+            var fecha = new Date();
+            var semana = diasSemana[fecha.getDay()];
+            var dia = fecha.getDate();
+            var mes = meses[fecha.getMonth()];
+            var año = fecha.getFullYear();
 
-    document.getElementById("aviso").innerText = aviso;
+            var mensaje = "No hay menús para el día de hoy (" + semana + " " + dia + " de " + mes + " del " + año + ")";
+            aviso.innerText = mensaje;
+        }
+    };
 </script>
 {% endblock script %}
