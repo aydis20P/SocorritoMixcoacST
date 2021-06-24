@@ -16,22 +16,27 @@
         {% csrf_token %}
 
         <div id="botones-menú" class="d-flex justify-content-end flex-wrap py-2">
-            <button id="btn-selec-bebidas" type="button" class="btn btn-warning mx-3" onclick="seleccionar('BE')">
+            <button id="btn-selec-bebidas" type="button" class="btn btn-warning m-2" onclick="seleccionar('BE')">
                 <i class="fas fa-coffee fa-lg">
                     Seleccionar todas las bebidas
                 </i>
             </button>
-            <button id="btn-selec-extras" type="button" class="btn btn-warning mx-3" onclick="seleccionar('EX')">
+            <button id="btn-selec-extras" type="button" class="btn btn-warning m-2" onclick="seleccionar('EX')">
                 <i class="fas fa-utensils fa-lg">
                     Seleccionar todos los extras
                 </i>
             </button>
-            <button id="btn-selec-sushis" type="button" class="btn btn-warning mx-3" onclick="seleccionar('SU')">
+            <button id="btn-selec-sushis" type="button" class="btn btn-warning m-2" onclick="seleccionar('SU')">
                 <i class="fas fa-utensils fa-lg">
                     Seleccionar todos los sushis
                 </i>
             </button>
-            <button id="btn-copiar-comidas" type="button" class="btn btn-warning mx-3" onclick="copiar({{ menu_anterior }})">
+            <button id="btn-selec-guisado" type="button" class="btn btn-warning m-2" onclick="seleccionar('GU')">
+                <i class="fas fa-hamburger fa-lg">
+                    Seleccionar todos los guisados
+                </i>
+            </button>
+            <button id="btn-copiar-comidas" type="button" class="btn btn-warning m-2" onclick="copiar({{ menu_anterior }})">
                 <i class="fas fa-copy fa-lg">
                     Copiar el menú anterior
                 </i>
@@ -40,7 +45,7 @@
 
         <div id="contenedor-tabla" class="table-responsive-xl py-2">
             <div class="form-outline">
-                <input type="text" id="input-busqueda" class="form-control" onkeyup="actualizaTabla()"/>
+                <input type="text" id="input-busqueda" class="form-control" onkeyup="actualizaTabla()" onfocus="this.value=''; actualizaTabla()"/>
                 <label class="form-label">
                     <i class="fas fa-search"></i>
                     Buscar platillo

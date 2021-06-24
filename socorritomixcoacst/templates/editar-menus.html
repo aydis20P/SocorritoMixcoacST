@@ -16,7 +16,7 @@
 
         <div id="contenedor-tabla" class="table-responsive-xl">
             <div class="form-outline">
-                <input type="text" id="input-busqueda" class="form-control" onkeyup="actualizaTabla()"/>
+                <input type="text" id="input-busqueda" class="form-control" onkeyup="actualizaTabla()" onfocus="this.value=''; actualizaTabla()"/>
                 <label class="form-label">
                     <i class="fas fa-search"></i>
                     Buscar platillo
