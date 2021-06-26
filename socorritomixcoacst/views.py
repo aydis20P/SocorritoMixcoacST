@@ -646,6 +646,7 @@ def editar_menus(request):
         context = {}
         context["platillos"] = platillos
         context["platillos_hoy"] = platillos_hoy
+        context["precios"] = HistorialPrecio.objects.filter(es_precio_actual=True)
         return render(request, "editar-menus.html", context)
 
     if request.method == "POST":
